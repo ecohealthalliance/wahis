@@ -1,0 +1,739 @@
+
+<script language = 'javascript'>
+function validate_map_click(a){
+    //alert('validate_map_click');
+    if(document.mapform.button_action.value=='identify') {
+      document.mapform.target='query_window';
+    } 
+    else {
+      document.mapform.target='map_window';
+      window.open('about:blank','map_window','directories=no,height=700,location=no,menubar=no,resizable=yes,scrollbars=yes,status=yes,toolbar=no,width=640,top=1,left=1');
+      return true;
+    }
+    if(!(document.mapform.button_action.value=='zoom_in'
+      || document.mapform.button_action.value=='pan'
+      || document.mapform.button_action.value=='identify')) {
+      alert('Select an action button on the right before clicking on the map');
+      return false;
+    } else {
+      if (document.mapform.button_action.value=='identify')
+      window.open('about:blank','query_window','directories=no,height=320,location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no,width=320,top=50,left=1');
+      return true;
+    }
+}
+
+</script>
+ 
+<head>
+    <link rel="stylesheet" type="text/css" href="/wahis_2/public/css/cssCompressor.php" />
+    <script type="text/javascript" src="/wahis_2/public/js/wahid.js"></script>
+</head>
+<body>
+    
+<div class="ContentBigTableWhite">
+<div class="MidBigTable">
+
+
+        <table width="70%" cellspacing="0" cellpadding="0" border="0" class="TableChoisir">
+
+	<a name="rep_25385"></a>
+		<tr>
+        <td>    
+            <table width="90%">    
+                <tr>
+            	<td width='1%'>
+            	<img src='/wahis_2/public/images/oielogosmall.png'>
+                </td>
+                
+            	<td align="left" width="*" valign="center">
+            	<div class="Rap12-Subtitle">African swine fever,<br>Russia</div>
+                </td>
+                
+            	<td width="1%" align="right">
+                    <form>
+                    <input type='button' value="Print" class="sauvegarde floatL" onClick='window.print()'>
+                    <input type='button' value="Close" class="sauvegarde floatL" onClick='window.close()'>
+                    </form>
+                </td>
+            	</tr>
+            </table>    
+        </td>
+    </tr>    
+        
+    
+    <tr><td>
+    
+    
+         <table width="90%" class="TableChoisir" border="0" cellpadding="0" cellspacing="0">
+    	<tr>
+    	<td class="topbigtabletitle27">
+            Information received on 15/12/2017 from Dr Evgeny Nepoklonov, Vice-minister, Ministry of Agriculture, 
+        	Ministry of Agriculture, Moscow, Russia
+        </td>
+        </tr>
+     </table>
+    </td></tr>
+    
+    
+    
+    <tr><td>
+        <div class="RapportTitle2">Summary</div>
+    <table width="60%" class="TableFoyers">
+                            <tr>
+                <td width="10%" class="filtrer_th">Report type</td>
+                <td width="30%">Follow-up report No. 157</td>
+            </tr>
+                    <tr>
+                <td width="10%" class="filtrer_th">Date of start of the event</td>
+                <td width="30%">14/01/2014</td>
+            </tr>
+                    <tr>
+                <td width="10%" class="filtrer_th">Date of confirmation of the event</td>
+                <td width="30%">22/01/2014</td>
+            </tr>
+                    <tr>
+                <td width="10%" class="filtrer_th">Report date</td>
+                <td width="30%">15/12/2017</td>
+            </tr>
+                    <tr>
+                <td width="10%" class="filtrer_th">Date submitted to OIE</td>
+                <td width="30%">15/12/2017</td>
+            </tr>
+                    <tr>
+                <td width="10%" class="filtrer_th">Reason for notification</td>
+                <td width="30%">First occurrence of a listed disease</td>
+            </tr>
+                    <tr>
+                <td width="10%" class="filtrer_th">Manifestation of disease</td>
+                <td width="30%">Clinical disease</td>
+            </tr>
+                    <tr>
+                <td width="10%" class="filtrer_th">Causal agent</td>
+                <td width="30%">African swine fever virus</td>
+            </tr>
+                    <tr>
+                <td width="10%" class="filtrer_th">Nature of diagnosis</td>
+                <td width="30%">Clinical, Laboratory (basic), Laboratory (advanced), Necropsy</td>
+            </tr>
+                    <tr>
+                <td width="10%" class="filtrer_th">This event pertains to</td>
+                <td width="30%">a defined zone within the country</td>
+            </tr>
+        
+                
+                    <tr>
+                <td width="10%" class="filtrer_th ta_left">Related reports</td>
+                <td width="30%">
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '14684')">Immediate notification (24/01/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '14696')">Follow-up report No. 1 (27/01/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '14727')">Follow-up report No. 2 (03/02/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '14734')">Follow-up report No. 3 (05/02/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '14750')">Follow-up report No. 4 (11/02/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '14775')">Follow-up report No. 5 (14/02/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '14797')">Follow-up report No. 6 (18/02/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '14826')">Follow-up report No. 7 (25/02/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '14929')">Follow-up report No. 8 (11/03/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '15001')">Follow-up report No. 9 (24/03/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '15106')">Follow-up report No. 10 (11/04/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '15283')">Follow-up report No. 11 (20/05/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '15317')">Follow-up report No. 12 (26/05/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '15437')">Follow-up report No. 13 (20/06/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '15469')">Follow-up report No. 14 (23/06/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '15480')">Follow-up report No. 15 (26/06/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '15506')">Follow-up report No. 16 (02/07/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '15515')">Follow-up report No. 17 (03/07/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '15523')">Follow-up report No. 18 (08/07/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '15595')">Follow-up report No. 19 (14/07/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '15621')">Follow-up report No. 20 (16/07/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '15681')">Follow-up report No. 21 (23/07/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '15695')">Follow-up report No. 22 (24/07/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '15743')">Follow-up report No. 23 (01/08/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '15774')">Follow-up report No. 24 (05/08/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '15793')">Follow-up report No. 25 (08/08/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '15863')">Follow-up report No. 26 (15/08/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '15903')">Follow-up report No. 27 (22/08/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '15938')">Follow-up report No. 28 (29/08/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '16007')">Follow-up report No. 29 (05/09/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '16047')">Follow-up report No. 30 (12/09/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '16116')">Follow-up report No. 31 (29/09/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '16200')">Follow-up report No. 32 (10/10/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '16422')">Follow-up report No. 33 (30/10/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '16476')">Follow-up report No. 34 (07/11/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '16521')">Follow-up report No. 35 (14/11/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '16553')">Follow-up report No. 36 (21/11/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '16630')">Follow-up report No. 37 (28/11/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '16691')">Follow-up report No. 38 (05/12/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '16790')">Follow-up report No. 39 (19/12/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '16833')">Follow-up report No. 40 (26/12/2014)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '16938')">Follow-up report No. 41 (16/01/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '17048')">Follow-up report No. 42 (23/01/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '17097')">Follow-up report No. 43 (30/01/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '17145')">Follow-up report No. 44 (06/02/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '17184')">Follow-up report No. 45 (13/02/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '17256')">Follow-up report No. 46 (27/02/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '17309')">Follow-up report No. 47 (06/03/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '17343')">Follow-up report No. 48 (13/03/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '17429')">Follow-up report No. 49 (27/03/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '17540')">Follow-up report No. 50 (17/04/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '17634')">Follow-up report No. 51 (30/04/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '17678')">Follow-up report No. 52 (08/05/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '17739')">Follow-up report No. 53 (15/05/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '18010')">Follow-up report No. 54 (29/06/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '18049')">Follow-up report No. 55 (03/07/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '18114')">Follow-up report No. 56 (10/07/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '18158')">Follow-up report No. 57 (17/07/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '18224')">Follow-up report No. 58 (24/07/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '18274')">Follow-up report No. 59 (31/07/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '18332')">Follow-up report No. 60 (07/08/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '18402')">Follow-up report No. 61 (14/08/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '18487')">Follow-up report No. 62 (21/08/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '18532')">Follow-up report No. 63 (28/08/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '18590')">Follow-up report No. 64 (04/09/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '18638')">Follow-up report No. 65 (11/09/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '18686')">Follow-up report No. 66 (18/09/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '18719')">Follow-up report No. 67 (23/09/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '18767')">Follow-up report No. 68 (02/10/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '18826')">Follow-up report No. 69 (09/10/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '18927')">Follow-up report No. 70 (23/10/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '18994')">Follow-up report No. 71 (30/10/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '19040')">Follow-up report No. 72 (06/11/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '19071')">Follow-up report No. 73 (13/11/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '19196')">Follow-up report No. 74 (27/11/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '19251')">Follow-up report No. 75 (04/12/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '19371')">Follow-up report No. 76 (18/12/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '19417')">Follow-up report No. 77 (25/12/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '19433')">Follow-up report No. 78 (30/12/2015)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '19596')">Follow-up report No. 79 (22/01/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '19638')">Follow-up report No. 80 (29/01/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '19681')">Follow-up report No. 81 (05/02/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '19717')">Follow-up report No. 82 (12/02/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '19806')">Follow-up report No. 83 (26/02/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '19859')">Follow-up report No. 84 (04/03/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '19934')">Follow-up report No. 85 (18/03/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '19968')">Follow-up report No. 86 (25/03/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '20051')">Follow-up report No. 87 (15/04/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '20178')">Follow-up report No. 88 (13/05/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '20226')">Follow-up report No. 89 (23/05/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '20240')">Follow-up report No. 90 (27/05/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '20274')">Follow-up report No. 91 (03/06/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '20298')">Follow-up report No. 92 (10/06/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '20337')">Follow-up report No. 93 (17/06/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '20363')">Follow-up report No. 94 (24/06/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '20405')">Follow-up report No. 95 (01/07/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '20440')">Follow-up report No. 96 (08/07/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '20476')">Follow-up report No. 97 (15/07/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '20526')">Follow-up report No. 98 (22/07/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '20612')">Follow-up report No. 99 (29/07/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '20668')">Follow-up report No. 100 (05/08/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '20738')">Follow-up report No. 101 (12/08/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '20790')">Follow-up report No. 102 (19/08/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '20835')">Follow-up report No. 103 (26/08/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '20903')">Follow-up report No. 104 (02/09/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '20935')">Follow-up report No. 105 (09/09/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '20986')">Follow-up report No. 106 (19/09/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '21032')">Follow-up report No. 107 (23/09/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '21090')">Follow-up report No. 108 (30/09/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '21138')">Follow-up report No. 109 (07/10/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '21235')">Follow-up report No. 110 (14/10/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '21309')">Follow-up report No. 111 (21/10/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '21382')">Follow-up report No. 112 (28/10/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '21428')">Follow-up report No. 113 (03/11/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '21510')">Follow-up report No. 114 (11/11/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '21575')">Follow-up report No. 115 (18/11/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '21667')">Follow-up report No. 116 (25/11/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '21769')">Follow-up report No. 117 (02/12/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '21853')">Follow-up report No. 118 (09/12/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '21953')">Follow-up report No. 119 (16/12/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '22107')">Follow-up report No. 120 (28/12/2016)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '22341')">Follow-up report No. 121 (13/01/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '22447')">Follow-up report No. 122 (20/01/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '22579')">Follow-up report No. 123 (27/01/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '22796')">Follow-up report No. 124 (10/02/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '22878')">Follow-up report No. 125 (17/02/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '22965')">Follow-up report No. 126 (22/02/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '23089')">Follow-up report No. 127 (03/03/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '23267')">Follow-up report No. 128 (17/03/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '23364')">Follow-up report No. 129 (24/03/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '23492')">Follow-up report No. 130 (07/04/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '23697')">Follow-up report No. 131 (05/05/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '24009')">Follow-up report No. 132 (09/06/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '24096')">Follow-up report No. 133 (16/06/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '24184')">Follow-up report No. 134 (30/06/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '24223')">Follow-up report No. 135 (07/07/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '24298')">Follow-up report No. 136 (14/07/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '24366')">Follow-up report No. 137 (24/07/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '24424')">Follow-up report No. 138 (01/08/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '24492')">Follow-up report No. 139 (04/08/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '24529')">Follow-up report No. 140 (11/08/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '24588')">Follow-up report No. 141 (18/08/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '24611')">Follow-up report No. 142 (25/08/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '24704')">Follow-up report No. 143 (01/09/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '24755')">Follow-up report No. 144 (08/09/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '24811')">Follow-up report No. 145 (15/09/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '24843')">Follow-up report No. 146 (22/09/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '24897')">Follow-up report No. 147 (28/09/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '24954')">Follow-up report No. 148 (06/10/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '25030')">Follow-up report No. 149 (13/10/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '25076')">Follow-up report No. 150 (20/10/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '25144')">Follow-up report No. 151 (03/11/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '25203')">Follow-up report No. 152 (10/11/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '25249')">Follow-up report No. 153 (17/11/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '25291')">Follow-up report No. 154 (24/11/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '25330')">Follow-up report No. 155 (01/12/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '25369')">Follow-up report No. 156 (08/12/2017)</a> <br />
+                                            <a href="javascript:open_report('/wahis_2/public/wahid.php/Reviewreport/Review?', '25385')">Follow-up report No. 157 (15/12/2017)</a> <br />
+                        
+                </td>
+            </tr>
+            
+        
+    </table>    
+    
+    </td></tr>
+    
+                      <tr>
+        <td>
+        <div class="ReviewSubmitBox">
+        <table class="TableFoyers">
+            <div class="RapportTitle2">New outbreaks (2)</div>
+        </table>
+        </div>
+        </td>
+    </tr>
+                                	            <tr><td>
+        <div class="ReviewSubmitBox">
+        <table class="TableFoyers">
+            
+            <tr>
+                                    <td align="left" class="filtrer_th ta_left">Outbreak 1 </td>
+                    
+                    
+                                                    <td class="filtrer_th ta_left">Novaya Zarya, Shebekinsky, BELGORODSKAYA OBLAST</td>
+                         
+                            </tr>
+                    
+            <tr>
+                                                        <td class="filtrer_th ta_left">Date of start of the outbreak</td>
+                                        
+                    
+                                                        
+                            <td class="">06/12/2017</td>
+                                                     
+                            </tr>
+                    
+            <tr>
+                                                        <td class="filtrer_th ta_left">Outbreak status</td>
+                                        
+                    
+                                                        
+                            <td class="">Continuing (or date resolved not provided)</td>
+                                                     
+                            </tr>
+                    
+            <tr>
+                                                        <td class="filtrer_th ta_left">Epidemiological unit</td>
+                                        
+                    
+                                                        
+                            <td class="">Forest</td>
+                                                     
+                            </tr>
+                    
+            <tr>
+                                                        <td class="filtrer_th ta_left">Affected animals</td>
+                                        
+                                    <td class="">
+                        <table class="TableFoyers">
+                            <tr>
+                                                                                                    <td class="filtrer_th ta_center last">Species</td>
+                                                                                                                                    <td class="filtrer_th ta_center last">Susceptible</td>
+                                                                                                                                    <td class="filtrer_th ta_center last">Cases</td>
+                                                                                                                                    <td class="filtrer_th ta_center last">Deaths</td>
+                                                                                                                                    <td class="filtrer_th ta_center last">Killed and disposed of</td>
+                                                                                                                                    <td class="filtrer_th ta_center last">Slaughtered</td>
+                                                                
+                            </tr>
+                            
+                                                                                                <tr>
+                                                                                                                            <td>Wild boar:Sus scrofa(Suidae)</td>
+                                                                                                                                                                    <td class="ta_right"></td>
+                                                                                                                                                                    <td class="ta_right">1</td>
+                                                                                                                                                                    <td class="ta_right">0</td>
+                                                                                                                                                                    <td class="ta_right">1</td>
+                                                                                                                                                                    <td class="ta_right">0</td>
+                                                                                    
+                                    </tr>                                 
+                                                                
+                        </table>
+                    </td>
+                            </tr>
+                	                      </table>
+    </div>
+    </td></tr>
+	              <tr><td>
+        <div class="ReviewSubmitBox">
+        <table class="TableFoyers">
+            
+            <tr>
+                                    <td align="left" class="filtrer_th ta_left">Outbreak 2 </td>
+                    
+                    
+                                                    <td class="filtrer_th ta_left">Ivitsa, OOO Miratorg-Belgorod, Korochansky, BELGORODSKAYA OBLAST</td>
+                         
+                            </tr>
+                    
+            <tr>
+                                                        <td class="filtrer_th ta_left">Date of start of the outbreak</td>
+                                        
+                    
+                                                        
+                            <td class="">06/12/2017</td>
+                                                     
+                            </tr>
+                    
+            <tr>
+                                                        <td class="filtrer_th ta_left">Outbreak status</td>
+                                        
+                    
+                                                        
+                            <td class="">Continuing (or date resolved not provided)</td>
+                                                     
+                            </tr>
+                    
+            <tr>
+                                                        <td class="filtrer_th ta_left">Epidemiological unit</td>
+                                        
+                    
+                                                        
+                            <td class="">Farm</td>
+                                                     
+                            </tr>
+                    
+            <tr>
+                                                        <td class="filtrer_th ta_left">Affected animals</td>
+                                        
+                                    <td class="">
+                        <table class="TableFoyers">
+                            <tr>
+                                                                                                    <td class="filtrer_th ta_center last">Species</td>
+                                                                                                                                    <td class="filtrer_th ta_center last">Susceptible</td>
+                                                                                                                                    <td class="filtrer_th ta_center last">Cases</td>
+                                                                                                                                    <td class="filtrer_th ta_center last">Deaths</td>
+                                                                                                                                    <td class="filtrer_th ta_center last">Killed and disposed of</td>
+                                                                                                                                    <td class="filtrer_th ta_center last">Slaughtered</td>
+                                                                
+                            </tr>
+                            
+                                                                                                <tr>
+                                                                                                                            <td>Swine </td>
+                                                                                                                                                                    <td class="ta_right">24027</td>
+                                                                                                                                                                    <td class="ta_right">72</td>
+                                                                                                                                                                    <td class="ta_right">72</td>
+                                                                                                                                                                    <td class="ta_right"></td>
+                                                                                                                                                                    <td class="ta_right">0</td>
+                                                                                    
+                                    </tr>                                 
+                                                                
+                        </table>
+                    </td>
+                            </tr>
+                	                      </table>
+    </div>
+    </td></tr>
+	              <tr><td>
+        <div class="ReviewSubmitBox">
+        <table class="TableFoyers">
+            
+            <tr>
+                                    <td align="left" class="filtrer_th ta_left">Summary of outbreaks</td>
+                    
+                    
+                                                    <td class="filtrer_th ta_left">Total outbreaks: 2</td>
+                         
+                            </tr>
+                    
+            <tr>
+                                                        <td class="filtrer_th ta_left">Total animals affected</td>
+                                        
+                                    <td class="">
+                        <table class="TableFoyers">
+                            <tr>
+                                                                                                    <td class="filtrer_th ta_center last">Species</td>
+                                                                                                                                    <td class="filtrer_th ta_center last">Susceptible</td>
+                                                                                                                                    <td class="filtrer_th ta_center last">Cases</td>
+                                                                                                                                    <td class="filtrer_th ta_center last">Deaths</td>
+                                                                                                                                    <td class="filtrer_th ta_center last">Killed and disposed of</td>
+                                                                                                                                    <td class="filtrer_th ta_center last">Slaughtered</td>
+                                                                
+                            </tr>
+                            
+                                                                                                <tr>
+                                                                                                                            <td>Wild boar:Sus scrofa(Suidae)</td>
+                                                                                                                                                                    <td class="ta_right"></td>
+                                                                                                                                                                    <td class="ta_right">1</td>
+                                                                                                                                                                    <td class="ta_right">0</td>
+                                                                                                                                                                    <td class="ta_right">1</td>
+                                                                                                                                                                    <td class="ta_right">0</td>
+                                                                                    
+                                    </tr>                                 
+                                                                                                                                <tr>
+                                                                                                                            <td>Swine</td>
+                                                                                                                                                                    <td class="ta_right">24027</td>
+                                                                                                                                                                    <td class="ta_right">72</td>
+                                                                                                                                                                    <td class="ta_right">72</td>
+                                                                                                                                                                    <td class="ta_right"></td>
+                                                                                                                                                                    <td class="ta_right">0</td>
+                                                                                    
+                                    </tr>                                 
+                                                                
+                        </table>
+                    </td>
+                            </tr>
+                    
+            <tr>
+                                                        <td class="filtrer_th ta_left">Outbreak statistics</td>
+                                        
+                                    <td class="">
+                        <table class="TableFoyers">
+                            <tr>
+                                                                                                    <td class="filtrer_th ta_center last">Species</td>
+                                                                                                                                    <td class="filtrer_th ta_center last">Apparent morbidity rate</td>
+                                                                                                                                    <td class="filtrer_th ta_center last">Apparent mortality rate</td>
+                                                                                                                                    <td class="filtrer_th ta_center last">Apparent case fatality rate</td>
+                                                                                                                                    <td class="filtrer_th ta_center last">Proportion susceptible animals lost*</td>
+                                                                
+                            </tr>
+                            
+                                                                                                <tr>
+                                                                                                                            <td>Wild boar:Sus scrofa(Suidae)</td>
+                                                                                                                                                                    <td class="ta_right">**</td>
+                                                                                                                                                                    <td class="ta_right">**</td>
+                                                                                                                                                                    <td class="ta_right">0.00%</td>
+                                                                                                                                                                    <td class="ta_right">**</td>
+                                                                                    
+                                    </tr>                                 
+                                                                                                                                <tr>
+                                                                                                                            <td>Swine</td>
+                                                                                                                                                                    <td class="ta_right">0.30%</td>
+                                                                                                                                                                    <td class="ta_right">0.30%</td>
+                                                                                                                                                                    <td class="ta_right">100.00%</td>
+                                                                                                                                                                    <td class="ta_right"> **</td>
+                                                                                    
+                                    </tr>                                 
+                                                                
+                        </table>
+                    </td>
+                            </tr>
+                    
+            <tr>
+                                                        <td colspan="2" class="filtrer_th ta_left">*Removed from the susceptible population through death, destruction and/or slaughter</td>
+                                        
+                    
+                                                                             
+                            </tr>
+                    
+            <tr>
+                                                        <td colspan="2" class="filtrer_th ta_left">**Not calculated because of missing information</td>
+                                        
+                    
+                                                                             
+                            </tr>
+            
+                 </table>   
+    </div>
+    </td></tr>
+                <tr>
+    <td>
+        <div class="RapportTitle2">Epidemiology</div>
+	<table class="TableFoyers">
+	<tr>
+	  <td class="filtrer_th ta_left">Source of the outbreak(s) or origin of infection</td>
+        <td class="">
+            <ul>
+    		        		      <li>
+    		          Unknown or inconclusive
+                  </li>
+                      
+            </ul>
+        </td>
+	</tr>
+                        </table>
+    </td></tr>
+    
+    
+    <tr><td>
+            </td></tr>
+
+
+    <tr><td>
+        <div class="RapportTitle2">Control measures</div>
+	<table class="TableFoyers">
+    	<tr>
+    		<td class="filtrer_th ta_left">Measures applied</td>
+    		<td class="">
+    	    <ul>
+        	                		<li>
+            		Movement control inside the country
+                    
+                                        
+                    </li>
+        	                		<li>
+            		Screening
+                    
+                                        
+                    </li>
+        	                		<li>
+            		Quarantine
+                    
+                                        
+                    </li>
+        	                		<li>
+            		Surveillance outside containment and/or protection zone
+                    
+                                        
+                    </li>
+        	                		<li>
+            		Official destruction of animal products
+                    
+                                        
+                    </li>
+        	                		<li>
+            		Official disposal of carcasses, by-products and waste
+                    
+                                        
+                    </li>
+        	                		<li>
+            		Surveillance within containment and/or protection zone
+                    
+                                        
+                    </li>
+        	                		<li>
+            		Control of wildlife reservoirs
+                    
+                                        
+                    </li>
+        	                		<li>
+            		Vaccination permitted (if a vaccine exists)
+                    
+                                        
+                    </li>
+        	                		<li>
+            		No treatment of affected animals
+                    
+                                        
+                    </li>
+        	                </ul>
+            </td>
+    	</tr>
+    	
+        <tr>
+            <td class="filtrer_th ta_left">Measures to be applied</td>
+            <td class="">
+            <ul>
+                                <li>
+                Stamping out<br />
+                </li>
+                            </ul>
+            </td>
+    	</tr>
+    
+    </table>
+    </td></tr>
+                <tr><td>
+	        <div class="RapportTitle2">Diagnostic test results</div>
+        <table class="TableFoyers">
+                <tr>
+                    <td class="filtrer_th ta_left">Laboratory name and type</td>
+                    <td class="filtrer_th ta_left">Species</td>
+                    <td class="filtrer_th ta_left">Test</td>
+                    <td class="filtrer_th ta_left">Test date</td>
+                    <td class="filtrer_th ta_left last">Result</td>
+                </tr>
+
+    		                                          <tr>
+                                <td class="filtrer_td">Belgorodskaya veterinary Laboratory (Local laboratory)</td>
+                                <td class="filtrer_td">Swine</td>
+                                <td class="filtrer_td">polymerase chain reaction (PCR)</td>
+                                <td class="filtrer_td">08/12/2017</td>
+                                <td class="filtrer_td cb-centree last">Positive</td>
+                            </tr>
+                                    
+    		                                          <tr>
+                                <td class="filtrer_td">State Science Institution National Research Institute of Veterinary Virology and Microbiology of Russian Academy of Agricultural Sciences (National laboratory)</td>
+                                <td class="filtrer_td">Swine</td>
+                                <td class="filtrer_td">direct immunofluorescence (DIF) test</td>
+                                <td class="filtrer_td">09/12/2017</td>
+                                <td class="filtrer_td cb-centree last">Positive</td>
+                            </tr>
+                                            <tr>
+                                <td class="filtrer_td">State Science Institution National Research Institute of Veterinary Virology and Microbiology of Russian Academy of Agricultural Sciences (National laboratory)</td>
+                                <td class="filtrer_td">Swine</td>
+                                <td class="filtrer_td">polymerase chain reaction (PCR)</td>
+                                <td class="filtrer_td">09/12/2017</td>
+                                <td class="filtrer_td cb-centree last">Positive</td>
+                            </tr>
+                                            <tr>
+                                <td class="filtrer_td">State Science Institution National Research Institute of Veterinary Virology and Microbiology of Russian Academy of Agricultural Sciences (National laboratory)</td>
+                                <td class="filtrer_td">Wild boar</td>
+                                <td class="filtrer_td">polymerase chain reaction (PCR)</td>
+                                <td class="filtrer_td">08/12/2017</td>
+                                <td class="filtrer_td cb-centree last">Positive</td>
+                            </tr>
+                                    
+    				</table>
+	    </td></tr>
+    
+     
+    <tr><td>
+        <div class="RapportTitle2">Future Reporting</div>
+    <table class="TableFoyers">
+        <tr>
+            <td class="filtrer_td">The event is continuing.  Weekly follow-up reports will be submitted.</td>
+        </tr>
+    </table>        
+    </td></tr>
+    
+            <tr><td>
+               
+        <table>
+            <tr>
+
+                <td>
+ <div class="RapportTitle2">Map of outbreak locations</div>
+ <div class="ta_center">
+<form name='mapform' action="/wahis_2/public/wahid.php/countrymapinteractive" method='POST' target='map_window' onSubmit='return validate_map_click(this)'>
+    <input type='image' style="border:1px solid black" name='map' src='http://www.oie.int/wahis_2/resource/maps/tmp/5a358062_5fd8_a.png' height=400 width=400 class='framed_map'>
+    <input type='hidden' name='map_file' value='publicb3m3l2eqt9erk1p61fis9gkdn41513455714'>
+    <input type='hidden' name='page' value='country_map_interactive'>
+    <input type='hidden' name='page_title' value='Location of current outbreaks'>
+    <input type='hidden' name='page_refer' value='MapFullEventReport'>
+    <input type='hidden' name='page_info' value=''>
+    <input type='hidden' name='public_country' value='RUS'>
+            <input type='hidden' name='map_query' value='TRUE'>
+       
+            <input type='hidden' name='reportid' value=''>
+                    <input type='hidden' name='selected_start_month' value=''>
+                <input type='hidden' name='selected_start_year' value=''>
+                <input type='hidden' name='selected_end_month' value=''>
+                <input type='hidden' name='selected_end_year' value=''>
+                <input type='hidden' name='disease_id' value=''>
+        
+    <input type='hidden' name='disease_id' value=''>
+    <input type='hidden' name='extent' value='18.3, -23.12575, 180, 138.57425'>
+    <input type='hidden' name='exsize' value=15'>
+    <input type='hidden' name='pop' value='0'>
+    <input type='hidden' name='button_action' value=''>
+    <input type='hidden' name='map_size' value='400 400'>
+    <input type='hidden' name='new_map_zoom_origin' value='true'>
+    
+</form>
+</div>
+</td>
+            </tr>
+        </table>        
+        </td></tr>
+        
+    </table>         
+</div>          
+</div>
+</body>
