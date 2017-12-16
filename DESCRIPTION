@@ -1,0 +1,13 @@
+Package: wahis
+Title: wahis
+Version: 0.0.1
+Author: Noam Ross
+Maintainer: Noam Ross <ross@ecohealthalliance.org>
+Description: Data scraped from the OIE WAHIS system
+License: MIT + file LICENSE
+LazyData: true
+URL: https://github.com/ecohealthalliance/wahis
+BugReports: https://github.com/ecohealthalliance/wahis/issues
+RoxygenNote: 6.0.1
+Suggests: 
+    testthat
