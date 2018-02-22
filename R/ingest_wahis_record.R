@@ -1,0 +1,53 @@
+#' Read in a 
+#'
+#' @param file 
+#'
+#' @return
+#' @export
+#' @import rvest stringi
+#' @examples
+ingest_wahis_record <- function(web_page) {
+    page <- read_html(web_page)
+    record <- list()
+    record$id <- html_node(page, xpath="//div[@class='MidBigTable']//a") %>% 
+        html_attr("name") %>% 
+        stri_extract_last_regex("(?<=rep_)\\d+$")
+    if(is.na(record$id)) {
+        return(NULL)
+    }
+    
+    title_country <- 
+        html_nodes(page, xpath="//div[@class='Rap12-Subtitle']//text()") 
+    record$title <- title_country[[1]] %>% html_text() %>% stri_replace_last_regex(",$", "")
+    record$country <- title_country[[2]] %>% html_text()
+    
+    record$received <- html_nodes(page, xpath = "//td[@class='topbigtabletitle27']") %>% 
+        html_text(trim = TRUE) %>% 
+        stri_replace_all_regex("[\\s\\r\\n]+", " ")
+    
+    summary_table <- html_node(page, xpath="//table[@class='TableFoyers']") %>% 
+        html_table()
+    summary_table <- structure(as.list(summary_table[,2]), .Names=summary_table[,1])
+    summary_table[["Related reports"]] <- html_nodes(page, xpath="//tr//td//a") %>% 
+        html_attr("href") %>% 
+        stri_extract_last_regex("(?<=\\')\\d+(?=\\'\\))") %>% 
+        sort()
+    
+    record <- c(record, summary_table)
+    
+    if (length(html_nodes(page, xpath="//tr//td[contains(.,'There are no new outbreaks in this report')]")) !=0) {
+        record$outbreaks = "There are no new outbreaks in this report"
+    } else {
+        outbreak_tables <- html_nodes(page, xpath="//div[@class='ReviewSubmitBox']/table")[-1]
+        outbreak_summary <- outbreak_tables[length(outbreak_tables)]
+        outbreak_tables <- outbreak_tables[-length(outbreak_tables)]
+        outbreak_tables <- lapply(outbreak_tables, function(ob) {
+            names <- html_nodes(ob, xpath = "tr/td[1]") %>% html_text()
+            contents <- html_nodes(ob, xpath = "tr/td[2][not(table)]") %>% html_text %>% as.list()
+            cases <- html_node(ob, xpath="tr/td/table")[[1]] %>% html_table(header=TRUE)
+            return(structure(c(contents, list(cases)), .Names=names))
+        })
+        outbreak_summary <- 
+    }
+
+}

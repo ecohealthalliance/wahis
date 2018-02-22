@@ -2,6 +2,7 @@ library(tidyverse)
 library(xml2)
 library(rvest)
 library(stringi)
+library(httr)
 
 #Read the page of weekly reports and get the latest report number
 weekly_pg <-
@@ -16,6 +17,8 @@ report_ids <- weekly_pg %>%
 
 max_report_id = max(report_ids)
 
+file.size(list.files(here::here("inst", "raw_wahis_pages"), full.names = TRUE))
+
 for(rid in rev(seq_len(max_report_id))) {
     file_name = paste0(rid, ".html")
     if(length(list.files(here::here("inst", "raw_wahis_pages"), paste0("^", file_name))) == 0) {
@@ -24,5 +27,5 @@ for(rid in rev(seq_len(max_report_id))) {
           write_disk(here::here("inst", "raw_wahis_pages", file_name)),
           user_agent("R httr extraction script (ross@ecohealthalliance.org)"))
     }
-    sleep(1 + rexp(1, 0.25))
+    Sys.sleep(1 + rexp(1, 0.25))
 }
