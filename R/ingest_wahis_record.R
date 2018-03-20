@@ -44,7 +44,7 @@ ingest_wahis_record <- function(web_page) {
         outbreak_tables <- lapply(outbreak_tables, function(ob) {
             names <- html_nodes(ob, xpath = "tr/td[1]") %>% html_text()
             contents <- html_nodes(ob, xpath = "tr/td[2][not(table)]") %>% html_text %>% as.list()
-            cases <- html_node(ob, xpath="tr/td/table")[[1]] %>% html_table(header=TRUE)
+            cases <- html_nodes(ob, xpath="tr/td/table")[[1]] %>% html_table(header=TRUE)
             return(structure(c(contents, list(cases)), .Names=names))
         })
         outbreak_summary <- 
