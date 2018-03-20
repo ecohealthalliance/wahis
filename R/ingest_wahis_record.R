@@ -32,20 +32,24 @@ ingest_wahis_record <- function(web_page) {
         html_attr("href") %>% 
         stri_extract_last_regex("(?<=\\')\\d+(?=\\'\\))") %>% 
         sort()
-    
-    record <- c(record, summary_table)
-    
-    if (length(html_nodes(page, xpath="//tr//td[contains(.,'There are no new outbreaks in this report')]")) !=0) {
-        record$outbreaks = "There are no new outbreaks in this report"
-    } else {
-        outbreak_tables <- html_nodes(page, xpath="//div[@class='ReviewSubmitBox']/table")[-1]
-        outbreak_tables <- outbreak_tables[-length(outbreak_tables)]
-        outbreak_tables <- lapply(outbreak_tables, function(ob) {
-            names <- html_nodes(ob, xpath = "tr/td[1]") %>% html_text()
-            contents <- html_nodes(ob, xpath = "tr/td[2][not(table)]") %>% html_text %>% as.list()
-            cases <- html_nodes(ob, xpath="tr/td/table")[[1]] %>% html_table(header=TRUE)
-            return(structure(c(contents, list(cases)), .Names=names))
-        })
-    }
+        
+    outbreaks <- if (length(html_nodes(page, xpath="//tr//td[contains(.,'There are no new outbreaks in this report')]")) !=0) {
+                     record$outbreaks = "There are no new outbreaks in this report"
+                 } else {
+                     outbreak_tables <- html_nodes(page, xpath="//div[@class='ReviewSubmitBox']/table")[-1]
+                     outbreak_tables <- outbreak_tables[-length(outbreak_tables)]
+                     outbreak_tables <- lapply(outbreak_tables, function(ob) {
+                         names <- html_nodes(ob, xpath = "tr/td[1]") %>% html_text()
+                         contents <- html_nodes(ob, xpath = "tr/td[2][not(table)]") %>%
+                             html_text %>%
+                             as.list()
+                         cases <- html_nodes(ob, xpath="tr/td/table")[[1]] %>%
+                             html_table(header=TRUE)
+                         return(structure(c(contents, list(cases)), .Names=names))
+                     })
+                 }
+    names(outbreaks) <- paste("Outbreak_", 1:length(outbreaks), sep = "")
+
+    record <- c(record, summary_table, outbreaks)
 
 }
