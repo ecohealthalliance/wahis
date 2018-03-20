@@ -39,7 +39,6 @@ ingest_wahis_record <- function(web_page) {
         record$outbreaks = "There are no new outbreaks in this report"
     } else {
         outbreak_tables <- html_nodes(page, xpath="//div[@class='ReviewSubmitBox']/table")[-1]
-        outbreak_summary <- outbreak_tables[length(outbreak_tables)]
         outbreak_tables <- outbreak_tables[-length(outbreak_tables)]
         outbreak_tables <- lapply(outbreak_tables, function(ob) {
             names <- html_nodes(ob, xpath = "tr/td[1]") %>% html_text()
@@ -47,7 +46,6 @@ ingest_wahis_record <- function(web_page) {
             cases <- html_nodes(ob, xpath="tr/td/table")[[1]] %>% html_table(header=TRUE)
             return(structure(c(contents, list(cases)), .Names=names))
         })
-        outbreak_summary <- 
     }
 
 }
