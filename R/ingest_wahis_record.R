@@ -1,11 +1,35 @@
-#' Read in a 
+#' Extract Info from WAHIS Weekly Disease Information
 #'
-#' @param file 
+#' Extract the information found in the weekly OIE World Animal Health Information
+#' System (WAHIS) HTML reports. These reports have to be provided to this function.
 #'
-#' @return
+#' @param web_page Name of the downloaded web page.
+#'
+#' @return A list with elements:
+#' \item{id}{Record id.}
+#' \item{country}{Country of outbreak.}
+#' \item{title}{Name of disease.}
+#' \item{received}{Information on reporting authority.}
+#' \item{Report type}{Type of report}
+#' \item{Date of start of the event}{Self-explanatory.}
+#' \item{Date of confirmation of the event}{id.}
+#' \item{Report date}{id.}
+#' \item{Date submitted to OIE}{id.}
+#' \item{Reason for notification}{id.}
+#' \item{Manifestation of disease}{id.}
+#' \item{Causal agent}{id.}
+#' \item{Nature of diagnosis}{id.}
+#' \item{This event pertains to}{Extent of the outbreak.}
+#' \item{Related reports}{Self-explanatory.}
+#' \item{Outbreak_i}{i lists of outbreaks with following elements: location,
+#' start date of the outbreak, outbreak status, epidemiological unit, and
+#' affected animals (as a table).}
+#' \item{epi_source}{Source of the outbreak.}
+#' \item{control_measures}{Vector with the various control measures put in place.}
+#' @examples
+#' ##ingest_wahis_record("../inst/raw_wahis_pages/25385.html")
 #' @export
 #' @import rvest stringi
-#' @examples
 ingest_wahis_record <- function(web_page) {
     page <- read_html(web_page)
     record <- list()
@@ -15,7 +39,6 @@ ingest_wahis_record <- function(web_page) {
     if(is.na(record$id)) {
         return(NULL)
     }
-    
     title_country <- 
         html_nodes(page, xpath="//div[@class='Rap12-Subtitle']//text()") 
     record$title <- title_country[[1]] %>% html_text() %>% stri_replace_last_regex(",$", "")
