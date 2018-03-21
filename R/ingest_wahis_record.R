@@ -58,6 +58,8 @@ ingest_wahis_record <- function(web_page) {
         
     outbreaks <- if (length(html_nodes(page, xpath="//tr//td[contains(.,'There are no new outbreaks in this report')]")) !=0) {
                      record$outbreaks = "There are no new outbreaks in this report"
+                 } else if (length(html_nodes(page, xpath="//div[@class='ReviewSubmitBox']/table")) == 0) {
+                     record$outbreaks = "There are no new outbreaks in this report"
                  } else {
                      outbreak_tables <- html_nodes(page, xpath="//div[@class='ReviewSubmitBox']/table")[-1]
                      outbreak_tables <- outbreak_tables[-length(outbreak_tables)]
