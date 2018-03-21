@@ -1,6 +1,9 @@
 Package: wahis
 Title: wahis
 Version: 0.0.1
+Imports:
+    rvest,
+    stringi
 Author: Noam Ross
 Maintainer: Noam Ross <ross@ecohealthalliance.org>
 Description: Data scraped from the OIE WAHIS system
