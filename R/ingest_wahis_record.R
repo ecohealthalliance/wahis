@@ -33,6 +33,9 @@
 ingest_wahis_record <- function(web_page) {
     page <- read_html(web_page)
     record <- list()
+    if (length(page) < 2) {
+        return(NULL)
+    }
     record$id <- html_node(page, xpath="//div[@class='MidBigTable']//a") %>% 
         html_attr("name") %>% 
         stri_extract_last_regex("(?<=rep_)\\d+$")
