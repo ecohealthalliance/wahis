@@ -79,12 +79,13 @@ ingest_wahis_record <- function(web_page) {
     names(outbreaks) <- paste("Outbreak_", 1:length(outbreaks), sep = "")
 
     epi_source <- html_nodes(page, xpath = "//li")
-    control_measures <- epi_source[2:(length(epi_source)-1)] %>%
-        html_text(trim = TRUE)
+#    control_measures <- epi_source[2:(length(epi_source)-1)] %>%
+#        html_text(trim = TRUE)  # avoid getting it for now, not constant across web pages
     epi_source <- epi_source[1] %>% html_text(trim = TRUE)
 
     record <- c(record, summary_table, outbreaks,
-                epi_source = epi_source, list(control_measures = control_measures))
+                epi_source = epi_source#, list(control_measures = control_measures)
+                )
 
     return(record)
 }
