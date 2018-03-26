@@ -59,6 +59,9 @@ ingest_wahis_record <- function(web_page) {
         stri_extract_last_regex("(?<=\\')\\d+(?=\\'\\))") %>% 
         sort() %>%
         toString()
+    if (!exists('Date of previous occurrence', where = summary_table)) {
+        summary_table[["Date of previous occurrence"]] <- ""
+    }
         
     outbreaks <- if (length(html_nodes(page, xpath="//tr//td[contains(.,'There are no new outbreaks in this report')]")) !=0) {
                      record$outbreaks = "There are no new outbreaks in this report"
