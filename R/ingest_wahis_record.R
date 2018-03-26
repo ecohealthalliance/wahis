@@ -57,7 +57,8 @@ ingest_wahis_record <- function(web_page) {
     summary_table[["Related reports"]] <- html_nodes(page, xpath="//tr//td//a") %>% 
         html_attr("href") %>% 
         stri_extract_last_regex("(?<=\\')\\d+(?=\\'\\))") %>% 
-        sort()
+        sort() %>%
+        toString()
         
     outbreaks <- if (length(html_nodes(page, xpath="//tr//td[contains(.,'There are no new outbreaks in this report')]")) !=0) {
                      record$outbreaks = "There are no new outbreaks in this report"
