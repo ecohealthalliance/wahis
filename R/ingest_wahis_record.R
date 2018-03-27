@@ -62,6 +62,21 @@ ingest_wahis_record <- function(web_page) {
     if (!exists('Date of previous occurrence', where = summary_table)) {
         summary_table[["Date of previous occurrence"]] <- ""
     }
+    if (!exists('Date event resolved', where = summary_table)) {
+        summary_table[["Date event resolved"]] <- ""
+    }
+    if (!exists('Nature of diagnosis', where = summary_table)) {
+        summary_table[["Nature of diagnosis"]] <- ""
+    }
+    if (!exists('Manifestation of disease', where = summary_table)) {
+        summary_table[["Manifestation of disease"]] <- ""
+    }
+    if (!exists('Causal agent', where = summary_table)) {
+        summary_table[["Causal agent"]] <- ""
+    }
+    if (!exists('Serotype', where = summary_table)) {
+        summary_table[["Serotype"]] <- ""
+    }
         
     outbreaks <- if (length(html_nodes(page, xpath="//tr//td[contains(.,'There are no new outbreaks in this report')]")) !=0) {
                      record$outbreaks = "There are no new outbreaks in this report"
