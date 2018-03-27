@@ -29,7 +29,7 @@
 #' @examples
 #' ##ingest_wahis_record("../inst/raw_wahis_pages/25385.html")
 #' @export
-#' @import rvest stringi
+#' @import rvest stringi xml2
 ingest_wahis_record <- function(web_page) {
     page <- read_html(web_page)
     record <- list()

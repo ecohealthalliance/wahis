@@ -3,3 +3,4 @@
 export(ingest_wahis_record)
 import(rvest)
 import(stringi)
+import(xml2)
