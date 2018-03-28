@@ -92,7 +92,11 @@ ingest_wahis_record <- function(web_page) {
                              as.list()
                          cases <- html_nodes(ob, xpath="tr/td/table")[[1]] %>%
                              html_table(header=TRUE)
-                         return(structure(c(contents, list(cases)), .Names=names))
+                         cases2 <- structure(list(cases), .Names = "Cases")
+                         cases2 <- mapply(cbind, cases2, "id" = record$id,
+                                          SIMPLIFY = FALSE)  # could also use: Map(cbind, cases2, id = record$id) which is short for mapply()
+                         return(c(structure(c(contents, list(cases)), .Names=names),
+                                cases2))
                      })
                  }
     names(outbreaks) <- paste("Outbreak_", 1:length(outbreaks), sep = "")
