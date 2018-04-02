@@ -68,6 +68,21 @@ for (cou in countries) {
         out_node <- content(req_3,  encoding="windows-1252") %>% 
             html_node(xpath="//table[contains(@class,'table-pad0-100')]") 
         if(class(out_node) != "xml_missing") {
+          
+          
+          if(html_table(out_node, fill=TRUE, header=TRUE)[1,1] == 'No information available') {
+            
+            newdata <- html_table(out_node, fill=TRUE, header=TRUE)
+            names(newdata)[5] <- 'Year'
+            newdata[1,1] <- cou
+            newdata <- newdata %>% mutate_all(as.character)
+            newdata[1,5] <- yr
+            class(newdata$Year) <- "integer"
+
+            vacdata <- bind_rows(vacdata, newdata)
+            write_csv(newdata, "vacdata.csv", append=TRUE)
+            
+          } else {
             
             #Both append to data strucutre and write to disk
             newdata <- html_table(out_node, fill=TRUE, header=TRUE) %>% 
@@ -77,4 +92,6 @@ for (cou in countries) {
             write_csv(newdata, "vacdata.csv", append=TRUE)
         }
     }
+    }
 }
+    
