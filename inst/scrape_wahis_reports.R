@@ -3,6 +3,12 @@ library(xml2)
 library(rvest)
 library(stringi)
 library(httr)
+library(furrr)
+library(here)
+plan(multiprocess, workers = 8)
+
+
+# First remove empty html files
 
 #Read the page of weekly reports and get the latest report number
 weekly_pg <-
@@ -17,15 +23,23 @@ report_ids <- weekly_pg %>%
 
 max_report_id = max(report_ids)
 
-file.size(list.files(here::here("inst", "raw_wahis_pages"), full.names = TRUE))
+current_pages <- fs::dir_ls(here("data-raw", "raw_wahis_pages")) %>% 
+  stri_extract_first_regex("\\d+") %>% as.numeric() %>% as.integer()
+to_get <- setdiff(seq_len(max_report_id), current_pages)
 
-for(rid in rev(seq_len(max_report_id))) {
-    file_name = paste0(rid, ".html")
-    if(length(list.files(here::here("inst", "raw_wahis_pages"), paste0("^", file_name))) == 0) {
+responses <- furrr::future_map(to_get, function(rid) {
+    Sys.sleep(1 + rexp(1, 0.25))
+    file_name = here::here("data-raw", "raw_wahis_pages", paste0(rid, ".html"))
+    if(!fs::file_exists(file_name)) {
     response <- RETRY("GET",
           url = paste0("http://www.oie.int/wahis_2/public/wahid.php/Reviewreport/Review?reportid=", as.character(rid)),
-          write_disk(here::here("inst", "raw_wahis_pages", file_name)),
+          write_disk(file_name),
           user_agent("R httr extraction script (ross@ecohealthalliance.org)"))
     }
-    Sys.sleep(1 + rexp(1, 0.25))
-}
+    #TODO: Remove file if empty
+    return(response)
+}, .progress = TRUE)
+
+
+
+saveRDS(response, here("responses.rds"))

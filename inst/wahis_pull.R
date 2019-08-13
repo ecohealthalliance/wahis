@@ -2,15 +2,23 @@
 
 library(pbapply)
 library(tidyverse)
-library(wahis)
+#library(wahis)
+devtools::load_all()
 h <- here::here
 
 
 filenames <- list.files(h("data-raw", "raw_wahis_pages"),
                         pattern = "*.html",
                         full.names = TRUE)
-wahis <- pblapply(filenames, ingest_wahis_record)  ## 25448 files read
-saveRDS(wahis)
+pboptions(type="timer")
+#Rprof("out.prof")
+wahis <-lapply(filenames, ingest_wahis_record)  ## 25448 files read
+#Rprof(NULL)
+#noamtools::proftable("out.prof")
+saveRDS(wahis, "wahis_processed.rds")
+wahis <- compact(wahis)
+names(wahis) <- map_chr(wahis, ~as.integer(.$id))
+
 #ingest_wahis_record("/Users/noamross/dropbox-eha/projects/wahis/data-raw/raw_wahis_pages/400.html")
 
 ## to check where there's a problem:

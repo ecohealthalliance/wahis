@@ -31,80 +31,106 @@
 #' @export
 #' @import rvest stringi xml2
 ingest_wahis_record <- function(web_page) {
-    page <- read_html(web_page)
-    record <- list()
+    page <- suppressWarnings(read_xml(web_page, as_html = TRUE, options = c("RECOVER", "NOERROR", 
+                                                           "NOBLANKS")))
     if (length(page) < 2) {
         return(NULL)
     }
-    record$id <- html_node(page, xpath="//div[@class='MidBigTable']//a") %>% 
-        html_attr("name") %>% 
+    record <- list()
+    record$id <- xml_find_first(page, xpath="//div[@class='MidBigTable']//a") %>% 
+        xml_attr("name") %>% 
         stri_extract_last_regex("(?<=rep_)\\d+$")
     if(is.na(record$id)) {
         return(NULL)
     }
     title_country <- 
-        html_nodes(page, xpath="//div[@class='Rap12-Subtitle']//text()") 
-    record$title <- title_country[[1]] %>% html_text() %>% stri_replace_last_regex(",$", "")
-    record$country <- title_country[[2]] %>% html_text()
+        xml_find_all(page, xpath="//div[@class='Rap12-Subtitle']//text()") 
+    record$title <- title_country[[1]] %>% xml_text() %>% stri_replace_last_regex(",$", "")
+    record$country <- title_country[[2]] %>% xml_text()
     
-    record$received <- html_nodes(page, xpath = "//td[@class='topbigtabletitle27']") %>% 
-        html_text(trim = TRUE) %>% 
+    record$received <- xml_find_first(page, xpath = "//td[@class='topbigtabletitle27']") %>% 
+        xml_text(trim = TRUE) %>% 
         stri_replace_all_regex("[\\s\\r\\n]+", " ")
     
     summary_table <- html_node(page, xpath="//table[@class='TableFoyers']") %>% 
         html_table()
     summary_table <- structure(as.list(summary_table[,2]), .Names=summary_table[,1])
-    summary_table[["Related reports"]] <- html_nodes(page, xpath="//tr//td//a") %>% 
-        html_attr("href") %>% 
+    
+    summary_table$related_reports <- 
+        xml_find_all(page, xpath = "//tr/td[contains(text(),'Related reports')]/following-sibling::td[1]/a") %>%
+        xml_attr("href") %>% 
         stri_extract_last_regex("(?<=\\')\\d+(?=\\'\\))") %>% 
-        sort() %>%
-        toString()
+        sort()
+    
+    summary_table$immediate_report <- xml_find_first(page, xpath = "//tr/td[contains(text(),'Related reports')]/following-sibling::td[1]/a[contains(text(), 'Immediate notification')]") %>% 
+        xml_attr("href") %>% 
+        stri_extract_last_regex("(?<=\\')\\d+(?=\\'\\))") 
+    
     if (!exists('Date of previous occurrence', where = summary_table)) {
-        summary_table[["Date of previous occurrence"]] <- ""
+        summary_table[["Date of previous occurrence"]] <- NA_character_
     }
     if (!exists('Date event resolved', where = summary_table)) {
-        summary_table[["Date event resolved"]] <- ""
+        summary_table[["Date event resolved"]] <- NA_character_
     }
     if (!exists('Nature of diagnosis', where = summary_table)) {
-        summary_table[["Nature of diagnosis"]] <- ""
+        summary_table[["Nature of diagnosis"]] <- NA_character_
     }
     if (!exists('Manifestation of disease', where = summary_table)) {
-        summary_table[["Manifestation of disease"]] <- ""
+        summary_table[["Manifestation of disease"]] <- NA_character_
     }
     if (!exists('Causal agent', where = summary_table)) {
-        summary_table[["Causal agent"]] <- ""
+        summary_table[["Causal agent"]] <- NA_character_
     }
     if (!exists('Serotype', where = summary_table)) {
-        summary_table[["Serotype"]] <- ""
+        summary_table[["Serotype"]] <- NA_character_
     }
         
-    outbreaks <- if (length(html_nodes(page, xpath="//tr//td[contains(.,'There are no new outbreaks in this report')]")) !=0) {
+    record <- c(record, summary_table)
+    
+if (length(xml_find_first(page, xpath="//tr//td[contains(.,'There are no new outbreaks in this report')]")) !=0) {
                      record$outbreaks = "There are no new outbreaks in this report"
-                 } else if (length(html_nodes(page, xpath="//div[@class='ReviewSubmitBox']/table")) == 0) {
+                 } else if (length(xml_find_first(page, xpath="//div[@class='ReviewSubmitBox']/table")) == 0) {
                      record$outbreaks = "There are no new outbreaks in this report"
                  } else {
                      outbreak_tables <- html_nodes(page, xpath="//div[@class='ReviewSubmitBox']/table")[-1]
                      outbreak_tables <- outbreak_tables[-length(outbreak_tables)]
-                     outbreak_tables <- lapply(outbreak_tables, function(ob) {
-                         names <- html_nodes(ob, xpath = "tr/td[1]") %>% html_text()
-                         contents <- html_nodes(ob, xpath = "tr/td[2][not(table)]") %>%
-                             html_text %>%
+                     outbreak_tables <- lapply(seq_along(outbreak_tables), function(i) {
+                         names <- html_nodes(outbreak_tables[i], xpath = "tr/td[1]") %>% xml_text()
+                         contents <- html_nodes(outbreak_tables[i], xpath = "tr/td[2][not(table)]") %>%
+                             xml_text %>%
                              as.list()
-                         cases <- html_nodes(ob, xpath="tr/td/table")[[1]] %>%
-                             html_table(header=TRUE)
+                         cases <- html_nodes(outbreak_tables[i], xpath="tr/td/table")[[1]] %>%
+                             table_value(html_table, trim = TRUE, header=TRUE)
                          return(structure(c(contents, list(cases)), .Names=names))
                      })
+                     record$outbreaks <- outbreak_tables
+                     
                  }
-    names(outbreaks) <- paste("Outbreak_", 1:length(outbreaks), sep = "")
 
-    epi_source <- html_nodes(page, xpath = "//li")
-#    control_measures <- epi_source[2:(length(epi_source)-1)] %>%
-#        html_text(trim = TRUE)  # avoid getting it for now, not constant across web pages
-    epi_source <- epi_source[1] %>% html_text(trim = TRUE)
-
-    record <- c(record, summary_table, outbreaks,
-                epi_source = epi_source#, list(control_measures = control_measures)
-                )
+#    record$summary_table <- summary_table
+    record$epi_source <- xml_find_first(page, xpath = "//tr/td[contains(text(),'Source of the outbreak')]/following-sibling::td[1]//li") %>% 
+        table_value(xml_text, trim = TRUE)
+    record$epi_notes <- xml_find_first(page, xpath = "//tr/td[contains(text(),'Epidemiological comments')]/following-sibling::td[1]") %>% 
+        table_value(xml_text, trim = TRUE)
+    
+    record$control_applied <- xml_find_first(page, xpath = "//tr/td[contains(text(),'Measures applied')]/following-sibling::td[1]//li") %>% 
+        xml_text(trim=TRUE)
+    record$control_to_be_applied <- xml_find_first(page, xpath = "//tr/td[contains(text(),'Measures to be applied')]/following-sibling::td[1]//li") %>% 
+        table_value(xml_text, trim = TRUE)
+    
+    record$diagnostic_tests <- xml_find_first(page, xpath = "//div[contains(text(),'Diagnostic test results')]/following-sibling::table[1]") %>% 
+        table_value(html_table, trim = TRUE, header=TRUE)
+    
+    record$future_reporting <- xml_find_first(page, xpath = "//div[contains(text(),'Future Reporting')]/following-sibling::table[1]/tr/td") %>% 
+        table_value(xml_text, trim = TRUE)
 
     return(record)
+}
+
+table_value <- function(xml, extractor, ...) {
+    if(class(xml) == "xml_missing") {
+        return(NA)
+    } else {
+        return(extractor(xml, ...))
+    }
 }
