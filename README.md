@@ -1,29 +1,30 @@
 
 # wahis
 
-> wahis
+This repo is for processing and eventually serving data from the [OIE WAHIS](http://www.oie.int/wahis_2/public/wahid.php) database as an R package.
 
-[![Linux Build Status](https://travis-ci.org/noamross/wahis.svg?branch=master)](https://travis-ci.org/noamross/wahis)
+- `inst/scraping_scripts` contains scripts to download HTML and PDF-formatted
+   records from OIE.  These are downloaded to `data-raw`.  As this is a very
+   slow process and these raw data are biggist, these data are `.gitignored`,
+   and can by synced with an EHA S3 bucket with `inst/sync_aws_data.R`
+   
+-  Functions (In `R/`) process individual HTML or PDF files.  There are three
+   types of records - outbreaks, old outbreak PDFs, and annual reports. There
+   should be one function for each type of file that processes it into a record 
+   that can be inserted into a database.  These should have tests, developed
+   as we encounter various pathological records.
+   
+-  `inst/processing_scripts` contains scripts to run on all downloaded data,
+   using the package functions, to generate the final database.
+   
+-  Final form for all the data should be a series of CSVs that also work as
+   an SQL database (probably MonetDB or duckdb, possibly with JSON extensions)
 
-[![Windows Build status](https://ci.appveyor.com/api/projects/status/github/noamross/wahis?svg=true)](https://ci.appveyor.com/project/noamross/wahis)
-[![](http://www.r-pkg.org/badges/version/wahis)](http://www.r-pkg.org/pkg/wahis)
-[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/wahis)](http://www.r-pkg.org/pkg/wahis)
+-  Package structure will eventually be similar to **lemis** or **citesdb**,
+   but with the database also archived/served remotely for other processes
+   in the REPEL project.
+   
+-  CI/CD should eventually scrape WAHIS, rebuild and reploy the database
+   regularly (monthly) or with updates to the package.
 
 
-Data scraped from the OIE WAHIS system
-
-## Installation
-
-```r
-devtools::install_github("noamross/wahis")
-```
-
-## Usage
-
-```r
-library(wahis)
-```
-
-## License
-
-MIT + file LICENSE © 

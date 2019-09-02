@@ -1,5 +1,7 @@
 ## Extract info on FMD from WAHIS web pages
 
+## An old script that pulled outbreak data with little structure.
+
 library(wahis)
 library(rvest)
 library(stringi)

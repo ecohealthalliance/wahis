@@ -1,5 +1,7 @@
 #!/usr/bin/env Rscript
 
+# A script to scrape country semi-annual and annal reports from WAHIS
+
 library(httr)
 library(tidyverse)
 library(xml2)

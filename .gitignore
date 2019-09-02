@@ -4,8 +4,8 @@
 .DS_Store
 .Rcache/
 .httr-oauth
-inst/raw_wahis_pages
-data-raw/raw_wahis_pages
 *.prof
 *.out
-data-raw/raw_wahis_reports
+*.tar.xz
+data-raw/*
+!data-raw/.gitkeep

@@ -1,3 +1,5 @@
+# A script to scrape incident reports from WAHIS
+
 library(tidyverse)
 library(xml2)
 library(rvest)
@@ -6,6 +8,7 @@ library(httr)
 library(furrr)
 library(here)
 plan(multiprocess, workers = 8)
+
 
 
 # First remove empty html files

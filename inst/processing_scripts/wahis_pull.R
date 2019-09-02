@@ -1,5 +1,8 @@
 #!/usr/bin/env Rscript
 
+# A short script that ingests the downloaded WAHIS records and saves and .rds
+# Just for reference, really.
+
 library(pbapply)
 library(tidyverse)
 #library(wahis)
