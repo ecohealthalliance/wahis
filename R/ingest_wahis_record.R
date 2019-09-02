@@ -101,7 +101,11 @@ if (length(xml_find_first(page, xpath="//tr//td[contains(.,'There are no new out
                              as.list()
                          cases <- html_nodes(outbreak_tables[i], xpath="tr/td/table")[[1]] %>%
                              table_value(html_table, trim = TRUE, header=TRUE)
-                         return(structure(c(contents, list(cases)), .Names=names))
+                         cases2 <- structure(list(cases), .Names = "Cases")
+                         cases2 <- mapply(cbind, cases2, "id" = record$id,
+                                          SIMPLIFY = FALSE)  # could also use: Map(cbind, cases2, id = record$id) which is short for mapply()
+                         return(c(structure(c(contents, list(cases)), .Names=names),
+                                  cases2))
                      })
                      record$outbreaks <- outbreak_tables
                      
