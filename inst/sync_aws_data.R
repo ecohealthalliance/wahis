@@ -25,6 +25,6 @@ aws.signature::use_credentials()
 # To get current scraped data (>2GB)
 save_object(object = "wahis-raw-data.tar.xz", 
             bucket = "wahis-raw-data",
-            file = "waihs-raw-data.tar.xz",
+            file = "wahis-raw-data.tar.xz",
             overwrite = TRUE)
 untar("wahis-raw-data.tar.xz", exdir = ".", tar = "internal")
