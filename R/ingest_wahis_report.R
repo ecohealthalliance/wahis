@@ -4,17 +4,15 @@
 #' @param report_period report period
 #' @param web_page Name of the downloaded web page
 #' @noRd
-get_oie_report_table <- function(parents, country, report_period, web_page){
+clean_oie_report_table <- function(parent){
     
-    tbl_out <- parents[[min(which(xml_name(parents) == "table"))]] %>% 
+    tbl_out <- parent %>% 
         html_table() %>%
         as_tibble() %>%
         set_names(.[2,]) %>%
         clean_names() %>%
         slice(-1:-2) %>%
-        mutate_all(~na_if(., "")) %>%
-        mutate(country = country, report_period = report_period, file = basename(web_page)) 
-    
+        mutate_all(~na_if(., "")) 
     return(tbl_out)
 }
 
@@ -33,6 +31,7 @@ get_oie_report_table <- function(parents, country, report_period, web_page){
 #' @export
 #' @importFrom xml2 read_xml xml_find_first xml_text xml_parents
 #' @importFrom stringi stri_extract_first_regex
+#' @importFrom stringr str_remove str_trim
 #' @importFrom rvest html_table
 #' @importFrom purrr map_df
 #' @importFrom tidyr fill
@@ -52,12 +51,12 @@ ingest_wahis_report <- function(web_page) {
     report_period <- xml_find_first(page, '//td[contains(., "Report period:")]') %>% xml_text() %>% stri_extract_first_regex("(?<=:\\s).*")
     
     ## 1
-    # get OIE-listed diseases/infections present
+    # OIE-listed diseases/infections present
     tab_title <- xml_find_first(page, "//td[contains(., \"Summary on OIE-listed diseases/infections present in\")]")
-    #if(inherits(tab_title, "xml_missing")) return(tibble(country = character(0)))
-    parents <- xml_parents(tab_title)
+    parent <- xml_parents(tab_title)
+    parent <- parent[[min(which(xml_name(parent) == "table"))]]
     
-    diseases_present <- get_oie_report_table(parents, country, report_period, web_page) %>%
+    diseases_present <- clean_oie_report_table(parent) %>%
         fill(oie_listed_disease, .direction = "down") %>% 
         group_by(oie_listed_disease) %>%
         mutate(oie_listed_disease_row_id = row_number()) %>%
@@ -79,43 +78,51 @@ ingest_wahis_report <- function(web_page) {
     }
     
     ## 2
-    # get OIE-listed diseases absent
-    taxa_grp <- c("Multiple species",
-                  "Cattle",
-                  "Sheep/Goats",
-                  "Swine",
-                  "Equidae",
-                  "Lagomorphs",
-                  "Birds",
-                  "Bees",
-                  "Other",
-                  "Fish",
-                  "Molluscs",
-                  "Crustaceans")
-    diseases_absent <- map_df(taxa_grp, function(tg){
+    # OIE-listed diseases absent
+    tab_title = xml_find_all(page, '//th[contains(., "Date of last occurrence")]')
+    parent <- xml_parents(tab_title)
+    parent <- parent[which(xml_name(parent) == "table")] 
+    diseases_absent <- map_df(parent, ~clean_oie_report_table(.))
+    
+    ## 3  
+    # Detailed quantitative information for OIE-listed diseases/infections present
+    # Disease information by State by month
+    #TODO ^ this might be different for pre-2014
+    
+    tab_title = xml_find_all(page, '//th[contains(., "Month")]')
+    parent <- xml_parents(tab_title)
+    parent <- parent[which(xml_name(parent) == "table")] 
+    
+    #TODO how to do this with purrr (ie using single bracket subset)?
+    diseases_present_detail <- tibble()
+    for(i in seq_along(parent)){
         
-        tbl_header_xml <- paste0('//td[contains(., "',
-                                 tg,
-                                 '")]')
+        p_node <- parent[[i]]
+        disease <- html_table(p_node)[1,1] 
+        disease_check <- str_remove(disease, "Species") %>% str_trim()
         
-        tab_title <- xml_find_first(page, tbl_header_xml)
-        #if(inherits(tab_title, "xml_missing")) return(tibble(country = character(0)))
-        parents <- xml_parents(tab_title)
-        
-        # make sure you got the absense table and not something later in the report
-        out <- get_oie_report_table(parents, country, report_period, web_page) 
-        if(!"date_of_last_occurrence" %in% names(out)){
-            out <- tibble()
+        if(disease_check %in% c("Wild", "Domestic")){ #TODO need to test this on other cases
+            p_nodeset <- parent[i]
+            grandparent <- xml_parent(p_nodeset) # get parent of table
+            siblings <- xml_children(grandparent) 
+            disease <- siblings[which(siblings %in% p_nodeset)-1] %>% html_text()
         }
-        out 
-    })
+        
+        diseases_present_detail <- bind_rows(diseases_present_detail, 
+                                             clean_oie_report_table(p_node) %>%
+                                                 fill(month, .direction = "down") %>%
+                                                 mutate(disease = disease))
+    }
     
-    
+
+    # output
     return(list(
         "country" = country,
         "report_period" = report_period,
-        "diseases_present"=diseases_present, 
-        "diseases_absent"=diseases_absent))
+        "web_page" = web_page,
+        "diseases_present"= diseases_present, 
+        "diseases_absent"= diseases_absent,
+        "diseases_present_detail"= diseases_present_detail))
 }
 
 safe_ingest <- function(web_page) {
