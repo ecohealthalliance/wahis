@@ -7,7 +7,7 @@
 ingest_wahis_report(web_page)
 }
 \arguments{
-\item{web_page}{Name of the downloaded web page.}
+\item{web_page}{Name of the downloaded web page}
 }
 \value{
 A list with elements:

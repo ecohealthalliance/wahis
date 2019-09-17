@@ -2,14 +2,20 @@ Package: wahis
 Title: wahis
 Version: 0.0.1
 Imports:
-    rvest,
-    stringi,
-    MonetDBLite,
-    DBI,
-    xml2,
-    dplyr,
-    tidyr
-Author: Noam Ross
+        DBI,
+        dplyr,
+        janitor,
+        magrittr,
+        MonetDBLite,
+        purrr,
+        rvest,
+        stringi,
+        tidyr,
+        xml2
+Authors@R: c(
+    person("Noam", "Ross", , "ross@ecohealthalliance.org", role = c("aut", "cre")),
+    person("Toph", "Allen", , "allen@ecohealthalliance.edu", role = c("aut")),
+    person("Emma", "Mendelsohn", , "mendelsohn@ecohealthalliance.org", role = c("aut")))
 Maintainer: Noam Ross <ross@ecohealthalliance.org>
 Description: Data scraped from the OIE WAHIS system
 License: MIT + file LICENSE
