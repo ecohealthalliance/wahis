@@ -13,9 +13,9 @@ find_parent <- function(page, pref, header_name){
     parent <- xml_parents(tab_title)
     
     parent <- switch(pref,
-                  "th" = parent[which(xml_name(parent) == "table")],
-                  "td" = parent[[min(which(xml_name(parent) == "table"))]])
-
+                     "th" = parent[which(xml_name(parent) == "table")],
+                     "td" = parent[[min(which(xml_name(parent) == "table"))]])
+    
     return(parent)
 }
 
@@ -97,7 +97,7 @@ ingest_wahis_report <- function(web_page) {
     # OIE-listed diseases absent
     parent <- find_parent(page, "th", "Date of last occurrence")
     diseases_absent <- map_df(parent, ~clean_oie_report_table(.))
-
+    
     ## 3  
     # Detailed quantitative information for OIE-listed diseases/infections present
     # Disease information by State by month
@@ -115,7 +115,7 @@ ingest_wahis_report <- function(web_page) {
         
         if(disease_check %in% c("Wild", "Domestic")){ #TODO need to test this on other cases
             p_nodeset <- parent[i]
-            grandparent <- xml_parent(p_nodeset) # get parent of table
+            grandparent <- xml_parent(p_nodeset) 
             siblings <- xml_children(grandparent) 
             disease <- siblings[which(siblings %in% p_nodeset)-1] %>% html_text()
         }
@@ -128,12 +128,36 @@ ingest_wahis_report <- function(web_page) {
     
     ## 4  
     # Unreported OIE-listed diseases during the reporting period
+    p_title <- xml_find_all(page, "//div[contains(., \"Unreported OIE-listed diseases during the reporting period\")]")
+    p_nodeset <- p_title[5]
+    grandparent <- xml_parent(p_nodeset) 
+    siblings <- xml_children(grandparent) 
+    
+    header_index <- which(siblings %in% p_nodeset)
+    
+    next_header <- xml_parent(xml_find_all(siblings, "//tr[contains(., \"Zoonotic diseases in humans\")]"))
+    next_header_index <- which(siblings %in% next_header)
+    
+    parent <- siblings[(header_index+1):(next_header_index-1)]
+    diseases_unreported <- map_df(parent, function(x){
+        dat <- x %>% 
+            html_table() %>%
+            t()
+        if(ncol(dat)>2){
+            out <- tibble(taxa = unique(dat[,1]), disease = c(dat[,2:ncol(dat)]))
+        }else{
+            out <- dat %>%
+                as_tibble(.name_repair = "minimal") %>%
+                set_names(c("taxa", "disease"))
+        }
+        out %>% filter(disease != "")
+    })
     
     ## 5  
     # Zoonotic diseases in humans
     parent <- find_parent(page, "td", "Zoonotic diseases in humans")
     disease_humans <- clean_oie_report_table(parent) 
-
+    
     ## 6
     # Animal population
     parent <- find_parent(page, "td", "Animal population")
@@ -141,6 +165,32 @@ ingest_wahis_report <- function(web_page) {
     
     ## 7
     # Veterinarians and veterinary para-professionals
+    parent <- find_parent(page, "td", "Veterinarians:")
+    veterinarians <- clean_oie_report_table(parent) %>%
+        rename(veterinarian_field = x) %>%
+        mutate(veterinarian_class = "veterinarians")
+    
+    note <- veterinarians %>% filter(veterinarian_field == "(specify with a short note)") %>% pull(2)
+    
+    veterinarians <- veterinarians %>%
+        mutate(veterinarian_field = ifelse(veterinarian_field=="Others", 
+                                           paste0(veterinarian_field, " (", note, ")"),
+                                           veterinarian_field)) %>%
+        slice(-nrow(.))
+    
+    parent <- find_parent(page, "td", "Veterinary Paraprofessionals")
+    veterinarian_paraprofessionals <- clean_oie_report_table(parent) %>%
+        rename(veterinarian_field = x) %>%
+        mutate(veterinarian_class = "veterinarian paraprofessionals")
+    
+    note <- veterinarian_paraprofessionals %>% filter(veterinarian_field == "(specify with a short note)") %>% pull(2)
+    
+    veterinarian_paraprofessionals <- veterinarian_paraprofessionals %>%
+        mutate(veterinarian_field = ifelse(veterinarian_field=="Others", 
+                                           paste0(veterinarian_field, " (", note, ")"),
+                                           veterinarian_field)) %>%
+        slice(-nrow(.))
+    veterinarians <- bind_rows(veterinarians, veterinarian_paraprofessionals)
     
     ## 8
     #  National reference laboratories
@@ -158,7 +208,7 @@ ingest_wahis_report <- function(web_page) {
     # Vaccine Manufacturers
     parent <- find_parent(page, "td", "Vaccine Manufacturers")
     vaccine_manufacturers <- clean_oie_report_table(parent) 
-
+    
     ## 11
     # Vaccines
     parent <- find_parent(page, "td", "Vaccines")
@@ -173,8 +223,10 @@ ingest_wahis_report <- function(web_page) {
         "diseases_present"= diseases_present, 
         "diseases_absent"= diseases_absent,
         "diseases_present_detail"= diseases_present_detail,
+        "diseases_unreported" = diseases_unreported,
         "disease_humans" = disease_humans,
         "animal_population" = animal_population,
+        "veterinarians" = veterinarians,
         "national_reference_laboratories" = national_reference_laboratories,
         "national_reference_laboratories_detail" = national_reference_laboratories_detail,
         "vaccine_manufacturers" = vaccine_manufacturers,
