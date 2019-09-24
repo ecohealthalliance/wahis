@@ -81,11 +81,11 @@ ingest_wahis_report <- function(web_page) {
     # Get table and add notes
     
     parent <- find_parent(page, "td", "Summary on OIE-listed diseases/infections present in")
-    assertthat::assert_that(length(parent)==1) # only should find one match
     diseases_present <- clean_oie_report_table(parent)
     
     if(!is.null(diseases_present)){ # may be NULL if no diseases were detected
         
+        assertthat::assert_that(length(parent)==1) # only should find one match
         # check that we have the right table
         assertthat::has_name(diseases_present, c("oie_listed_disease", "occurrence")) 
         
@@ -187,30 +187,28 @@ ingest_wahis_report <- function(web_page) {
     ## 5  
     # Zoonotic diseases in humans
     parent <- find_parent(page, "td", "Zoonotic diseases in humans")
-    assertthat::assert_that(length(parent)==1) # only should find one match
-    
     disease_humans <- clean_oie_report_table(parent) 
     if(!is.null(disease_humans)){
+        assertthat::assert_that(length(parent)==1) # only should find one match
         assertthat::has_name(disease_humans, c("no_information_available", "disease_absent")) 
     }
     
     ## 6
     # Animal population
     parent <- find_parent(page, "td", "Animal population")
-    assertthat::assert_that(length(parent)==1) # only should find one match
     animal_population <- clean_oie_report_table(parent) 
     if(!is.null(animal_population)){
+        assertthat::assert_that(length(parent)==1) # only should find one match
         assertthat::has_name(animal_population, c("species", "production")) 
     }
-    
-    
+
     ## 7
     # Veterinarians and veterinary para-professionals
     parent <- find_parent(page, "td", "Veterinarians:")
-    assertthat::assert_that(length(parent)==1) # only should find one match
     veterinarians <- clean_oie_report_table(parent) 
     
     if(!is.null(veterinarians)){
+        assertthat::assert_that(length(parent)==1) # only should find one match
         assertthat::has_name(veterinarians, c("x", "public_sector")) 
         
         veterinarians <- veterinarians %>%
@@ -228,10 +226,10 @@ ingest_wahis_report <- function(web_page) {
     }
     
     parent <- find_parent(page, "td", "Veterinary Paraprofessionals")
-    assertthat::assert_that(length(parent)==1) # only should find one match
     veterinarian_paraprofessionals <- clean_oie_report_table(parent)
     
     if(!is.null(veterinarian_paraprofessionals)){
+        assertthat::assert_that(length(parent)==1) # only should find one match
         assertthat::has_name(veterinarian_paraprofessionals, c("x", "public_sector")) 
         
         veterinarian_paraprofessionals <- veterinarian_paraprofessionals %>%
@@ -252,20 +250,20 @@ ingest_wahis_report <- function(web_page) {
     ## 8
     #  National reference laboratories
     parent <- find_parent(page, "td", "National reference laboratories")
-    assertthat::assert_that(length(parent)==1) # only should find one match
     national_reference_laboratories <- clean_oie_report_table(parent) 
     
     if(!is.null(national_reference_laboratories)){
+        assertthat::assert_that(length(parent)==1) # only should find one match
         assertthat::has_name(national_reference_laboratories, c("name", "contacts")) 
     }
     
     ## 9
     # Diagnostic Tests
     parent <- find_parent(page, "td", "Diagnostic Tests")
-    assertthat::assert_that(length(parent)==1) # only should find one match
     national_reference_laboratories_detail <- clean_oie_report_table(parent)
     
     if(!is.null(national_reference_laboratories_detail)){
+        assertthat::assert_that(length(parent)==1) # only should find one match
         assertthat::has_name(national_reference_laboratories_detail, c("laboratory", "disease", "test_type")) 
         
         national_reference_laboratories_detail <- national_reference_laboratories_detail %>%
@@ -276,10 +274,10 @@ ingest_wahis_report <- function(web_page) {
     ## 10
     # Vaccine Manufacturers
     parent <- find_parent(page, "td", "Vaccine Manufacturers")
-    assertthat::assert_that(length(parent)==1) # only should find one match
     vaccine_manufacturers <- clean_oie_report_table(parent) 
     
     if(!is.null(vaccine_manufacturers)){
+        assertthat::assert_that(length(parent)==1) # only should find one match
         assertthat::has_name(vaccine_manufacturers, c("manufacturer", "contacts")) 
     }
     
