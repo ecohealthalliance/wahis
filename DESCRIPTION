@@ -6,7 +6,6 @@ Imports:
         dplyr,
         janitor,
         magrittr,
-        MonetDBLite,
         purrr,
         rvest,
         stringi,
