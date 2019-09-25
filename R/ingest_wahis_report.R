@@ -98,18 +98,18 @@ ingest_wahis_report <- function(web_page) {
         assertthat::has_name(diseases_present, c("new_outbreaks", "occurrence")) 
         
         if(!"non_oie_listed_disease" %in% colnames(diseases_present)){diseases_present$non_oie_listed_disease <- NA_character_}
+        if(!"oie_listed_disease" %in% colnames(diseases_present)){diseases_present$oie_listed_disease <- NA_character_}
         
         diseases_present <- diseases_present %>%
             mutate(disease = coalesce(oie_listed_disease, non_oie_listed_disease)) %>%
             mutate(oie_listed = if_else(!is.na(oie_listed_disease), TRUE, 
                                         if_else(!is.na(non_oie_listed_disease), FALSE, NA))) %>%
-            select(-non_oie_listed_disease, -oie_listed_disease) %>%
+            select(disease, everything(), -non_oie_listed_disease, -oie_listed_disease) %>%
             fill(disease, .direction = "down") %>% 
             fill(oie_listed, .direction = "down") %>% 
             group_by(disease) %>%
             mutate(disease_row_id = row_number()) %>%
-            ungroup() %>%
-            select(disease, everything())
+            ungroup() 
         
         # get notes into OIE listed disease table
         note_rows <- which(stri_detect_fixed(diseases_present$disease, "note", case_insensitive = TRUE))
@@ -196,8 +196,14 @@ ingest_wahis_report <- function(web_page) {
            next_header_name <- "Zoonotic diseases in humans")
     
     next_header <- map(next_header_name, function(x){
-        xml_find_all(siblings, paste0('//tr[contains(., "', x,'")]')) %>%
+        # try tr
+        nhn <- xml_find_all(siblings, paste0('//tr[contains(., "', x,'")]')) %>% #TODO can this be td instead?
             xml_parent()
+        # if doesn't work (table is empty), try div
+        if(length(nhn)==0) {
+            nhn <- xml_find_all(siblings, paste0('//div[contains(., "', x,'")]'))[5]
+        }
+        return(nhn)
     })
     
     next_header_index <- map_int(next_header, ~which(siblings %in% .))
