@@ -26,11 +26,11 @@ find_parent <- function(page, pref, header_name){
 #' @noRd
 clean_oie_report_table <- function(parent){
     
-    if(is.null(parent)){return()}
+    if(is.null(parent) || length(parent)==0){return()}
     
     map_df(parent, function(p_node){
         p_node %>%
-            html_table() %>%
+            html_table(fill = TRUE) %>%
             as_tibble() %>%
             set_names(.[2,]) %>%
             clean_names() %>%
@@ -54,12 +54,12 @@ clean_oie_report_table <- function(parent){
 #' @export
 #' @importFrom xml2 read_xml xml_find_first xml_text xml_parents
 #' @importFrom stringi stri_extract_first_regex
-#' @importFrom stringr str_remove str_trim
+#' @importFrom stringr str_remove str_trim str_detect str_sub
 #' @importFrom rvest html_table
-#' @importFrom purrr map_df keep
 #' @importFrom tidyr fill
 #' @importFrom magrittr set_names
 #' @importFrom janitor clean_names
+#' @importFrom purrr map map2 map_df map_int keep reduce
 #' @import dplyr
 
 ingest_wahis_report <- function(web_page) {
@@ -75,45 +75,63 @@ ingest_wahis_report <- function(web_page) {
     
     # get report period
     report_period <- xml_find_first(page, '//td[contains(., "Report period:")]') %>% xml_text() %>% stri_extract_first_regex("(?<=:\\s).*")
+    report_year <- str_sub(report_period, start = -4) %>% as.numeric()
+    report_months <- str_sub(report_period, end = -6)
     
-    ## 1
+    # 1 -----------------------------------------------------------------------
     # OIE-listed diseases/infections present
-    # Get table and add notes
+    # pre-2014 also includes non-OIE-listed diseases present
     
-    parent <- find_parent(page, "td", "Summary on OIE-listed diseases/infections present in")
+    parent <- find_parent(page, "td", "diseases/infections present in")
+    parent <- keep(parent, function(x){
+        header <- xml_child(x) %>% 
+            xml_text() 
+        str_detect(header, "1. Summary on OIE-listed diseases/infections present in|5. Summary on non OIE-Listed diseases/infections present in")
+    })
+    
     diseases_present <- clean_oie_report_table(parent)
     
     if(!is.null(diseases_present)){ # may be NULL if no diseases were detected
         
-        assertthat::assert_that(length(parent)==1) # only should find one match
+        assertthat::assert_that(length(parent)<=2) # only should find one match
         # check that we have the right table
-        assertthat::has_name(diseases_present, c("oie_listed_disease", "occurrence")) 
+        assertthat::has_name(diseases_present, c("new_outbreaks", "occurrence")) 
+        
+        if(!"non_oie_listed_disease" %in% colnames(diseases_present)){diseases_present$non_oie_listed_disease <- NA_character_}
         
         diseases_present <- diseases_present %>%
-            fill(oie_listed_disease, .direction = "down") %>% 
-            group_by(oie_listed_disease) %>%
-            mutate(oie_listed_disease_row_id = row_number()) %>%
-            ungroup()
+            mutate(disease = coalesce(oie_listed_disease, non_oie_listed_disease)) %>%
+            mutate(oie_listed = if_else(!is.na(oie_listed_disease), TRUE, 
+                                        if_else(!is.na(non_oie_listed_disease), FALSE, NA))) %>%
+            select(-non_oie_listed_disease, -oie_listed_disease) %>%
+            fill(disease, .direction = "down") %>% 
+            fill(oie_listed, .direction = "down") %>% 
+            group_by(disease) %>%
+            mutate(disease_row_id = row_number()) %>%
+            ungroup() %>%
+            select(disease, everything())
         
         # get notes into OIE listed disease table
-        note_rows <- which(stri_detect_fixed(diseases_present$oie_listed_disease, "note", case_insensitive = TRUE))
-        notes <- tibble(oie_listed_disease = diseases_present$oie_listed_disease[note_rows - 1],
-                        oie_listed_disease_row_id = 1,
-                        notes = diseases_present$oie_listed_disease[note_rows])
+        note_rows <- which(stri_detect_fixed(diseases_present$disease, "note", case_insensitive = TRUE))
+        notes <- tibble(disease = diseases_present$disease[note_rows - 1],
+                        disease_row_id = 1,
+                        notes = diseases_present$disease[note_rows])
         
         if(length(note_rows)) {
             diseases_present <- diseases_present %>%
                 slice(-note_rows) %>%
-                left_join(notes, by = c("oie_listed_disease", "oie_listed_disease_row_id")) %>%
-                select(-oie_listed_disease_row_id)
+                left_join(notes, by = c("disease", "disease_row_id")) 
         }else{
             diseases_present$notes <- NA_character_
         }
+        diseases_present <- diseases_present %>%
+            select(-disease_row_id)
     }
     
-    ## 2
-    # OIE-listed diseases absent
-    # Get table 
+    # 2 -----------------------------------------------------------------------
+    # OIE-listed diseases absent 
+    #TODO Pull in taxa names?
+    #TODO Distinguish between oie-listed and non-oie-listed diseases?  relevant only to pre-2014.  follow indexing method in 4?
     
     parent <- find_parent(page, "th", "Date of last occurrence")
     diseases_absent <- clean_oie_report_table(parent)
@@ -124,22 +142,20 @@ ingest_wahis_report <- function(web_page) {
         
         diseases_absent <- diseases_absent %>%
             fill(disease, .direction = "down") 
-            
+        
     }
     
-    ## 3  
+    # 3 -----------------------------------------------------------------------
     # Detailed quantitative information for OIE-listed diseases/infections present
     # Disease information by State by month
     # Get every table that has "Month" in it.  Disease names are sometimes in table header and sometime in node above.  
-    #TODO ^ this might be different for pre-2014
     
     parent <- find_parent(page, "th", "Month")
     
     if(!is.null(parent)){
         
         diseases_present_detail <- map_df(parent, function(p_node){
-            
-            disease <- html_table(p_node)[1,1] 
+            disease <- html_table(p_node, fill = TRUE)[1,1] # fill needed b/c weirdness in IRQ_2015_sem0.html "/html/body/div/div[3]/div[2]/div/table[27]"
             disease_check <- str_remove(disease, "Species") %>% str_trim()
             
             # if disease name is not in header, get the node above
@@ -156,35 +172,57 @@ ingest_wahis_report <- function(web_page) {
             diseases_present_detail <- diseases_present_detail %>%
                 fill(month, .direction = "down") %>%
                 mutate(disease = disease) #TODO note that these output diseases do not exactly match the disease_present diseases because of line breaks
-        })
+         })
         
     }else{
         diseases_present_detail <- NULL
     }
     
-    ## 4  
+    # 4 -----------------------------------------------------------------------
     # Unreported OIE-listed diseases during the reporting period
     # Pulls all tables between top div marker and next section - this section has its own fromatting requirements that differ from other tbls
-    p_title <- xml_find_all(page, "//div[contains(., \"Unreported OIE-listed diseases during the reporting period\")]")
-    p_nodeset <- p_title[5]
+    #TODO Distinguish between oie-listed and non-oie-listed diseases?  relevant only to pre-2014
+    
+    p_title <- xml_find_all(page, "//div[contains(., \"Unreported\")]")
+    p_nodeset <- p_title[5:length(p_title)]
     grandparent <- xml_parent(p_nodeset) 
     siblings <- xml_children(grandparent) 
     
     header_index <- which(siblings %in% p_nodeset)
     
-    next_header <- xml_parent(xml_find_all(siblings, "//tr[contains(., \"Zoonotic diseases in humans\")]"))
-    next_header_index <- which(siblings %in% next_header)
+    assertthat::assert_that(ifelse(report_year<2014, length(p_nodeset)==2, length(p_nodeset)==1))
     
-    parent <- siblings[(header_index+1):(next_header_index-1)]
-    diseases_unreported <- map_df(parent, function(p_node){
-        dat <- p_node %>% 
-            html_table() %>%
-            t()
-        tibble(taxa = unique(dat[,1]), disease = c(dat[,2:ncol(dat)])) %>% 
-            filter(disease != "")
+    ifelse(length(p_nodeset)==2, next_header_name <- c("Summary on non OIE-Listed diseases/infections present", "Zoonotic diseases in humans"), 
+           next_header_name <- "Zoonotic diseases in humans")
+    
+    next_header <- map(next_header_name, function(x){
+        xml_find_all(siblings, paste0('//tr[contains(., "', x,'")]')) %>%
+            xml_parent()
     })
     
-    ## 5  
+    next_header_index <- map_int(next_header, ~which(siblings %in% .))
+    
+    # check that there is data between headers 
+    check_index <- next_header_index - header_index >1
+    
+    header_index <- header_index[check_index]
+    next_header_index <- next_header_index[check_index]
+    
+    if(length(header_index)){
+        all_index <- map2(header_index, next_header_index, ~(.x+1):(.y-1)) %>% reduce(c)
+        parent <- siblings[all_index]
+        diseases_unreported <- map_df(parent, function(p_node){
+            dat <- p_node %>% 
+                html_table(fill = TRUE) %>%
+                t()
+            tibble(taxa = unique(dat[,1]), disease = c(dat[,2:ncol(dat)])) %>% 
+                filter(disease != "")
+        })
+    }else{
+        diseases_unreported <- NULL 
+    }
+    
+    # 5 -----------------------------------------------------------------------
     # Zoonotic diseases in humans
     parent <- find_parent(page, "td", "Zoonotic diseases in humans")
     disease_humans <- clean_oie_report_table(parent) 
@@ -193,16 +231,18 @@ ingest_wahis_report <- function(web_page) {
         assertthat::has_name(disease_humans, c("no_information_available", "disease_absent")) 
     }
     
-    ## 6
+    # 6 -----------------------------------------------------------------------
     # Animal population
     parent <- find_parent(page, "td", "Animal population")
     animal_population <- clean_oie_report_table(parent) 
     if(!is.null(animal_population)){
         assertthat::assert_that(length(parent)==1) # only should find one match
         assertthat::has_name(animal_population, c("species", "production")) 
+        animal_population <- animal_population %>%
+            fill(species, .direction = "down")
     }
-
-    ## 7
+    
+    # 7 -----------------------------------------------------------------------
     # Veterinarians and veterinary para-professionals
     parent <- find_parent(page, "td", "Veterinarians:")
     veterinarians <- clean_oie_report_table(parent) 
@@ -247,7 +287,7 @@ ingest_wahis_report <- function(web_page) {
     }
     veterinarians <- bind_rows(veterinarians, veterinarian_paraprofessionals)
     
-    ## 8
+    # 8 -----------------------------------------------------------------------
     #  National reference laboratories
     parent <- find_parent(page, "td", "National reference laboratories")
     national_reference_laboratories <- clean_oie_report_table(parent) 
@@ -257,7 +297,7 @@ ingest_wahis_report <- function(web_page) {
         assertthat::has_name(national_reference_laboratories, c("name", "contacts")) 
     }
     
-    ## 9
+    # 9 -----------------------------------------------------------------------
     # Diagnostic Tests
     parent <- find_parent(page, "td", "Diagnostic Tests")
     national_reference_laboratories_detail <- clean_oie_report_table(parent)
@@ -271,7 +311,7 @@ ingest_wahis_report <- function(web_page) {
             fill(disease, .direction = "down")
     }
     
-    ## 10
+    # 10 -----------------------------------------------------------------------
     # Vaccine Manufacturers
     parent <- find_parent(page, "td", "Vaccine Manufacturers")
     vaccine_manufacturers <- clean_oie_report_table(parent) 
@@ -281,13 +321,13 @@ ingest_wahis_report <- function(web_page) {
         assertthat::has_name(vaccine_manufacturers, c("manufacturer", "contacts")) 
     }
     
-    ## 11
+    # 11 -----------------------------------------------------------------------
     # Vaccines
     parent <- find_parent(page, "td", "Vaccines") 
     parent <- keep(parent, function(x){
         header <- xml_child(x) %>% 
             xml_text() 
-        !grepl("National reference laboratories|Manufacturers", header)
+        !grepl("National reference laboratories|Manufacturers|production", header)
     })
     
     vaccine_manufacturers_detail <- clean_oie_report_table(parent) 
@@ -300,11 +340,28 @@ ingest_wahis_report <- function(web_page) {
             fill(disease, .direction = "down")
     }
     
-    # 12 vaccine production
+    # 12 -----------------------------------------------------------------------
+    # Vaccine production
+    
+    parent <- find_parent(page, "td", "Vaccine production")
+    parent <- keep(parent, function(x){
+        header <- xml_child(x) %>% 
+            xml_text() 
+        !grepl("National reference laboratories|Manufacturers|Vaccines", header)
+    })
+    
+    vaccine_production <- clean_oie_report_table(parent) 
+    
+    if(!is.null(vaccine_production)){
+        assertthat::assert_that(length(parent)==1) # only should find one match
+        assertthat::has_name(vaccine_production, c("manufacturer", "vaccine", "doses_produced")) 
+    }
     
     # output
     return(list(
         "country" = country,
+        "report_months" = report_months,
+        "report_year" = report_year,
         "report_period" = report_period,
         "web_page" = web_page,
         "diseases_present"= diseases_present, 
@@ -317,7 +374,8 @@ ingest_wahis_report <- function(web_page) {
         "national_reference_laboratories" = national_reference_laboratories,
         "national_reference_laboratories_detail" = national_reference_laboratories_detail,
         "vaccine_manufacturers" = vaccine_manufacturers,
-        "vaccine_manufacturers_detail" = vaccine_manufacturers_detail))
+        "vaccine_manufacturers_detail" = vaccine_manufacturers_detail,
+        "vaccine_production" = vaccine_production))
 }
 
 safe_ingest <- function(web_page) {
