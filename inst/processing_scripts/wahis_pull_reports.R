@@ -14,4 +14,4 @@ for(i in seq_along(filenames)){
 }
 
 web_page = filenames[[i]]
-web_page = "data-raw/raw_wahis_reports/USA_2012_sem0.html"
+web_page = "data-raw/raw_wahis_reports/USA_2017_sem0.html"
