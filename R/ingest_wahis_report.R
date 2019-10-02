@@ -229,29 +229,6 @@ ingest_wahis_report <- function(web_page) {
         diseases_present_detail <- NULL
     }
     
-    # Disease present detail by semesters
-    diseases_present_siblings <- xml_nodes(page, xpath='//div[@class="ContentBigTable"]/*')
-    
-    first_header_name <- paste("Disease information for", country, report_period)
-    second_header_name <- "Unreported OIE-listed diseases during the reporting period"
-    
-    disease_present_sems_index <- get_tables_by_index(siblings = diseases_present_siblings, 
-                                                      first_header_name = first_header_name,
-                                                      second_header_name = second_header_name)
-
-    #TODO Ugh need to check headers here too - try to combine with above if possible ?
-    # search for new outbreaks and exclude first table? 
-    # index methods?  name two sets of headers
-    diseases_present_sems_detail <- map_dfr(disease_present_sems_index, function(x){
-        tabs <- diseases_absent_siblings[x]
-        map_dfr(tabs, function(tb){
-            clean_oie_report_table(tb, include_header = TRUE) %>%
-                rename(disease = header)
-        })
-    })
-    
-    assertthat::has_name(diseases_present_sems_detail, c("new_outbreaks", "total_outbreaks", "species"))
-    
     # 4 -----------------------------------------------------------------------
     # Unreported OIE-listed diseases during the reporting period
     # Pulls all tables between top div marker and next section 
