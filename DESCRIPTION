@@ -2,8 +2,10 @@ Package: wahis
 Title: wahis
 Version: 0.0.1
 Imports:
+        assertthat,
         DBI,
         dplyr,
+        here,
         janitor,
         magrittr,
         purrr,

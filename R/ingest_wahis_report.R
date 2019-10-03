@@ -135,10 +135,18 @@ ingest_wahis_report <- function(web_page) {
             as_tibble()
         
         dat <- dat[,1:2] %>%
-            set_names(c("field", "value")) %>%
-            bind_rows(dat[,3:4] %>% set_names(c("field", "value"))) %>%
-            mutate(animal_type = .$value[field == "Animal type"]) %>%
-            filter(field != "Animal type")
+            set_names(c("submission_info", "submission_value")) %>%
+            bind_rows(dat[,3:4] %>% set_names(c("submission_info", "submission_value"))) %>%
+            mutate(submission_animal_type = .$submission_value[submission_info == "Animal type"]) %>%
+            filter(submission_info != "Animal type") %>% 
+            filter(submission_info != "Report Period:") %>% 
+           # mutate(submission_info = janitor::make_clean_names(submission_info)) %>%
+            mutate(country = country,
+                   report_period = report_period,
+                   report_year = report_year,
+                   report_months = report_months,
+                   web_page = web_page) %>%
+            select(country, report_period, report_year, report_months, everything())
             
     })
     # 1 -----------------------------------------------------------------------
@@ -445,12 +453,12 @@ ingest_wahis_report <- function(web_page) {
     
     # Output -----------------------------------------------------------------------
     return(list(
-        "country" = country,
-        "report_months" = report_months,
-        "report_year" = report_year,
-        "report_period" = report_period,
+        # "country" = country,
+        # "report_months" = report_months,
+        # "report_year" = report_year,
+        # "report_period" = report_period,
         "metadata" = metadata,
-        "web_page" = web_page,
+        # "web_page" = web_page,
         "diseases_present"= diseases_present, 
         "diseases_absent"= diseases_absent,
         "diseases_present_detail"= diseases_present_detail,
@@ -464,6 +472,11 @@ ingest_wahis_report <- function(web_page) {
         "vaccine_manufacturers_detail" = vaccine_manufacturers_detail,
         "vaccine_production" = vaccine_production))
 }
+
+#' Function to safely run ingest_wahis_report
+#' @param web_page Name of the downloaded web page
+#' @importFrom purrr safely
+#' @export
 
 safe_ingest <- function(web_page) {
     out <- safely(ingest_wahis_report)(web_page)
