@@ -13,68 +13,35 @@ library(future)
 library(furrr)
 library(digest)
 
-plan(multiprocess, workers = 2)
-cat("Checking for report availability\n")
-base_page <-read_html("http://www.oie.int/wahis_2/public/wahid.php/Countryinformation/Countryhome")
-country_codes <- base_page %>% 
-    xml_nodes(xpath='//*[@id="country6"]/option') %>% 
-    xml_attrs() %>% 
-    map("value") %>% 
-    unlist() %>% 
-    {`[`(., . != "0")}
+plan(multiprocess, workers = min(parallel::detectCores(), 8))
 
-country_codes <- sample(country_codes, length(country_codes)) # randomize for even performance
-
-df <- tibble(country = 1, yr = 1, semester = 1, reported = 1) %>% filter(country=="yoyo")
-write_csv(df, here::here("data-raw", "available_reports_prog.csv"))
-available_reports <- future_map_dfr(country_codes, function(country) {
-    page <- RETRY("POST",
-                  url = "https://www.oie.int/wahis_2/public/wahid.php/Countryinformation/reporting/reporthistory",
-                  body = list(this_country_code = country, detailed = "1"), encode = "form")
-    html_tb <- read_html(content(page, "text", encoding = "ISO-8859-1")) %>% 
-        xml_nodes(xpath = '//table[@class="Table27"]/*') %>% 
-        as_list()
-    out <- map_dfr(html_tb[-1], function(tr) {
-        tibble(
-            country = country,
-            yr = as.integer(stri_trim_both(tr[[1]][[1]])),
-            `1` = names(tr[[3]])[2] == "a",
-            `2` = names(tr[[5]])[2] == "a",
-            `0` = names(tr[[7]])[2] == "a"
-        )
-    })
-    if(nrow(out) == 0) {
-        return(df)
-    } else {
-        out <- gather(out, "semester", "reported", -country, -yr)
-        write_csv(out, here::here("data-raw", "available_reports_prog.csv"), append = TRUE)
-        Sys.sleep(min(0.5, rexp(1, 1)))
-        return(out)
-    }
-}, .progress = TRUE)
-
-write_csv(available_reports, here::here("data-raw", "available_reports.csv"))
-
-reports_to_get <- available_reports %>% 
+available_reports <- read_csv(here::here("data-raw", "available_annual_reports.csv")) %>% 
     filter(reported) %>% 
-    select(-reported) %>% 
-    sample_frac(1)  # randomizing for even performance across threads
+    select(-reported)
+
+current_reports <- 
+    tibble(file = basename(fs::dir_ls(here::here("data-raw", "raw_wahis_annual_reports")))) %>% 
+    extract(file, into = c("country", "yr", "semester"), regex = "(\\w{3})_(\\d{4})_sem(\\d)\\.html", remove = TRUE) %>% 
+    mutate_at(vars(yr, semester), as.double)
+
+reports_to_get <- anti_join(available_reports, current_reports) %>% 
+    sample_frac(1)
 
 df <- tibble(country = 1, yr = 1, semester = 1, file = 1, path = 1, status = 1, md5 = 1) %>% filter(country=="yoyo")
-write_csv(df, here::here("data-raw", "wahis_reports_prog.csv"))
+write_csv(df, here::here("data-raw", "annual_reports_scraped_progress.csv"))
 
 sRETRY <- safely(RETRY)
 
 cat(glue("Downloading {nrow(reports_to_get)} reports...\n\n"))
 
-fs::dir_info(here::here("data-raw", "raw_wahis_reports")) %>% 
+fs::dir_info(here::here("data-raw", "raw_wahis_annual_reports")) %>% 
     filter(size == 0) %>% 
     pull(path) %>% 
     fs::file_delete()
 
-if(!dir.exists(here::here("data-raw", "raw_wahis_reports"))) dir.create(here::here("data-raw", "raw_wahis_reports"))
+if(!dir.exists(here::here("data-raw", "raw_wahis_annual_reports"))) dir.create(here::here("data-raw", "raw_wahis_annual_reports"))
 files <- future_pmap_dfr(reports_to_get, function(country, yr, semester) {
-    fileout <- here::here("data-raw", "raw_wahis_reports",
+    fileout <- here::here("data-raw", "raw_wahis_annual_reports",
                           glue("{country}_{yr}_sem{semester}.html"))
     if(!file.exists(fileout) || file.info(fileout)$size == 0) {
         country_report <- sRETRY(
@@ -98,15 +65,15 @@ files <- future_pmap_dfr(reports_to_get, function(country, yr, semester) {
     } else {
         status = "skipped" 
         md5 = digest(readLines(fileout))
-        1}
+    }
     
     df <- tibble(country = country, yr = yr, semester = semester, file = basename(fileout), path = fileout, status = status, md5 = md5)
     write_csv(df, here::here("data-raw", "wahis_reports_prog.csv"), append = TRUE)
     return(df)
 }, .progress = TRUE)
-write_csv(files, here::here("data-raw", "wahis_reports.csv"))
+write_csv(files, here::here("data-raw", "wahis_annual_reports_downloaded.csv"))
 
-fs::dir_info(here::here("data-raw", "raw_wahis_reports")) %>% 
+fs::dir_info(here::here("data-raw", "raw_wahis_annual_reports")) %>% 
     filter(size == 0) %>% 
     pull(path) %>% 
     fs::file_delete()

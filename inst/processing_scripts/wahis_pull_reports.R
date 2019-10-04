@@ -5,7 +5,7 @@ library(wahis)
 # Pull files --------------------------------------------------------------
 
 # List all file names
-filenames <- list.files(here::here("data-raw/raw_wahis_reports"),
+filenames <- list.files(here::here("data-raw/raw_wahis_annual_reports"),
                         pattern = "*.html",
                         full.names = TRUE)
 
