@@ -14,47 +14,46 @@ library(furrr)
 library(digest)
 
 plan(multiprocess, workers = 2)
-if(!file.exists(here::here("data-raw", "available_reports.csv"))) {
-    cat("Checking for report availability\n")
-    base_page <-read_html("http://www.oie.int/wahis_2/public/wahid.php/Countryinformation/Countryhome")
-    country_codes <- base_page %>% 
-        xml_nodes(xpath='//*[@id="country6"]/option') %>% 
-        xml_attrs() %>% 
-        map("value") %>% 
-        unlist() %>% 
-        {`[`(., . != "0")}
-    
-    country_codes <- sample(country_codes, length(country_codes)) # randomize for even performance
-    
-    df <- tibble(country = 1, yr = 1, semester = 1, reported = 1) %>% filter(country=="yoyo")
-    write_csv(df, here::here("data-raw", "available_reports_prog.csv"))
-    available_reports <- future_map_dfr(country_codes, function(country) {
-        page <- RETRY("POST",
-                      url = "http://www.oie.int/wahis_2/public/wahid.php/Countryinformation/reporting/reporthistory",
-                      body = list(this_country_code = country, detailed = "1"), encode = "form")
-        html_tb <- read_html(content(page, "text", encoding = "ISO-8859-1")) %>% 
-            xml_nodes(xpath = '//table[@class="Table27"]/*') %>% 
-            as_list()
-        out <- map_dfr(html_tb[-1], function(tr) {
-            tibble(
-                country = country,
-                yr = as.integer(stri_trim_both(tr[[1]][[1]])),
-                `1` = names(tr[[3]])[2] == "a",
-                `2` = names(tr[[5]])[2] == "a",
-                `0` = names(tr[[7]])[2] == "a"
-            )
-        }) %>% 
-            gather("semester", "reported", -country, -yr)
+cat("Checking for report availability\n")
+base_page <-read_html("http://www.oie.int/wahis_2/public/wahid.php/Countryinformation/Countryhome")
+country_codes <- base_page %>% 
+    xml_nodes(xpath='//*[@id="country6"]/option') %>% 
+    xml_attrs() %>% 
+    map("value") %>% 
+    unlist() %>% 
+    {`[`(., . != "0")}
+
+country_codes <- sample(country_codes, length(country_codes)) # randomize for even performance
+
+df <- tibble(country = 1, yr = 1, semester = 1, reported = 1) %>% filter(country=="yoyo")
+write_csv(df, here::here("data-raw", "available_reports_prog.csv"))
+available_reports <- future_map_dfr(country_codes, function(country) {
+    page <- RETRY("POST",
+                  url = "https://www.oie.int/wahis_2/public/wahid.php/Countryinformation/reporting/reporthistory",
+                  body = list(this_country_code = country, detailed = "1"), encode = "form")
+    html_tb <- read_html(content(page, "text", encoding = "ISO-8859-1")) %>% 
+        xml_nodes(xpath = '//table[@class="Table27"]/*') %>% 
+        as_list()
+    out <- map_dfr(html_tb[-1], function(tr) {
+        tibble(
+            country = country,
+            yr = as.integer(stri_trim_both(tr[[1]][[1]])),
+            `1` = names(tr[[3]])[2] == "a",
+            `2` = names(tr[[5]])[2] == "a",
+            `0` = names(tr[[7]])[2] == "a"
+        )
+    })
+    if(nrow(out) == 0) {
+        return(df)
+    } else {
+        out <- gather(out, "semester", "reported", -country, -yr)
         write_csv(out, here::here("data-raw", "available_reports_prog.csv"), append = TRUE)
         Sys.sleep(min(0.5, rexp(1, 1)))
         return(out)
-    }, .progress = TRUE)
-    
-    write_csv(available_reports, here::here("data-raw", "available_reports.csv"))
-    
-} else {
-    available_reports <- read_csv(here::here("data-raw", "available_reports.csv"))
-}
+    }
+}, .progress = TRUE)
+
+write_csv(available_reports, here::here("data-raw", "available_reports.csv"))
 
 reports_to_get <- available_reports %>% 
     filter(reported) %>% 
@@ -99,7 +98,7 @@ files <- future_pmap_dfr(reports_to_get, function(country, yr, semester) {
     } else {
         status = "skipped" 
         md5 = digest(readLines(fileout))
-    1}
+        1}
     
     df <- tibble(country = country, yr = yr, semester = semester, file = basename(fileout), path = fileout, status = status, md5 = md5)
     write_csv(df, here::here("data-raw", "wahis_reports_prog.csv"), append = TRUE)

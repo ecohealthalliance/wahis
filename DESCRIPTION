@@ -1,19 +1,6 @@
 Package: wahis
 Title: wahis
 Version: 0.0.1
-Imports:
-        assertthat,
-        DBI,
-        dplyr,
-        here,
-        janitor,
-        magrittr,
-        purrr,
-        rvest,
-        stringi,
-        stringr, 
-        tidyr,
-        xml2
 Authors@R: c(
     person("Noam", "Ross", , "ross@ecohealthalliance.org", role = c("aut", "cre")),
     person("Toph", "Allen", , "allen@ecohealthalliance.edu", role = c("aut")),
@@ -25,5 +12,27 @@ LazyData: true
 URL: https://github.com/ecohealthalliance/wahis
 BugReports: https://github.com/ecohealthalliance/wahis/issues
 RoxygenNote: 6.1.1
+Imports:
+    assertthat,
+    DBI,
+    dplyr,
+    here,
+    janitor,
+    magrittr,
+    purrr,
+    rvest,
+    stringi,
+    stringr, 
+    tidyr,
+    xml2,
+    MonetDBLite
+Remotes:
+  cran/MonetDBLite@0.6.0
 Suggests: 
-    testthat
+    testthat,
+    tidyverse,
+    httr
+    aws.signature,
+    aws.s3
+    furrr,
+    future

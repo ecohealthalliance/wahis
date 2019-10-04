@@ -1,3 +1,5 @@
+#!/usr/bin/env Rscript
+
 # A script to scrape incident reports from WAHIS
 
 library(tidyverse)
