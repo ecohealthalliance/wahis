@@ -34,8 +34,6 @@ scrape-annual-reports-list:
       - data/
   script:
     - ./inst/scraping_scripts/scrape_list_of_annual_reports.R
-  when: always
-  only: 
-    - schedules
+  when: manual
   tags:
     - aegypti # Run this jon on the Aegypti runner
