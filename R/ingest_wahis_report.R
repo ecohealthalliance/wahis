@@ -258,10 +258,16 @@ ingest_wahis_report <- function(web_page) {
             
             diseases_present_detail <-  clean_oie_report_table(node)
             
-            if(!colnames(diseases_present_detail)[2] %in% c("serotype_s", "new_outbreaks")){ # this is precarious - trying to catch tables with "state", but it the name varies by country
+            # find column that represents adm
+            cols <- c("month", "serotype_s", "new_outbreaks", "total_outbreaks", "species", "family_name", "latin_name", "measuring_units", "susceptible", "cases", "deaths", "killed_and_disposed_of", "slaughtered", "vaccination_in_response_to_the_outbreak_s")
+            adm <- setdiff(colnames(diseases_present_detail), cols)
+            
+            assertthat::assert_that(length(adm) <= 1)
+            
+            if(length(adm) == 1){
                 diseases_present_detail <- diseases_present_detail %>%
-                    mutate(adm_type = colnames(.)[2]) %>%
-                    rename(adm = 2) 
+                    mutate(adm_type = adm) %>%
+                    rename(adm = !!adm) 
             }else{
                 diseases_present_detail <- diseases_present_detail %>%
                     mutate(adm_type = "country") %>%
