@@ -31,8 +31,8 @@ Remotes:
 Suggests: 
     testthat,
     tidyverse,
-    httr
+    httr,
     aws.signature,
-    aws.s3
+    aws.s3,
     furrr,
     future

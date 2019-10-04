@@ -49,9 +49,6 @@ available_reports <- future_map_dfr(country_codes, function(country) {
         return(df)
     } else {
         out <- gather(out, "semester", "reported", -country, -yr)
-        #write_csv(out, here::here("inst", "scraping_scripts", "available_annual_reports.csv"), append = TRUE)
-        #write_csv(out, stdout(), append = TRUE)
-        cat(format_tsv(out, append = TRUE))
         return(out)
     }
 }, .progress = TRUE)
