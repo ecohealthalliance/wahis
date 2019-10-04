@@ -57,5 +57,6 @@ scrape-annual-reports:
   tags:
     - aegypti # Run this jon on the Aegypti runner
   timeout: 72h
-  dependencies: scrape-annual-reports-list
+  dependencies:
+    - scrape-annual-reports-list
     
