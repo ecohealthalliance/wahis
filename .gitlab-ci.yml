@@ -21,7 +21,6 @@ build-testing-image:
     changes:
       - "DESCRIPTION"
       - "Dockerfile"
-  when: always
   tags:
     - docker  # Run on runners for building docker
   

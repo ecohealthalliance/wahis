@@ -19,6 +19,10 @@ available_reports <- read_csv(here::here("data-raw", "available_annual_reports.c
     filter(reported) %>% 
     select(-reported)
 
+if (!dir.exists(here::here("data-raw", "raw_wahis_annual_reports"))) {
+    dir.create(here::here("data-raw", "raw_wahis_annual_reports"))
+}
+
 current_reports <- 
     tibble(file = basename(fs::dir_ls(here::here("data-raw", "raw_wahis_annual_reports")))) %>% 
     extract(file, into = c("country", "yr", "semester"), regex = "(\\w{3})_(\\d{4})_sem(\\d)\\.html", remove = TRUE) %>% 
