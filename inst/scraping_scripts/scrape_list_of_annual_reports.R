@@ -26,8 +26,8 @@ country_codes <- sample(country_codes, length(country_codes)) # randomize for ev
 
 # Make an empty table of headers
 df <- tibble(country = 1, yr = 1, semester = 1, reported = 1) %>% filter(country=="yoyo")
-write_csv(df, here::here("data-raw", "available_reports_prog.csv"))
 
+# Scrape all country pages for available reports
 available_reports <- future_map_dfr(country_codes, function(country) {
     Sys.sleep(min(0.5, rexp(1, 1)))
     page <- RETRY("POST",
