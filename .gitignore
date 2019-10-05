@@ -9,3 +9,5 @@
 *.tar.xz
 data-raw/*
 !data-raw/.gitkeep
+data/*
+!data/.gitkeep

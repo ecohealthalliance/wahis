@@ -6,3 +6,6 @@
 ^appveyor.yml$
 ^inst/raw_wahis_pages$
 ^data-raw$
+^\.gitlab-ci\.yml$
+^Dockerfile$
+^\.dockerignore$
