@@ -79,6 +79,32 @@ get_tables_by_index <- function(siblings, first_header_name, second_header_name,
 }
 
 
+#' Support function for ingest_wahis_report to take notes from row and add to table column
+#' @param tbl dataframe with notes as full rows
+#' @noRd
+
+add_notes <- function(tbl){
+    # get notes into table
+    note_rows <- which(stri_detect_fixed(tbl$disease, "note", case_insensitive = TRUE))
+    
+    if(length(note_rows)) {
+        notes <- tibble(disease = tbl$disease[note_rows - 1],
+                        disease_row_id = 1,
+                        notes = tbl$disease[note_rows])
+        
+        tbl <- tbl %>%
+            group_by(disease) %>%
+            mutate(disease_row_id = row_number()) %>%
+            ungroup() %>%
+            slice(-note_rows) %>%
+            left_join(notes, by = c("disease", "disease_row_id"))  %>%
+            select(-disease_row_id)
+    }else{
+        tbl$notes <- NA_character_
+    }
+    return(tbl)
+}
+
 #' Extract Info from WAHIS Annual and Semi-Annual Reports
 #'
 #' Extract the information found in the Annual and Semi-Annual OIE World Animal Health Information
@@ -178,23 +204,7 @@ ingest_wahis_report <- function(web_page) {
             fill(oie_listed, .direction = "down")
         
         # get notes into table
-        note_rows <- which(stri_detect_fixed(diseases_present$disease, "note", case_insensitive = TRUE))
-        
-        if(length(note_rows)) {
-            notes <- tibble(disease = diseases_present$disease[note_rows - 1],
-                            disease_row_id = 1,
-                            notes = diseases_present$disease[note_rows])
-            
-            diseases_present <- diseases_present %>%
-                group_by(disease) %>%
-                mutate(disease_row_id = row_number()) %>%
-                ungroup() %>%
-                slice(-note_rows) %>%
-                left_join(notes, by = c("disease", "disease_row_id"))  %>%
-                select(-disease_row_id)
-        }else{
-            diseases_present$notes <- NA_character_
-        }
+        diseases_present <- add_notes(diseases_present)
         
     }
     
@@ -229,6 +239,8 @@ ingest_wahis_report <- function(web_page) {
     })
     
     assertthat::has_name(diseases_absent, c("date_of_last_occurrence", "species"))
+    
+    diseases_absent <- add_notes(diseases_absent)
     
     # 3 -----------------------------------------------------------------------
     # Detailed quantitative information for OIE-listed diseases/infections present
