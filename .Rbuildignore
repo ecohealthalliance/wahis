@@ -9,3 +9,4 @@
 ^\.gitlab-ci\.yml$
 ^Dockerfile$
 ^\.dockerignore$
+^\.httr-oauth$

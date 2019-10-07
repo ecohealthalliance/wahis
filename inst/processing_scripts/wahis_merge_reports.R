@@ -3,6 +3,11 @@ library(tidyverse)
 # Merge files -------------------------------------------------------------
 wahis <- readr::read_rds(here::here("data", "wahis.rds"))
 
+# Count report errors
+keep(wahis, function(x){
+    length(x) == 1
+}) %>% length()
+
 # Remove report errors
 wahis <- discard(wahis, function(x){
     length(x) == 1
