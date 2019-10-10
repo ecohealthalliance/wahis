@@ -4,7 +4,8 @@ Version: 0.0.1
 Authors@R: c(
     person("Noam", "Ross", , "ross@ecohealthalliance.org", role = c("aut", "cre")),
     person("Toph", "Allen", , "allen@ecohealthalliance.edu", role = c("aut")),
-    person("Emma", "Mendelsohn", , "mendelsohn@ecohealthalliance.org", role = c("aut")))
+    person("Emma", "Mendelsohn", , "mendelsohn@ecohealthalliance.org", role = c("aut")),
+    person("EcoHealth Alliance", role = c("cph")))
 Maintainer: Noam Ross <ross@ecohealthalliance.org>
 Description: Data scraped from the OIE WAHIS system
 License: MIT + file LICENSE
@@ -13,26 +14,37 @@ URL: https://github.com/ecohealthalliance/wahis
 BugReports: https://github.com/ecohealthalliance/wahis/issues
 RoxygenNote: 6.1.1
 Imports:
-    assertthat,
     DBI,
     dplyr,
-    here,
-    janitor,
-    magrittr,
+    httr,
+    rappdirs,
     purrr,
     rvest,
     stringi,
     stringr, 
     tidyr,
-    xml2,
-    MonetDBLite
-Remotes:
-  cran/MonetDBLite@0.6.0
+    MonetDBLite,
+    fs,
+    magrittr
 Suggests: 
     testthat,
+    assertthat,
     tidyverse,
-    httr,
     aws.signature,
     aws.s3,
     furrr,
-    future
+    future,
+    googledrive,
+    readxl,
+    xml2,
+    here,
+    janitor,
+    glue,
+    digest,
+    pbapply,
+    devtools
+Remotes:
+  cran/MonetDBLite@0.6.0
+
+
+
