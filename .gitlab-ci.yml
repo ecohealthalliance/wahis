@@ -2,6 +2,9 @@ stages:
   - build-image
   - scrape-list
   - scrape-data
+  - process-data
+  - test
+
 
 build-testing-image:
   stage: build-image
@@ -31,7 +34,6 @@ scrape-annual-reports-list:
     name: "$CI_JOB_NAME"
     paths:
       - data-raw/
-      - data/
   script:
     - ./inst/scraping_scripts/scrape_list_of_annual_reports.R
   when: always
@@ -39,22 +41,49 @@ scrape-annual-reports-list:
     - schedule
   tags:
     - aegypti # Run this job on the Aegypti runner
-
-process-annual-reports:
+    
+scrape-annual-reports:
   image: $CI_REGISTRY_IMAGE:latest
   stage: scrape-data
   artifacts:
     name: "$CI_JOB_NAME"
     paths:
       - data-raw/
+  script:
+    - ./inst/scraping_scripts/scrape_annual_reports.R
+  when: on_success
+  only:
+    - schedule
+  tags:
+    - aegypti # Run this jon on the Aegypti runner
+  timeout: 72h
+  dependencies:
+    - scrape-annual-reports-list
+    
+process-annual-reports:
+  image: $CI_REGISTRY_IMAGE:latest
+  stage: process-data
+  artifacts:
+    name: "$CI_JOB_NAME"
+    paths:
       - data/
   script:
-    - [ ! -d "data-raw/wahis_raw_annual_reports" ] && ./inst/processing_scripts/wahis_pull_aws_raw_annual_reports.R
-    - wahis_process_annual_reports.R
-    - wahis_merge_annual_reports.R
-    - wahis_transform_annual_reports.R
-    - wahis_push_aws_annual_report_data.R
+    - [ ! -d "data-raw/wahis_raw_annual_reports" ] && ./inst/processing_scripts/pull_aws_raw_annual_reports.R
+    - ./inst/processing_scripts/pull_annual_report_lookup_tables.R
+    - ./inst/processing_scripts/process_annual_reports.R
+    - ./inst/processing_scripts/merge_annual_reports.R
+    - ./inst/processing_scripts/transform_annual_reports.R
+    - ./inst/processing_scripts/push_aws_annual_report_data.R
+  when: manual
+  timeout: 6h
   tags:
     - aegypti # Run this jog on the Aegypti runner
 
-    
+test-package:
+  image: $CI_REGISTRY_IMAGE:latest
+  stage: test
+  script:
+   - Rscript -e "devtools::check()"
+
+  
+

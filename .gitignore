@@ -6,8 +6,13 @@
 .httr-oauth
 *.prof
 *.out
+*.xz
+*.gz
+*.tar.gz
 *.tar.xz
 data-raw/*
 !data-raw/.gitkeep
-data/*
-!data/.gitkeep
+data-raw2/*
+!data-raw2/.gitkeep
+data-processed/*
+!data-processed/.gitkeep

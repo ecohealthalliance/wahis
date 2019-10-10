@@ -13,20 +13,27 @@ LazyData: true
 URL: https://github.com/ecohealthalliance/wahis
 BugReports: https://github.com/ecohealthalliance/wahis/issues
 RoxygenNote: 6.1.1
+Encoding: UTF-8
+Language: en-US
 Imports:
     DBI,
     dplyr,
     httr,
     rappdirs,
     purrr,
-    rvest,
     stringi,
     stringr, 
     tidyr,
     MonetDBLite,
     fs,
-    magrittr
-Suggests: 
+    arkdb,
+    magrittr,
+    aws.s3,
+    aws.signature,
+    rvest,
+    xml2
+Suggests:
+    spelling, 
     testthat,
     assertthat,
     tidyverse,
@@ -36,15 +43,17 @@ Suggests:
     future,
     googledrive,
     readxl,
-    xml2,
     here,
     janitor,
     glue,
     digest,
     pbapply,
-    devtools
+    devtools,
+    covr,
+    DT
 Remotes:
   cran/MonetDBLite@0.6.0
+  ropensci/arkdb
 
 
 

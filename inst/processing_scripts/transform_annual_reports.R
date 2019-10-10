@@ -1,7 +1,10 @@
-library(tidyverse)
-library(googlesheets4) #https://github.com/tidyverse/googlesheets4
+#!/usr/bin/env Rscript
 
-wahis_joined <- read_rds(here::here("data", "wahis-merged-annual-reports.rds"))
+library(tidyverse)
+library(fs)
+library(here)
+
+wahis_joined <- read_rds(here::here("data-processed", "merged-annual-reports.rds"))
 
 # Clean disease names -----------------------------------------------------
 diseases <- map_df(wahis_joined, function(x){
@@ -82,7 +85,7 @@ animal_diseases_unreported <- wahis_joined$diseases_unreported %>%
 animal_diseases <- bind_rows(animal_diseases, animal_diseases_unreported)
 
 # Look up occurrence codes ----------------------------------------------------
-occurrence <- read_csv(here::here("data-raw", "wahis_lookup_occurrence.csv")) %>%
+occurrence <- read_csv(here::here("data-raw", "annual_report_lookups", "lookup_occurrence.csv")) %>%
     mutate(code = str_remove_all(code, "\""))
 animal_diseases <- animal_diseases %>%
     left_join(occurrence, by = c("occurrence" = "code")) %>%
@@ -101,7 +104,7 @@ animal_hosts <- wahis_joined$diseases_present %>%
     ungroup()
 
 # Look up species codes ----------------------------------------------------
-species <- read_csv(here::here("data-raw", "wahis_lookup_species.csv"))
+species <- read_csv(here::here("data-raw", "annual_report_lookups", "lookup_species.csv"))
 animal_hosts <- animal_hosts %>%
     mutate(taxa = str_replace(taxa, "\\(fau\\)", "\\(wild\\)")) %>% # manual fix
     left_join(species, by = c("taxa" = "code")) %>%
@@ -109,7 +112,7 @@ animal_hosts <- animal_hosts %>%
     select(-code_value) 
 
 # Look up control measure codes ----------------------------------------------------
-control <- read_csv(here::here("data-raw", "wahis_lookup_control.csv"))
+    control <- read_csv(here::here("data-raw", "annual_report_lookups", "lookup_control.csv"))
 animal_hosts <- animal_hosts %>%
     separate_rows(control_measures, sep = " ") %>%
     left_join(control,  by = c("control_measures" = "code", "group" = "group")) %>% # first join by group
@@ -155,11 +158,7 @@ db <- wahis_joined %>%  magrittr::extract(index)
 db$animal_diseases <- animal_diseases
 db$animal_hosts <- animal_hosts
 
-names(db) <- paste0("annual_reports_", names(db))
+dir_create(here("data-processed", "db"))
+iwalk(db, ~write_csv(.x, here("data-processed", "db", paste0("annual_reports_", .y, ".csv.xz"))))
 
-if (!dir.exists(here::here("data", "annual_reports"))) {
-    dir.create(here::here("data", "annual_reports"))
-}
-iwalk(db, ~write_csv(.x, here::here("data", "annual_reports", paste0(.y, ".csv.xz"))))
-
-write_rds(db, here::here("data", "wahis-annual-reports-data.rds"))
+write_rds(db, here("data-processed", "annual-reports-data.rds"), compress = "xz", compression = 9L)

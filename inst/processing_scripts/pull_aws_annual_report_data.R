@@ -1,8 +1,15 @@
+#!/usr/bin/env Rscript
+
 # Post to AWS -------------------------------------------------------------
 # See https://ecohealthalliance.github.io/eha-ma-handbook/11-cloud-computing-services.html
 # For credentials setup
 library(aws.s3)
-aws.signature::use_credentials()
+
+if (Sys.getenv("CI_JOB_ID") != "") {
+    aws.signature::use_credentials(file = Sys.getenv("AWS_SIGNATURE_PATH"))
+} else {
+    aws.signature::use_credentials()
+}
 Sys.setenv("AWS_DEFAULT_REGION" = "us-east-1")
 
 # Create the bucket, only done once

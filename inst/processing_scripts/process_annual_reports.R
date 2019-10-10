@@ -1,16 +1,17 @@
+#!/usr/bin/env Rscript
+
 library(pbapply) 
-library(wahis)
-#devtools::load_all()
+library(wahis) #doing this as scraping functions may not be exported
 
-# Pull files --------------------------------------------------------------
-
-# List all file names
-filenames <- list.files(here::here("data-raw/raw_wahis_annual_reports"),
+# List all files  ---------------------------------------------------------
+filenames <- list.files(here::here("data-raw/wahis_raw_annual_reports"),
                         pattern = "*.html",
                         full.names = TRUE)
 
-# Run scraper (~1 hr)
-wahis <- pblapply(filenames, safe_ingest, cl = parallel::detectCores())  
+# Run scraper (~1 hr) ---------------------------------------------------------
+message(paste(length(filenames), "files to process"))
+opb <- pboptions(type="timer")
+wahis <- pblapply(filenames, wahis:::safe_ingest, cl = parallel::detectCores())  
 
-# Save
-readr::write_rds(wahis, here::here("data", "wahis.rds"))
+# Save processed files   ------------------------------------------------------
+readr::write_rds(wahis, here::here("data-processed", "processed-annual-reports.rds"), compress = "xz", compression = 9L)

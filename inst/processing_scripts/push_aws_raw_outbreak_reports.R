@@ -12,20 +12,31 @@ if (Sys.getenv("CI_JOB_ID") != "") {
 Sys.setenv("AWS_DEFAULT_REGION" = "us-east-1")
 
 
-if(!bucket_exists("wahis-data")) {
+if (!bucket_exists("wahis-data")) {
     aws.s3::put_bucket(bucket = "wahis-data", acl = "private")
 }
 
 #Compress the raw data 
 setwd(here::here("data-raw"))
-tar("wahis-raw-annual-reports.tar.xz",
-    files = "wahis_raw_annual_reports",
+tar("wahis-raw-outbreak-reports.tar.xz",
+    files = "wahis_raw_outbreak_reports",
     compression = "xz",      # xz and level 9 makes this slow, but small!
     compression_level = 9,
     tar = "internal")
 # Upload the compressed file
-put_object(file = "wahis-raw-annual-reports.tar.xz",
-           object = "wahis-raw-annual-reports.tar.xz",
+put_object(file = "wahis-raw-outbreak-reports.tar.xz",
+           object = "wahis-raw-outbreak-reports.tar.xz",
+           bucket = "wahis-data",
+           multipart = FALSE,
+           verbose = FALSE)
+tar("wahis-raw-outbreak-pdfs.tar.xz",
+    files = "wahis_raw_outbreak_pdfs",
+    compression = "xz",      # xz and level 9 makes this slow, but small!
+    compression_level = 9,
+    tar = "internal")
+# Upload the compressed file
+put_object(file = "wahis-raw-outbreak-pdfs.tar.xz",
+           object = "wahis-raw-outbreak-pdfs.tar.xz",
            bucket = "wahis-data",
            multipart = FALSE,
            verbose = FALSE)

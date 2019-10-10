@@ -14,7 +14,7 @@ clean_oie_report_table <- function(parent, include_header = FALSE){
     clean <- raw %>%
         as_tibble() %>%
         set_names(.[2,]) %>%
-        clean_names() %>%
+        janitor::clean_names() %>%
         slice(-1:-2) %>%
         mutate_all(~na_if(., ""))
     
@@ -118,16 +118,13 @@ add_notes <- function(tbl){
 #' @examples
 #' ##ingest_wahis_report("../data-raw/raw_wahis_reports/BWA_2016_sem0.html")
 #' @export
-#' @importFrom xml2 read_xml xml_find_first xml_text xml_parents
+#' @import xml2 
 #' @importFrom stringi stri_extract_first_regex
 #' @importFrom stringr str_remove str_trim str_detect str_sub
-#' @importFrom rvest html_table
 #' @importFrom tidyr fill
 #' @importFrom magrittr set_names
-#' @importFrom janitor clean_names
 #' @importFrom purrr map map2 map_df imap_dfr map_dfr map_lgl compact
 #' @import dplyr
-
 ingest_wahis_report <- function(web_page) {
     
     # get page
@@ -156,7 +153,7 @@ ingest_wahis_report <- function(web_page) {
     tabs <- siblings[index]
     metadata <- map_dfr(tabs, function(tb){
         dat <- tb %>% 
-            html_table(fill = TRUE) %>%
+            rvest::html_table(fill = TRUE) %>%
             filter(X1 != "") %>%
             as_tibble()
         

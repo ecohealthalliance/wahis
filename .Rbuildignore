@@ -6,7 +6,10 @@
 ^appveyor.yml$
 ^inst/raw_wahis_pages$
 ^data-raw$
+^data-processed$
 ^\.gitlab-ci\.yml$
 ^Dockerfile$
 ^\.dockerignore$
 ^\.httr-oauth$
+^.*\.xz$
+^public$
