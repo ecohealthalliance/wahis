@@ -1,6 +1,7 @@
 library(tidyverse)
+library(googlesheets4) #https://github.com/tidyverse/googlesheets4
 
-wahis_joined <- read_rds(here::here("data", "wahis-merged.rds"))
+wahis_joined <- read_rds(here::here("data", "wahis-merged-annual-reports.rds"))
 
 # Clean disease names -----------------------------------------------------
 diseases <- map_df(wahis_joined, function(x){
@@ -154,4 +155,11 @@ db <- wahis_joined %>%  magrittr::extract(index)
 db$animal_diseases <- animal_diseases
 db$animal_hosts <- animal_hosts
 
-write_rds(db, here::here("data", "wahis-db.rds"))
+names(db) <- paste0("annual_reports_", names(db))
+
+if (!dir.exists(here::here("data", "annual_reports"))) {
+    dir.create(here::here("data", "annual_reports"))
+}
+iwalk(db, ~write_csv(.x, here::here("data", "annual_reports", paste0(.y, ".csv.xz"))))
+
+write_rds(db, here::here("data", "wahis-annual-reports-data.rds"))

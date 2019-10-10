@@ -3,11 +3,6 @@ library(tidyverse)
 # Merge files -------------------------------------------------------------
 wahis <- readr::read_rds(here::here("data", "wahis.rds"))
 
-# Count report errors
-keep(wahis, function(x){
-    length(x) == 1
-}) %>% length()
-
 # Remove report errors
 wahis <- discard(wahis, function(x){
     length(x) == 1
@@ -31,6 +26,7 @@ wahis <- purrr::map(wahis, function(x){
 wahis_joined <- map(names(wahis[[1]]), function(name){
     map_dfr(wahis, ~magrittr::extract2(., name)) 
 })
+
 names(wahis_joined) <- names(wahis[[1]])
 
 # Save

@@ -10,7 +10,7 @@ filenames <- list.files(here::here("data-raw/raw_wahis_annual_reports"),
                         full.names = TRUE)
 
 # Run scraper (~1 hr)
-wahis <- pblapply(filenames, safe_ingest, cl=40)  
+wahis <- pblapply(filenames, safe_ingest, cl = parallel::detectCores())  
 
 # Save
 readr::write_rds(wahis, here::here("data", "wahis.rds"))

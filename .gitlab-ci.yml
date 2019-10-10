@@ -40,7 +40,7 @@ scrape-annual-reports-list:
   tags:
     - aegypti # Run this job on the Aegypti runner
 
-scrape-annual-reports:
+process-annual-reports:
   image: $CI_REGISTRY_IMAGE:latest
   stage: scrape-data
   artifacts:
@@ -49,13 +49,12 @@ scrape-annual-reports:
       - data-raw/
       - data/
   script:
-    - ./inst/scraping_scripts/scrape_annual_reports.R
-  when: on_success
-  only:
-    - schedule
+    - [ ! -d "data-raw/wahis_raw_annual_reports" ] && ./inst/processing_scripts/wahis_pull_aws_raw_annual_reports.R
+    - wahis_process_annual_reports.R
+    - wahis_merge_annual_reports.R
+    - wahis_transform_annual_reports.R
+    - wahis_push_aws_annual_report_data.R
   tags:
-    - aegypti # Run this jon on the Aegypti runner
-  timeout: 72h
-  dependencies:
-    - scrape-annual-reports-list
+    - aegypti # Run this jog on the Aegypti runner
+
     
