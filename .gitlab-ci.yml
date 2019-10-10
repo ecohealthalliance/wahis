@@ -68,7 +68,7 @@ process-annual-reports:
     paths:
       - data/
   script:
-    - [ ! -d "data-raw/wahis_raw_annual_reports" ] && ./inst/processing_scripts/pull_aws_raw_annual_reports.R
+    - "[ ! -d 'data-raw/wahis_raw_annual_reports' ] && ./inst/processing_scripts/pull_aws_raw_annual_reports.R"
     - ./inst/processing_scripts/pull_annual_report_lookup_tables.R
     - ./inst/processing_scripts/process_annual_reports.R
     - ./inst/processing_scripts/merge_annual_reports.R
