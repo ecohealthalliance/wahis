@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 library(pbapply) 
-library(wahis) #doing this as scraping functions may not be exported
+devtools::load_all(here::here()) #doing this as scraping functions may not be exported
 
 # List all files  ---------------------------------------------------------
 filenames <- list.files(here::here("data-raw/wahis_raw_annual_reports"),
