@@ -50,7 +50,9 @@ Suggests:
     pbapply,
     devtools,
     covr,
-    DT
+    DT,
+    future,
+    furrr
 Remotes:
   cran/MonetDBLite@0.6.0,
   ropensci/arkdb
