@@ -37,7 +37,8 @@ wahis_db_download <- function(destdir = tempfile(),
     purrr::walk(data_files_df$Key, function(key) {
         f = fs::path(destdir, basename(key))
         save_object(key, "wahis-data", file = f)
-        arkdb::unark(f, wahis_db(), try_native = TRUE, overwrite = TRUE)
+        arkdb::unark(f, wahis_db(), lines = 100000,
+                     try_native = TRUE, overwrite = TRUE)
         if (cleanup) file.remove(f)
     })
     if (verbose) message("Calculating Stats...\n")

@@ -1,9 +1,11 @@
 #!/usr/bin/env Rscript
 
-library(furrr)
-library(future)
 library(fs)
-plan(multiprocess) # This takes a long time in RStudio, but is faster from terminal
+library(future)
+library(furrr)
+# Set up parallel plan  --------------------------------------------------------
+
+plan(multiprocess) # This takes a bit to load on many cores as all the processes are starting
 devtools::load_all(here::here()) #doing this as scraping functions may not be exported
 
 # List all files  ---------------------------------------------------------
@@ -11,9 +13,16 @@ filenames <- list.files(here::here("data-raw/wahis_raw_annual_reports"),
                         pattern = "*.html",
                         full.names = TRUE)
 
-# Run scraper (~1 hr) ---------------------------------------------------------
+# Run scraper (~25 mins) ---------------------------------------------------------
 message(paste(length(filenames), "files to process"))
 wahis <- future_map(filenames, wahis:::safe_ingest, .progress = TRUE)  
+
+#For testing/profiling
+# Rprof("out.prof")
+# wahis <- lapply(filenames[1:100], wahis:::safe_ingest)
+# Rprof(NULL)
+# noamtools::proftable("out.prof")
+
 
 # Save processed files   ------------------------------------------------------
 dir_create(here::here("data-processed"))
