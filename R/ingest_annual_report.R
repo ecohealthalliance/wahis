@@ -35,7 +35,7 @@ clean_oie_report_table <- function(parent, include_header = FALSE){
 get_header_index <- function(headers, siblings){
     
     out <- map(headers, function(x){
-        p_nodeset <- xml_nodes(siblings, xpath = paste0('.//div[contains(text(), "', x, '")]'))
+        p_nodeset <- xml_nodes(siblings, xpath = paste0('//div[contains(text(), "', x, '")]'))
         if(length(p_nodeset)==0){return(NULL)}
         which(siblings %in% p_nodeset) 
     }) 
@@ -61,7 +61,7 @@ get_tables_by_index <- function(siblings, first_header_name, second_header_name,
         
     # if second header is not in siblings nodeset, check if it's a table (eg this is the case for "Zoonotic diseases in humans")
     if(is.null(second_header_index)){
-        ns <- xml_find_all(siblings, paste0('.//tr[contains(., "', second_header_name,'")]')) %>%
+        ns <- xml_find_all(siblings, paste0('//tr[contains(., "', second_header_name,'")]')) %>%
             xml_parent()
         second_header_index <- which(siblings %in% ns)
         # if still not there,return null
