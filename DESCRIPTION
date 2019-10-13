@@ -55,7 +55,7 @@ Suggests:
     furrr
 Remotes:
   cran/MonetDBLite@0.6.0,
-  ropensci/arkdb
+  ropensci/arkdb@comment-char
 
 
 
