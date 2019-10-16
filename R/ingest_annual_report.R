@@ -163,13 +163,9 @@ ingest_wahis_report <- function(web_page) {
             mutate(submission_animal_type = .$submission_value[submission_info == "Animal type"]) %>%
             filter(submission_info != "Animal type") %>% 
             filter(submission_info != "Report Period:") %>% 
-           # mutate(submission_info = janitor::make_clean_names(submission_info)) %>%
-            mutate(country = country,
-                   report_period = report_period,
-                   report_year = report_year,
-                   report_months = report_months,
+            mutate(report_period = report_period,
                    web_page = web_page) %>%
-            select(country, report_period, report_year, report_months, everything())
+            select(report_period, everything())
             
     })
     # 1 -----------------------------------------------------------------------
@@ -467,13 +463,8 @@ ingest_wahis_report <- function(web_page) {
     }
     
     # Output -----------------------------------------------------------------------
-    return(list(
-        # "country" = country,
-        # "report_months" = report_months,
-        # "report_year" = report_year,
-        # "report_period" = report_period,
+    wahis <- list(
         "metadata" = metadata,
-        # "web_page" = web_page,
         "diseases_present"= diseases_present, 
         "diseases_absent"= diseases_absent,
         "diseases_present_detail"= diseases_present_detail,
@@ -485,7 +476,18 @@ ingest_wahis_report <- function(web_page) {
         "national_reference_laboratories_detail" = national_reference_laboratories_detail,
         "vaccine_manufacturers" = vaccine_manufacturers,
         "vaccine_manufacturers_detail" = vaccine_manufacturers_detail,
-        "vaccine_production" = vaccine_production))
+        "vaccine_production" = vaccine_production)
+    
+    
+    wahis <- map(wahis, function(x){
+            if(is.null(x)){return()}
+            x %>% mutate(country = country,
+                         report_year = report_year,
+                         report_months = report_months) %>%
+                select(country, report_year, report_months, everything())
+    })
+    
+    return(wahis)
 }
 
 #' Function to safely run ingest_wahis_report
