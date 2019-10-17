@@ -134,7 +134,14 @@ ingest_wahis_report <- function(web_page) {
     country <- xml_find_first(page, '//td[contains(., "Country:")]') %>% xml_text() %>% stri_extract_first_regex("(?<=:\\s).*")
     
     # return error if country name is NA - indicates that report was not correctly loaded (eg )
-    if(is.na(country)){return("report error")}
+    if(is.na(country)){
+        
+        error_message <- xml_find_first(page, '//h4[contains(., "Application Error")]') %>% xml_text()
+        
+        if(length(error_message) == 1){ return(paste(error_message, basename(web_page)))}
+        
+        return("unspecified report error")
+        }
     
     # get report period
     report_period <- xml_find_first(page, '//td[contains(., "Report period:")]') %>% xml_text() %>% stri_extract_first_regex("(?<=:\\s).*")
