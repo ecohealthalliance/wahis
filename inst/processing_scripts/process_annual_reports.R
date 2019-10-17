@@ -9,7 +9,7 @@ plan(multiprocess) # This takes a bit to load on many cores as all the processes
 devtools::load_all(here::here()) #doing this as scraping functions may not be exported
 
 # List all files  ---------------------------------------------------------
-filenames <- list.files(here::here("data-raw/wahis_raw_annual_reports"),
+filenames <- list.files(here::here("data-raw/wahis-raw-annual-reports"),
                         pattern = "*.html",
                         full.names = TRUE)
 
