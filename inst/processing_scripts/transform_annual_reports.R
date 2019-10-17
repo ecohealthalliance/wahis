@@ -162,3 +162,15 @@ dir_create(here("data-processed", "db"))
 iwalk(db, ~write_csv(.x, here("data-processed", "db", paste0("annual_reports_", .y, ".csv.xz"))))
 
 write_rds(db, here("data-processed", "annual-reports-data.rds"), compress = "xz", compression = 9L)
+
+# make dictionary table
+# dictionary <- purrr::imap_dfr(db, function(x, y){
+#     x %>% 
+#         summarise_all(class) %>% 
+#         gather(variable_name, data_type_r) %>%
+#         mutate(table_name = y) 
+# })
+# dictionary <- dictionary %>%
+#     mutate(description = "", data_type_postgres = "",	allowed_values = "") %>%
+#     select(table_name, variable_name, description, everything())
+# write_csv(dictionary, "dictionary.csv")
