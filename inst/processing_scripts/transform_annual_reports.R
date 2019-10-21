@@ -8,27 +8,27 @@ wahis_joined <- read_rds(here::here("data-processed", "merged-annual-reports.rds
 
 # NA handling -------------------------------------------------------------
 # "empty" = missing/NA/blank in the reports
-# "No information" = "..." or "-" or "0000" in the reports
+# "No information" = "..." or "No" in the reports
 
 wahis_joined <- map(wahis_joined, function(x){
     x %>%
         mutate_all(~replace_na(., "empty")) %>%
-        mutate_at(vars(-one_of("occurrence")),  ~ifelse(. %in% c("No", "...",  "-", "0000"), "no information", .))
+        mutate_at(vars(-one_of("occurrence")),  ~ifelse(. %in% c("No", "..."), "no information", .))
 })
 
 # Animal disease table ----------------------------------------------------
 animal_diseases <- wahis_joined$diseases_present %>%
     rename(serotype = serotype_s) %>%
     filter(occurrence != "empty") %>% # NAs are from nested species data - this is preserved in animal_hosts table
-    mutate(serotype = recode(serotype, "No" = "no information")) %>%
     mutate(status = "present") %>%
     select(country, report_year, report_months, disease, oie_listed, status,
            occurrence, serotype, new_outbreaks, total_outbreaks, notes)
 
 # Add Absent table to animal disease table ----------------------------------------------------
 animal_diseases_absent <- wahis_joined$diseases_absent %>%
-    select(country, report_year, report_months, disease, disease_population, oie_listed, taxa, date_of_last_occurrence_if_absent = date_of_last_occurrence) %>% 
+    select(country, report_year, report_months, disease, oie_listed, taxa, date_of_last_occurrence_if_absent = date_of_last_occurrence) %>% 
     group_by(country, report_year, report_months, disease) %>%
+    mutate(date_of_last_occurrence_if_absent = na_if(date_of_last_occurrence_if_absent, "empty")) %>%
     fill(date_of_last_occurrence_if_absent) %>%
     ungroup() %>%
     distinct() %>% 
@@ -50,44 +50,75 @@ animal_diseases <- bind_rows(animal_diseases, animal_diseases_unreported %>%
 # Look up occurrence codes ----------------------------------------------------
 occurrence <- read_csv(here::here("data-raw", "annual_report_lookups", "lookup_occurrence.csv")) %>%
     mutate(code = str_remove_all(code, "\""))
+
 animal_diseases <- animal_diseases %>%
     left_join(occurrence, by = c("occurrence" = "code")) %>%
-    #mutate_at(.vars = c("code_value", "code_description"), ~case_when(occurrence == "0000" ~ "Code not recognized", TRUE ~ .)) %>%
     select(-occurrence) %>%
-    rename(occurrence = code_value, occurrence_description = code_description)
+    rename(occurrence = code_value, occurrence_description = code_description) %>%
+    mutate(date_of_last_occurrence_if_absent = recode(date_of_last_occurrence_if_absent, 
+                                                      "-" = "disease absent",
+                                                      "0000" = "never reported"))
+
+# Remove dupes ------------------------------------------------------------
+animal_diseases <- animal_diseases %>%
+    distinct()
 
 # Animal host table ----------------------------------------------------
 animal_hosts <- wahis_joined$diseases_present %>%
     select(country, report_year, report_months, disease, oie_listed, 
            species:vaccination_in_response_to_the_outbreak_s) %>%
-    rename(taxa = species) %>%
+    rename(vaccination_in_response_to_the_outbreak = vaccination_in_response_to_the_outbreak_s) %>%
     group_by(country, report_year, report_months, disease, oie_listed) %>%
+    mutate(control_measures = na_if(control_measures, "empty")) %>%
     fill(control_measures, .direction = "down")  %>%
-    ungroup()
+    ungroup() %>%
+    mutate(status = "present") %>%
+    mutate(control_measures = replace_na(control_measures, "")) %>%
+    mutate(vaccination_in_response_to_the_outbreak_num = as.numeric(vaccination_in_response_to_the_outbreak)) %>%
+    mutate(control_measures2 = ifelse(!is.na(vaccination_in_response_to_the_outbreak_num) & vaccination_in_response_to_the_outbreak_num>0,
+                                      "Vr", "")) %>%
+    unite(control_measures, control_measures, control_measures2, sep = " ") %>%
+    mutate(control_measures = str_trim(control_measures)) %>%
+    select(-vaccination_in_response_to_the_outbreak_num) %>%
+    mutate(control_measures = ifelse(control_measures == "", "empty", control_measures))
+
+animal_hosts_absent <- wahis_joined$diseases_absent %>%
+    select(country, report_year, report_months, disease, oie_listed, 
+           species:official_vaccination) %>%
+    group_by(country, report_year, report_months, disease, oie_listed) %>%
+    mutate(control_measures = na_if(control_measures, "empty")) %>%
+    fill(control_measures, .direction = "down")  %>%
+    ungroup() %>%
+    mutate(status = "absent") %>%
+    mutate(control_measures = replace_na(control_measures, "empty"))
+
+ah_names <- setdiff(names(animal_hosts), names(animal_hosts_absent))
+animal_hosts <- bind_rows(animal_hosts, animal_hosts_absent) %>%
+    mutate_at(.vars = ah_names, ~replace_na(., "disease absent")) 
 
 # Look up species codes ----------------------------------------------------
 species <- read_csv(here::here("data-raw", "annual_report_lookups", "lookup_species.csv"))
 animal_hosts <- animal_hosts %>%
-    mutate(taxa = str_replace(taxa, "\\(fau\\)", "\\(wild\\)")) %>% # manual fix
-    left_join(species, by = c("taxa" = "code")) %>%
-    mutate(taxa = tolower(coalesce(code_value, taxa))) %>%
+    mutate(species = str_replace(species, "\\(fau\\)", "\\(wild\\)")) %>% # manual fix
+    left_join(species, by = c("species" = "code")) %>%
+    mutate(species = tolower(coalesce(code_value, species))) %>% # to capture empty/no info
     select(-code_value) 
 
 # Look up control measure codes ----------------------------------------------------
 control <- read_csv(here::here("data-raw", "annual_report_lookups", "lookup_control.csv"))
+control$code[control$code_value == "Vaccination in response to the outbreak(s)"] <- "Vr"
+control <- control %>% select(code, code_value) %>% distinct() %>% arrange(code) 
+control_lookup <- control$code_value
+names(control_lookup) <- control$code
+control_lookup <- c(control_lookup, "empty" = "empty")
+
 animal_hosts <- animal_hosts %>%
-    separate_rows(control_measures, sep = " ") %>%
-    left_join(control,  by = c("control_measures" = "code", "group" = "group")) %>% # first join by group
-    left_join(control %>%
-                  filter(group == "terrestrial") %>% select(-group), # then join by code only for cases where there us no group (ie species not specified). assume codes are terrestrial b/c we dont know species group (and code descriptions are very similar for terrestrial v aquatic)
-              by = c("control_measures" = "code")) %>%
-    mutate(control_measures = coalesce(code_value.x, code_value.y),
-           control_measures_description = coalesce(code_description.x, code_description.y)) %>%
-    mutate_at(.vars = c("control_measures", "control_measures_description"), ~replace_na(., "Code not recognized")) %>%
-    select(-ends_with(".x"), -ends_with(".y")) %>%
-    rename(taxa_class = group)
-
-
+    mutate(control_measures = str_split(control_measures, " ")) %>%
+    mutate(control_measures = map(control_measures, ~control_lookup[.])) %>%
+    mutate(control_measures = map(control_measures, ~replace_na(., "code not recognized"))) %>%
+    mutate(control_measures = map_chr(control_measures, ~str_flatten(., collapse = "; "))) %>%
+    rename(species_class = group) %>%
+    mutate(species_class = replace_na(species_class, "all"))
 # Add tables to database --------------------------------------------------
 
 index <- names(wahis_joined)[!names(wahis_joined) %in% c("diseases_present", "diseases_absent", "diseases_present_detail", "diseases_unreported")]
