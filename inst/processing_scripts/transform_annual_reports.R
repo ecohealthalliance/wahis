@@ -25,10 +25,10 @@ animal_diseases <- wahis_joined$diseases_present %>%
            occurrence, serotype, new_outbreaks, total_outbreaks, notes)
 
 # Add Absent table to animal disease table ----------------------------------------------------
-animal_diseases_absent <- wahis_joined$diseases_absent %>%
+diseases_absent <- wahis_joined$diseases_absent %>%
     select(country, report_year, report_months, disease, oie_listed, taxa, date_of_last_occurrence_if_absent = date_of_last_occurrence) %>% 
     group_by(country, report_year, report_months, disease) %>%
-    mutate(date_of_last_occurrence_if_absent = na_if(date_of_last_occurrence_if_absent, "empty")) %>%
+    mutate(date_of_last_occurrence_if_absent = na_if(date_of_last_occurrence_if_absent, "empty")) %>% # filling and then taking distinct, rather than just dropping NAs, because there can be some cases where there is empty date of last occurrence and we do not want to filter out
     fill(date_of_last_occurrence_if_absent) %>%
     ungroup() %>%
     distinct() %>% 
@@ -57,11 +57,25 @@ animal_diseases <- animal_diseases %>%
     rename(occurrence = code_value, occurrence_description = code_description) %>%
     mutate(date_of_last_occurrence_if_absent = recode(date_of_last_occurrence_if_absent, 
                                                       "-" = "disease absent",
-                                                      "0000" = "never reported"))
+                                                      "0000" = "never reported")) # same codes as occurrence
 
 # Remove dupes ------------------------------------------------------------
 animal_diseases <- animal_diseases %>%
     distinct()
+
+# Animal diseases detail --------------------------------------------------
+animal_diseases_detail <- wahis_joined$diseases_present_detail %>%
+    select(country, report_year, report_months, disease, serotype = serotype_s, period,temporal_scale, adm, adm_type, new_outbreaks, total_outbreaks) %>%
+    filter(new_outbreaks != "empty") %>%
+    mutate(status = "present")
+
+#TODO there's an issue in the scraping, disease names are sometimes column headers
+# see e.g.,
+# animal_diseases_detail %>% filter(country == "Afghanistan", report_year == "2006", report_months == "Jan-Dec")
+
+#TODO cleaning disease names so can be joined with animal_diseases
+
+#TODO QA check that totals in animal_diseases are the sum of the months in animal_diseases_detail
 
 # Animal host table ----------------------------------------------------
 animal_hosts <- wahis_joined$diseases_present %>%
@@ -76,11 +90,17 @@ animal_hosts <- wahis_joined$diseases_present %>%
     mutate(control_measures = replace_na(control_measures, "")) %>%
     mutate(vaccination_in_response_to_the_outbreak_num = as.numeric(vaccination_in_response_to_the_outbreak)) %>%
     mutate(control_measures2 = ifelse(!is.na(vaccination_in_response_to_the_outbreak_num) & vaccination_in_response_to_the_outbreak_num>0,
-                                      "Vr", "")) %>%
-    unite(control_measures, control_measures, control_measures2, sep = " ") %>%
+                                      "Vr", "")) %>% # < there is no code for vaccination_in_response_to_the_outbreak so I am making one up
+    unite(control_measures, control_measures, control_measures2, sep = " ") %>% # this is clunky but other approaches with paste and glue were sloooow
     mutate(control_measures = str_trim(control_measures)) %>%
     select(-vaccination_in_response_to_the_outbreak_num) %>%
     mutate(control_measures = ifelse(control_measures == "", "empty", control_measures))
+
+# confirming we do not have dupe species: (ie it's okay not to include serotypes in this table)
+# animal_hosts %>% 
+#     group_by(country, report_months, report_year,  disease, oie_listed) %>%
+#     summarize(n = n(), n_species = n_distinct(species)) %>%
+#     filter(n != n_species)
 
 animal_hosts_absent <- wahis_joined$diseases_absent %>%
     select(country, report_year, report_months, disease, oie_listed, 
@@ -113,22 +133,39 @@ names(control_lookup) <- control$code
 control_lookup <- c(control_lookup, "empty" = "empty")
 
 animal_hosts <- animal_hosts %>%
-    mutate(control_measures = str_split(control_measures, " ")) %>%
-    mutate(control_measures = map(control_measures, ~control_lookup[.])) %>%
-    mutate(control_measures = map(control_measures, ~replace_na(., "code not recognized"))) %>%
-    mutate(control_measures = map_chr(control_measures, ~str_flatten(., collapse = "; "))) %>%
+    mutate(control_measures = str_split(control_measures, " ")) %>% # make control_measures into list
+    mutate(control_measures = map(control_measures, ~control_lookup[.])) %>% # lookup all items in list
+    mutate(control_measures = map(control_measures, ~replace_na(., "code not recognized"))) %>% # NAs are not recognized
+    mutate(control_measures = map_chr(control_measures, ~str_flatten(., collapse = "; "))) %>% # back to string, now with full code measures
     rename(species_class = group) %>%
     mutate(species_class = replace_na(species_class, "all"))
+
+# Animal hosts detail --------------------------------------------------
+animal_hosts_detail <- wahis_joined$diseases_present_detail %>%
+    select(country, report_year, report_months, disease, period,temporal_scale, adm, adm_type, 
+           species, family_name: vaccination_in_response_to_the_outbreak_s) %>%
+    rename(vaccination_in_response_to_the_outbreak = vaccination_in_response_to_the_outbreak_s) %>%
+    mutate(species = str_replace(species, "\\(fau\\)", "\\(wild\\)")) %>% # manual fix
+    left_join(species, by = c("species" = "code")) %>%
+    mutate(species = tolower(coalesce(code_value, species))) %>% # to capture empty/no info
+    select(-code_value) 
+
+#TODO Same issues with disease names as in animal_diseases_details
+
 # Add tables to database --------------------------------------------------
 
 index <- names(wahis_joined)[!names(wahis_joined) %in% c("diseases_present", "diseases_absent", "diseases_present_detail", "diseases_unreported")]
 wahis_joined <- wahis_joined %>%  magrittr::extract(index) 
 wahis_joined$animal_diseases <- animal_diseases
 wahis_joined$animal_hosts <- animal_hosts
+wahis_joined$animal_diseases_detail <- animal_diseases_detail
+wahis_joined$animal_hosts_detail <- animal_hosts_detail
 
 # Clean disease names -----------------------------------------------------
-diseases <- map_df(wahis_joined[c("animal_diseases", "animal_hosts")], function(x){
-    x %>% dplyr::select(disease) %>% distinct()}) %>%
+
+# List of al diseases cleaned, with domestic/wild separated out
+diseases <- animal_diseases %>% 
+    dplyr::select(disease) %>%
     distinct() %>%
     mutate(disease_clean = janitor::make_clean_names(disease)) %>%
     mutate(disease_clean = str_replace(disease_clean, "domesticand_wild", "domestic_and_wild")) %>%
@@ -137,7 +174,7 @@ diseases <- map_df(wahis_joined[c("animal_diseases", "animal_hosts")], function(
     mutate(disease_population = ifelse(disease_population=="", "not specified", disease_population)) %>%
     mutate(disease_clean = str_remove(disease_clean, "_domestic_and_wild|_domestic|_wild")) 
 
-wahis_joined <- modify_at(wahis_joined, .at = c("animal_diseases", "animal_hosts"), function(x){
+wahis_joined <- modify_at(wahis_joined, .at = c("animal_diseases", "animal_hosts"), function(x){ #TODO add in animal_diseases_detail and animal_hosts_detail after fixing disease names
     x %>% left_join(diseases) %>%
         select(-disease) %>%
         rename(disease = disease_clean)
