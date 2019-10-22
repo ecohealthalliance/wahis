@@ -1,4 +1,4 @@
-#' Support function for ingest_wahis_report to clean html tables
+#' Support function for ingest_annual_report to clean html tables
 #' @param parent output of xml_node text matching
 #' @param include_header create new column containing content of table header? Defaults to FALSE
 #' @noRd
@@ -27,7 +27,7 @@ clean_oie_report_table <- function(parent, include_header = FALSE){
     return(clean)
 }
 
-#' Support function for ingest_wahis_report to find between dividers in report
+#' Support function for ingest_annual_report to find between dividers in report
 #' @param headers search strings
 #' @param siblings xml nodeset to search 
 #' @importFrom purrr map compact  
@@ -45,7 +45,7 @@ get_header_index <- function(headers, siblings){
 }
 
 
-#' Support function for ingest_wahis_report to find between dividers in report
+#' Support function for ingest_annual_report to find between dividers in report
 #' @param siblings xml nodeset to search 
 #' @param first_header_name string to match when searching colnames or table headers (can be vector of strings)
 #' @param second_header_name string to match when searching colnames or table headers (can be vector of strings)
@@ -79,7 +79,7 @@ get_tables_by_index <- function(siblings, first_header_name, second_header_name,
 }
 
 
-#' Support function for ingest_wahis_report to take notes from row and add to table column
+#' Support function for ingest_annual_report to take notes from row and add to table column
 #' @param tbl dataframe with notes as full rows
 #' @noRd
 
@@ -116,7 +116,7 @@ add_notes <- function(tbl){
 #' \item{id}{Record id.}
 #' \item{diseases_present}{Table of disease present in country over time period}
 #' @examples
-#' ##ingest_wahis_report("../data-raw/raw_wahis_reports/BWA_2016_sem0.html")
+#' ##ingest_annual_report("../data-raw/raw_wahis_reports/BWA_2016_sem0.html")
 #' @export
 #' @import xml2 
 #' @importFrom stringi stri_extract_first_regex
@@ -125,7 +125,7 @@ add_notes <- function(tbl){
 #' @importFrom magrittr set_names
 #' @importFrom purrr map map2 map_df imap_dfr map_dfr map_lgl compact
 #' @import dplyr
-ingest_wahis_report <- function(web_page) {
+ingest_annual_report <- function(web_page) {
     
     # get page
     page <- suppressWarnings(read_xml(web_page, as_html = TRUE, options = c("RECOVER", "NOERROR", 
@@ -497,13 +497,13 @@ ingest_wahis_report <- function(web_page) {
     return(wahis)
 }
 
-#' Function to safely run ingest_wahis_report
+#' Function to safely run ingest_annual_report
 #' @param web_page Name of the downloaded web page
 #' @importFrom purrr safely
 #' @export
 
-safe_ingest <- function(web_page) {
-    out <- safely(ingest_wahis_report)(web_page)
+safe_ingest_annual <- function(web_page) {
+    out <- safely(ingest_annual_report)(web_page)
     if(!is.null(out$result)) {
         return(out$result)
     } else {

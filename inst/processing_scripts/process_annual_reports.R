@@ -15,7 +15,7 @@ filenames <- list.files(here::here("data-raw/wahis-raw-annual-reports"),
 
 # Run scraper (~25 mins) ---------------------------------------------------------
 message(paste(length(filenames), "files to process"))
-wahis <- future_map(filenames, wahis:::safe_ingest, .progress = TRUE)  
+wahis_annual <- future_map(filenames, wahis:::safe_ingest_annual, .progress = TRUE)  
 
 #For testing/profiling
 # Rprof("out.prof")

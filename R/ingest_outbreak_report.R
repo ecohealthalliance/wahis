@@ -30,7 +30,7 @@
 #' ##ingest_wahis_record("../inst/raw_wahis_pages/25385.html")
 #' @export
 #' @import rvest stringi xml2
-ingest_wahis_record <- function(web_page) {
+ingest_outbreak_report <- function(web_page) {
     page <- suppressWarnings(read_xml(web_page, as_html = TRUE, options = c("RECOVER", "NOERROR", 
                                                            "NOBLANKS")))
     if (length(page) < 2) {
@@ -131,6 +131,11 @@ if (length(xml_find_first(page, xpath="//tr//td[contains(.,'There are no new out
     return(record)
 }
 
+#' Support function for ingest_outbreak_report to clean html tables
+#' @param xml
+#' @param extractor XML extract function
+#' @noRd
+
 table_value <- function(xml, extractor, ...) {
     if(class(xml) == "xml_missing") {
         return(NA)
@@ -138,3 +143,18 @@ table_value <- function(xml, extractor, ...) {
         return(extractor(xml, ...))
     }
 }
+
+#' Function to safely run ingest_outbreak_report
+#' @param web_page Name of the downloaded web page
+#' @importFrom purrr safely
+#' @export
+
+safe_ingest_outbreak <- function(web_page) {
+    out <- safely(ingest_outbreak_report)(web_page)
+    if(!is.null(out$result)) {
+        return(out$result)
+    } else {
+        return(tibble(file = basename(web_page)))
+    }
+}
+

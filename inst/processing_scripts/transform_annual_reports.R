@@ -128,8 +128,7 @@ animal_hosts <- animal_hosts %>%
 control <- read_csv(here::here("data-raw", "annual_report_lookups", "lookup_control.csv"))
 control$code[control$code_value == "Vaccination in response to the outbreak(s)"] <- "Vr"
 control <- control %>% select(code, code_value) %>% distinct() %>% arrange(code) 
-control_lookup <- control$code_value
-names(control_lookup) <- control$code
+control_lookup <- structure(as.vector(control$code_value), .Names=control$code)
 control_lookup <- c(control_lookup, "empty" = "empty")
 
 animal_hosts <- animal_hosts %>%
