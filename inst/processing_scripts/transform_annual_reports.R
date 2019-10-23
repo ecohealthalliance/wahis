@@ -38,7 +38,7 @@ animal_diseases <- wahis_joined$diseases_present %>%
            occurrence, serotype, new_outbreaks, total_outbreaks, notes)
 
 # Add Absent table to animal disease table ----------------------------------------------------
-diseases_absent <- wahis_joined$diseases_absent %>%
+animal_diseases_absent <- wahis_joined$diseases_absent %>%
     select(country, report_year, report_months, disease, oie_listed, taxa, date_of_last_occurrence_if_absent = date_of_last_occurrence) %>% 
     group_by(country, report_year, report_months, disease) %>%
     mutate(date_of_last_occurrence_if_absent = na_if(date_of_last_occurrence_if_absent, "empty")) %>% # filling and then taking distinct, rather than just dropping NAs, because there can be some cases where there is empty date of last occurrence and we do not want to filter out
