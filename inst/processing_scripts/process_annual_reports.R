@@ -26,4 +26,4 @@ wahis_annual <- future_map(filenames, wahis:::safe_ingest_annual, .progress = TR
 
 # Save processed files   ------------------------------------------------------
 dir_create(here::here("data-processed"))
-readr::write_rds(wahis, here::here("data-processed", "processed-annual-reports.rds"), compress = "xz", compression = 9L)
+readr::write_rds(wahis_annual, here::here("data-processed", "processed-annual-reports.rds"), compress = "xz", compression = 9L)

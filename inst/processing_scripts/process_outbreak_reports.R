@@ -17,8 +17,6 @@ filenames <- list.files(here::here("data-raw/wahis-raw-outbreak-reports"),
 message(paste(length(filenames), "files to process"))
 wahis_outbreak <- future_map(filenames, wahis:::safe_ingest_outbreak, .progress = TRUE)  
 
-# make outbreak table, metadata table
-
 #For testing/profiling
 # Rprof("out.prof")
 # wahis <- lapply(filenames[1:100], wahis:::safe_ingest)
@@ -28,4 +26,4 @@ wahis_outbreak <- future_map(filenames, wahis:::safe_ingest_outbreak, .progress 
 
 # Save processed files   ------------------------------------------------------
 dir_create(here::here("data-processed"))
-readr::write_rds(wahis, here::here("data-processed", "processed-outbreak-reports.rds"), compress = "xz", compression = 9L)
+readr::write_rds(wahis_outbreak, here::here("data-processed", "processed-outbreak-reports.rds"), compress = "xz", compression = 9L)
