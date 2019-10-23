@@ -4,7 +4,20 @@ library(tidyverse)
 library(fs)
 library(here)
 
-wahis_joined <- read_rds(here::here("data-processed", "merged-annual-reports.rds"))
+# Load files -------------------------------------------------------------
+wahis <- readr::read_rds(here::here("data-processed", "processed-annual-reports.rds"))
+
+# Remove report errors ---------------------------------------------------
+wahis <- discard(wahis, function(x){
+    length(x) == 1
+})
+
+# Extract and rbind tables ----------------------------------------------------
+wahis_joined <- map(names(wahis[[1]]), function(name){
+    map_dfr(wahis, ~magrittr::extract2(., name)) 
+})
+
+names(wahis_joined) <- names(wahis[[1]])
 
 # NA handling -------------------------------------------------------------
 # "empty" = missing/NA/blank in the reports
