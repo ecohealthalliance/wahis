@@ -4,4 +4,4 @@
 # See https://ecohealthalliance.github.io/eha-ma-handbook/11-cloud-computing-services.html
 # For credentials setup
 
-wahis:::pull_aws(bucket = "wahis-data", object = "data-processed.tar.xz")
+wahis:::pull_aws(bucket = "wahis-data", object = "data-processed.tar.xz", dir = ".")

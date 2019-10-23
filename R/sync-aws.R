@@ -17,14 +17,15 @@ get_aws_credentials <- function(){
 #' @param file files to compress
 #' @import aws.s3
 #' @noRd
-push_aws <- function(folder, bucket){
+push_aws <- function(folder, filename, bucket){
     
     get_aws_credentials()
     
     # Compress the folder
-    object <-  paste0(basename(folder), ".tar.xz")
+    object <-  paste0(filename, ".tar.xz")
+    setwd(here::here(folder))
     tar(tarfile = object,
-        files = folder,
+        files = filename,
         compression = "xz",      # xz and level 9 makes this slow, but small!
         compression_level = 9,
         tar = "internal")
@@ -41,6 +42,8 @@ push_aws <- function(folder, bucket){
                verbose = FALSE)
     
     file.remove(object)
+    
+    setwd(here::here())
     
 } 
 
