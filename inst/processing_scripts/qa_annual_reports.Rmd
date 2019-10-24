@@ -20,16 +20,16 @@ db <- read_rds(here("data-processed", "annual-reports-data.rds"))
 this_year <- as.numeric(format(Sys.Date(), "%Y"))
 
 animal_diseases <- db[["animal_diseases"]] %>%
-    mutate_at(.vars = c("new_outbreaks", "total_outbreaks"), ~as.integer(.)) 
+  mutate_at(.vars = c("new_outbreaks", "total_outbreaks"), ~as.integer(.)) 
 ```
 
 
 ## Cases where there are more new outbreaks than total outbreaks
 ```{r animal_diseases2}
 animal_diseases %>%
-    drop_na(new_outbreaks, total_outbreaks) %>%
-    filter(new_outbreaks > total_outbreaks) %>%
-      datatable(class = "row-border", escape = FALSE, rownames = FALSE, extensions = "Buttons", 
+  drop_na(new_outbreaks, total_outbreaks) %>%
+  filter(new_outbreaks > total_outbreaks) %>%
+  datatable(class = "row-border", escape = FALSE, rownames = FALSE, extensions = "Buttons", 
             options = list(
               columnDefs = list(list(className = 'dt-center', targets = 0:(dim(.)[2] - 1))),
               pageLength = 5,
@@ -44,15 +44,15 @@ animal_diseases %>%
 ```{r animal_diseases3}
 ## Listed with more than one status
 animal_diseases %>%
-    group_by(country, report_year, report_months, oie_listed, disease, disease_population) %>% 
-    mutate(n = n()) %>%
-    #filter(disease == "viral_encephalopathy_and_retinopathy", country == "Australia", report_year == "2005", report_months == "Jan-Jun")
-    filter(n>1) %>%
-    mutate(status = paste(status, collapse = "; ")) %>%
-        mutate(serotype = paste(serotype, collapse = "; ")) %>%
-    ungroup() %>%
-    select(country, report_year, report_months, oie_listed, disease, disease_population, serotype, status) %>%
-      datatable(class = "row-border", escape = FALSE, rownames = FALSE, extensions = "Buttons", 
+  group_by(country, report_year, report_months, oie_listed, disease, disease_population) %>% 
+  mutate(n = n()) %>%
+  #filter(disease == "viral_encephalopathy_and_retinopathy", country == "Australia", report_year == "2005", report_months == "Jan-Jun")
+  filter(n>1) %>%
+  mutate(status = paste(status, collapse = "; ")) %>%
+  mutate(serotype = paste(serotype, collapse = "; ")) %>%
+  ungroup() %>%
+  select(country, report_year, report_months, oie_listed, disease, disease_population, serotype, status) %>%
+  datatable(class = "row-border", escape = FALSE, rownames = FALSE, extensions = "Buttons", 
             options = list(
               columnDefs = list(list(className = 'dt-center', targets = 0:(dim(.)[2] - 1))),
               pageLength = 5,
@@ -66,23 +66,23 @@ animal_diseases %>%
 ```{r animal_diseases4}
 # Check that semester diseases are in annual report, and vice versa. Check that math adds up.
 animal_diseases_sem <- animal_diseases %>%
-    filter(report_months != "Jan-Dec") %>%
-    select(-notes, -date_of_last_occurrence_if_absent, -taxa, -occurrence_description)
+  filter(report_months != "Jan-Dec") %>%
+  select(-notes, -date_of_last_occurrence_if_absent, -taxa, -occurrence_description)
 
 animal_diseases_ann <- animal_diseases %>%
-    filter(report_months == "Jan-Dec") %>%
-    select(-report_months, -notes, -date_of_last_occurrence_if_absent, -taxa, -occurrence_description) 
+  filter(report_months == "Jan-Dec") %>%
+  select(-report_months, -notes, -date_of_last_occurrence_if_absent, -taxa, -occurrence_description) 
 
 animal_diseases_check <- full_join(animal_diseases_sem, animal_diseases_ann, by = c("country", "report_year", "disease", "oie_listed"), suffix = c(".sem", ".ann")) %>%
-    select("country", "report_year","report_months", "disease", "oie_listed", starts_with("disease_population"), starts_with("serotype"), starts_with("status"), starts_with("occurrence"), starts_with("new_outbreaks"), starts_with("total_outbreaks")) %>%
-    distinct() %>%
-    mutate(disease_population.sem.temp = str_split(disease_population.sem, " and ")) %>%
-        mutate(disease_population.ann.temp = str_split(disease_population.ann, " and ")) %>%
-    mutate(disease_population_match =  map2_lgl(disease_population.sem.temp, disease_population.ann.temp, function(x,y)  any(unlist(x) %in% unlist(y)))) %>%
-    select(-disease_population.sem.temp, -disease_population.ann.temp) %>%
-    filter(!(disease_population_match == FALSE & !is.na(disease_population.ann) & !is.na(disease_population.sem))) %>%
-    select(-disease_population_match)
-  
+  select("country", "report_year","report_months", "disease", "oie_listed", starts_with("disease_population"), starts_with("serotype"), starts_with("status"), starts_with("occurrence"), starts_with("new_outbreaks"), starts_with("total_outbreaks")) %>%
+  distinct() %>%
+  mutate(disease_population.sem.temp = str_split(disease_population.sem, " and ")) %>%
+  mutate(disease_population.ann.temp = str_split(disease_population.ann, " and ")) %>%
+  mutate(disease_population_match =  map2_lgl(disease_population.sem.temp, disease_population.ann.temp, function(x,y)  any(unlist(x) %in% unlist(y)))) %>%
+  select(-disease_population.sem.temp, -disease_population.ann.temp) %>%
+  filter(!(disease_population_match == FALSE & !is.na(disease_population.ann) & !is.na(disease_population.sem))) %>%
+  select(-disease_population_match)
+
 # Check matches  
 # animal_diseases_check %>% select("disease_population.sem", "disease_population.ann", disease_population_match) %>% distinct()
 ```
@@ -90,12 +90,12 @@ animal_diseases_check <- full_join(animal_diseases_sem, animal_diseases_ann, by 
 ## In semester but not annual (many likely due to name mismatches, but also missing or error reports)
 ```{r animal_diseases5}
 animal_diseases_check %>% 
-    filter(is.na(occurrence.ann)) %>%
-    filter(!report_year %in% c(this_year, this_year-1)) %>%
-    select(-ends_with(".ann")) %>%
-    mutate(status.sem = factor(status.sem, levels = c("present", "absent", "unreported"))) %>%
-    arrange(status.sem) %>%
-      datatable(class = "row-border", escape = FALSE, rownames = FALSE, extensions = "Buttons", 
+  filter(is.na(occurrence.ann)) %>%
+  filter(!report_year %in% c(this_year, this_year-1)) %>%
+  select(-ends_with(".ann")) %>%
+  mutate(status.sem = factor(status.sem, levels = c("present", "absent", "unreported"))) %>%
+  arrange(status.sem) %>%
+  datatable(class = "row-border", escape = FALSE, rownames = FALSE, extensions = "Buttons", 
             options = list(
               columnDefs = list(list(className = 'dt-center', targets = 0:(dim(.)[2] - 1))),
               pageLength = 5,
@@ -103,7 +103,7 @@ animal_diseases_check %>%
               dom = 'Bfrtip',
               buttons = c('csv')
             )
-      )
+  )
 # ^ how many are missing or error?
 ```
 
@@ -111,13 +111,13 @@ animal_diseases_check %>%
 ```{r animal_diseases6}
 
 animal_diseases_check %>% 
-    filter(is.na(occurrence.sem)) %>%
-    filter(oie_listed == TRUE) %>% # non-oie lisetd are not in semester
-    filter(!report_year %in% c(this_year, this_year-1)) %>%
-    select(-ends_with(".sem")) %>%
-    mutate(status.ann = factor(status.ann, levels = c("present", "absent", "unreported"))) %>%
-    arrange(status.ann) %>%
-      datatable(class = "row-border", escape = FALSE, rownames = FALSE, extensions = "Buttons", 
+  filter(is.na(occurrence.sem)) %>%
+  filter(oie_listed == TRUE) %>% # non-oie lisetd are not in semester
+  filter(!report_year %in% c(this_year, this_year-1)) %>%
+  select(-ends_with(".sem")) %>%
+  mutate(status.ann = factor(status.ann, levels = c("present", "absent", "unreported"))) %>%
+  arrange(status.ann) %>%
+  datatable(class = "row-border", escape = FALSE, rownames = FALSE, extensions = "Buttons", 
             options = list(
               columnDefs = list(list(className = 'dt-center', targets = 0:(dim(.)[2] - 1))),
               pageLength = 5,
@@ -125,20 +125,20 @@ animal_diseases_check %>%
               dom = 'Bfrtip',
               buttons = c('csv')
             )
-      )
+  )
 # ^ how many are missing or error?
 ```
 
 ## Cases where there are mismatches between semester and annual reports (some cases are due to being listed as more than one status)
 ```{r animal_diseases7}
 animal_diseases_check %>%
-    group_by(country, report_year, report_months, disease, oie_listed) %>%
-     mutate(n = n()) %>%
-     ungroup() %>%
-     arrange(n, country, report_year, report_months, disease) %>%
-    filter(n>2) %>%
-    arrange(n, country, report_year, report_months, disease)%>%
-      datatable(class = "row-border", escape = FALSE, rownames = FALSE, extensions = "Buttons", 
+  group_by(country, report_year, report_months, disease, oie_listed) %>%
+  mutate(n = n()) %>%
+  ungroup() %>%
+  arrange(n, country, report_year, report_months, disease) %>%
+  filter(n>2) %>%
+  arrange(n, country, report_year, report_months, disease) %>%
+  datatable(class = "row-border", escape = FALSE, rownames = FALSE, extensions = "Buttons",
             options = list(
               columnDefs = list(list(className = 'dt-center', targets = 0:(dim(.)[2] - 1))),
               pageLength = 5,
@@ -146,7 +146,41 @@ animal_diseases_check %>%
               dom = 'Bfrtip',
               buttons = c('csv')
             )
-      )
+  )
+
+```
+
+## Cases where the new outbreaks in the annual report do not match the sum of the new outbreak in the semester reports
+```{r animal_diseases8}
+unique_na <- function(x){
+  if(all(is.na(x))) return(NA)
+  return(unique(na.omit(x)))
+}
+
+animal_diseases_check %>%
+  filter(!is.na(occurrence.ann), !is.na(occurrence.sem)) %>%
+  group_by(country, report_year, report_months, disease, oie_listed, disease_population.sem, disease_population.ann) %>%
+  mutate(n = n()) %>%
+  ungroup() %>%
+  arrange(n, country, report_year, report_months, disease) %>%
+  filter(n<=2) %>%
+  group_by(country, report_year, disease, oie_listed, disease_population.sem, disease_population.ann) %>%
+  mutate(sum_new_outbreaks.sem = sum(new_outbreaks.sem, na.rm = TRUE)) %>%
+  mutate(unique_new_outbreaks.ann = unique_na(new_outbreaks.ann)) %>%
+  ungroup() %>%
+  mutate(match_new_outbreaks = sum_new_outbreaks.sem == unique_new_outbreaks.ann) %>%
+  filter(match_new_outbreaks == FALSE) %>%
+    datatable(class = "row-border", escape = FALSE, rownames = FALSE, extensions = "Buttons",
+            options = list(
+              columnDefs = list(list(className = 'dt-center', targets = 0:(dim(.)[2] - 1))),
+              pageLength = 5,
+              scrollX = TRUE,
+              dom = 'Bfrtip',
+              buttons = c('csv')
+            )
+  )
+
+# ^ how many are missing or error?
 
 ```
 
