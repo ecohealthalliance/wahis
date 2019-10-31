@@ -8,6 +8,11 @@ library(here)
 wahis <- readr::read_rds(here::here("data-processed", "processed-annual-reports.rds"))
 
 # Remove report errors ---------------------------------------------------
+wahis_error <- keep(wahis, function(x){
+    length(x) == 1
+})
+
+
 wahis <- discard(wahis, function(x){
     length(x) == 1
 })

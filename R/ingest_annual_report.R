@@ -131,22 +131,39 @@ ingest_annual_report <- function(web_page) {
     page <- suppressWarnings(read_xml(web_page, as_html = TRUE, options = c("RECOVER", "NOERROR", 
                                                                             "NOBLANKS")))
     # get country name
-    country <- xml_find_first(page, '//td[contains(., "Country:")]') %>% xml_text() %>% stri_extract_first_regex("(?<=:\\s).*")
+    country <- try(xml_find_first(page, '//td[contains(., "Country:")]') %>% xml_text() %>% stri_extract_first_regex("(?<=:\\s).*"), silent = TRUE)
     
     # return error if country name is NA - indicates that report was not correctly loaded (eg )
-    if(is.na(country)){
+    if(is.na(country)||class(country)=="try-error"){
         
-        error_message <- xml_find_first(page, '//h4[contains(., "Application Error")]') %>% xml_text()
-        
-        if(length(error_message) == 1){ return(paste(error_message, basename(web_page)))}
-        
-        return("unspecified report error")
+        if(class(country)=="try-error") {
+            error <- "blank page"
+        }else{
+            error <- xml_find_first(page, xpath="//h4['Application Error']") %>% xml_text()
+            if(is.na(error)){
+                error <-  xml_text(page)
+            }
         }
+        
+        report_info <- basename(web_page)
+        country_iso3c <- substr(report_info, 1, 3)
+        country = countrycode::countrycode(country_iso3c, origin = "iso3c", destination = "country.name")
+        report_year <- substr(report_info, 5, 8)
+        report_semester <- substr(report_info, 10, 13)
+        report_months <- switch(sem, "sem0" = "Jan-Dec", "sem1" = "Jan-Jun", "sem2" = "Jul-Dec")
+        
+        metadata <- tibble(country_iso3c, country, report_year, report_semester, report_months, error)
+        return(list(
+            "metadata" = metadata))
+    }
+    
+    country_iso3c <- substr(basename(web_page), 1, 3)
     
     # get report period
     report_period <- xml_find_first(page, '//td[contains(., "Report period:")]') %>% xml_text() %>% stri_extract_first_regex("(?<=:\\s).*")
     report_year <- str_sub(report_period, start = -4) %>% as.numeric()
     report_months <- str_sub(report_period, end = -6)
+    report_semester <- substr(basename(web_page), 10, 13)
     
     # get full report summary
     siblings <- xml_nodes(page, xpath='//div[@class="ContentBigTable"]/*')
@@ -171,6 +188,8 @@ ingest_annual_report <- function(web_page) {
             filter(submission_info != "Animal type") %>% 
             filter(submission_info != "Report Period:") %>% 
             mutate(report_period = report_period,
+                   report_semester = report_semester, 
+                   country_iso3c = country_iso3c,
                    web_page = web_page) %>%
             select(report_period, everything())
             
