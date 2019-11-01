@@ -8,11 +8,6 @@ library(here)
 wahis <- readr::read_rds(here::here("data-processed", "processed-annual-reports.rds"))
 
 # Remove report errors ---------------------------------------------------
-wahis_error <- keep(wahis, function(x){
-    length(x) == 1
-})
-
-
 wahis <- discard(wahis, function(x){
     length(x) == 1
 })
@@ -228,6 +223,24 @@ wahis_joined$vaccine_production <- wahis_joined$vaccine_production %>%
 
 wahis_joined$metadata <- wahis_joined$metadata %>%
     mutate(submission_animal_type = recode(submission_animal_type, "Terrestrial and Aquatic" = "Aquatic and terrestrial"))
+
+
+# Get list of error and missing countriwa ---------------------------------------------------
+wahis_error <- keep(wahis, function(x){
+    length(x) == 1
+})
+
+
+avail_combos <- wahis_joined$metadata %>% # expand name, year, report - what is missing?
+    select(country, report_year, report_months) %>%
+    distinct() %>%
+    mutate(status = "present")
+
+all_combos <- avail_combos %>%
+    expand(country, report_year, report_months) 
+
+
+
 
 # Export -----------------------------------------------
 dir_create(here("data-processed", "db"))
