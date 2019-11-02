@@ -147,12 +147,11 @@ ingest_annual_report <- function(web_page) {
         
         report_info <- basename(web_page)
         country_iso3c <- substr(report_info, 1, 3)
-        country = countrycode::countrycode(country_iso3c, origin = "iso3c", destination = "country.name")
         report_year <- substr(report_info, 5, 8)
         report_semester <- substr(report_info, 10, 13)
         report_months <- switch(report_semester, "sem0" = "Jan-Dec", "sem1" = "Jan-Jun", "sem2" = "Jul-Dec")
         
-        metadata <- tibble(country_iso3c, country, report_year, report_semester, report_months, error)
+        metadata <- tibble(country_iso3c, report_year, report_semester, report_months, error)
         return(list(
             "metadata" = metadata))
     }
