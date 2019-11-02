@@ -8,16 +8,16 @@ library(here)
 wahis <- readr::read_rds(here::here("data-processed", "processed-annual-reports.rds"))
 
 # Remove report errors ---------------------------------------------------
-wahis <- discard(wahis, function(x){
+wahis2 <- discard(wahis, function(x){
     length(x) == 1
 })
 
 # Extract and rbind tables ----------------------------------------------------
-wahis_joined <- map(names(wahis[[1]]), function(name){
-    map_dfr(wahis, ~magrittr::extract2(., name)) 
+wahis_joined <- map(names(wahis2[[1]]), function(name){
+    map_dfr(wahis2, ~magrittr::extract2(., name)) 
 })
 
-names(wahis_joined) <- names(wahis[[1]])
+names(wahis_joined) <- names(wahis2[[1]])
 
 # NA handling -------------------------------------------------------------
 # "empty" = missing/NA/blank in the reports
@@ -225,22 +225,31 @@ wahis_joined$metadata <- wahis_joined$metadata %>%
     mutate(submission_animal_type = recode(submission_animal_type, "Terrestrial and Aquatic" = "Aquatic and terrestrial"))
 
 
-# Get list of error and missing countriwa ---------------------------------------------------
+# Get list of error and missing countries ---------------------------------------------------
 wahis_error <- keep(wahis, function(x){
     length(x) == 1
 })
 
+wahis_error <- map_dfr(wahis_error, ~magrittr::extract2(., "metadata")) %>%
+    select(country_iso3c, report_year, report_semester) %>%
+    mutate(status = "error")
 
-avail_combos <- wahis_joined$metadata %>% # expand name, year, report - what is missing?
-    select(country, report_year, report_months) %>%
+avail_combos <- wahis_joined$metadata %>% 
+    select(country_iso3c, report_year, report_semester) %>%
     distinct() %>%
-    mutate(status = "present")
+    mutate(status = "available")
 
 all_combos <- avail_combos %>%
-    expand(country, report_year, report_months) 
+    expand(country_iso3c, report_year, report_semester) %>%
+    left_join(avail_combos, by = c( "country_iso3c", "report_year", "report_semester")) %>%
+    left_join(wahis_error, by = c( "country_iso3c", "report_year", "report_semester")) %>%
+    mutate(status = coalesce(status.x, status.y)) %>%
+    select(-status.x, -status.y) %>%
+    mutate(status = replace_na(status, "not available"))
 
+all_combos %>% filter(status=="error") %>% nrow() == nrow(wahis_error)
 
-
+write_csv(all_combos, here::here("data-processed", "report-status.csv"))
 
 # Export -----------------------------------------------
 dir_create(here("data-processed", "db"))
