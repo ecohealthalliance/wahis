@@ -15,7 +15,8 @@ library(DT)
 db <- read_rds(here("data-processed", "annual-reports-data.rds"))
 status <- read_csv(here("data-processed", "report-status.csv"))
 status_missing <- status %>%
-  filter(!status %in% "available")
+  filter(!status %in% "available") %>%
+    mutate(report_year = as.character(report_year))
 
 # function to make dt
 make_dt <- function(dat){
@@ -99,7 +100,6 @@ missing_ann <- animal_diseases_check %>%
   filter(!report_year %in% c(this_year, this_year-1)) %>%
   select(-ends_with(".ann")) %>%
   mutate(status.sem = factor(status.sem, levels = c("present", "absent", "unreported"))) %>%
-  mutate(report_year = as.numeric(report_year)) %>%
   arrange(status.sem)
 
 # check against report errors/missing
@@ -120,7 +120,6 @@ missing_sem <- animal_diseases_check %>%
   filter(!report_year %in% c(this_year, this_year-1)) %>%
   select(-ends_with(".sem")) %>%
   mutate(status.ann = factor(status.ann, levels = c("present", "absent", "unreported"))) %>%
-  mutate(report_year = as.numeric(report_year)) %>%
   arrange(status.ann) %>%
   select(-report_semester)
 
@@ -134,28 +133,21 @@ anti_join(missing_sem, status_missing_sem, by = c("country_iso3c", "report_year"
 
 ```
 
-## Cases where there are mismatches between semester and annual reports (some cases are due to being listed as more than one status)
+
 ```{r animal_diseases7}
-animal_diseases_check %>%
-  group_by(country, report_year, report_months, disease, oie_listed) %>%
-  mutate(n = n()) %>%
-  ungroup() %>%
-  arrange(n, country, report_year, report_months, disease) %>%
-  filter(n>2) %>%
-  arrange(n, country, report_year, report_months, disease) %>%
-  datatable(class = "row-border", escape = FALSE, rownames = FALSE, extensions = "Buttons",
-            options = list(
-              columnDefs = list(list(className = 'dt-center', targets = 0:(dim(.)[2] - 1))),
-              pageLength = 5,
-              scrollX = TRUE,
-              dom = 'Bfrtip',
-              buttons = c('csv')
-            )
-  )
+## Cases where there are mismatches between semester and annual reports - due to being listed as more than one status (above)
+
+# animal_diseases_check %>%
+#   group_by(country_iso3c, report_year, report_semester, disease, oie_listed) %>%
+#   mutate(n = n()) %>%
+#   ungroup() %>%
+#   filter(n>2) %>%
+#   arrange(n, country_iso3c, report_year, report_semester, disease) %>%
+#   make_dt()
 
 ```
 
-## Cases where the new outbreaks in the annual report do not match the sum of the new outbreak in the semester reports
+## Cases where the new outbreaks in the annual report do not match the sum of the new outbreak in the semester reports (some due to name mismatches or missing/error reports (see one_or_more_report_missing))
 ```{r animal_diseases8}
 unique_na <- function(x){
   if(all(is.na(x))) return(NA)
@@ -164,28 +156,23 @@ unique_na <- function(x){
 
 animal_diseases_check %>%
   filter(!is.na(occurrence.ann), !is.na(occurrence.sem)) %>%
-  group_by(country, report_year, report_months, disease, oie_listed, disease_population.sem, disease_population.ann) %>%
+  group_by(country_iso3c, report_year, report_semester, disease, oie_listed, disease_population.sem, disease_population.ann) %>%
   mutate(n = n()) %>%
   ungroup() %>%
-  arrange(n, country, report_year, report_months, disease) %>%
+  arrange(n, country_iso3c, report_year, report_semester, disease) %>%
   filter(n<=2) %>%
-  group_by(country, report_year, disease, oie_listed, disease_population.sem, disease_population.ann) %>%
+  group_by(country_iso3c, report_year, disease, oie_listed, disease_population.sem, disease_population.ann) %>%
   mutate(sum_new_outbreaks.sem = sum(new_outbreaks.sem, na.rm = TRUE)) %>%
   mutate(unique_new_outbreaks.ann = unique_na(new_outbreaks.ann)) %>%
   ungroup() %>%
   mutate(match_new_outbreaks = sum_new_outbreaks.sem == unique_new_outbreaks.ann) %>%
   filter(match_new_outbreaks == FALSE) %>%
-  datatable(class = "row-border", escape = FALSE, rownames = FALSE, extensions = "Buttons",
-            options = list(
-              columnDefs = list(list(className = 'dt-center', targets = 0:(dim(.)[2] - 1))),
-              pageLength = 5,
-              scrollX = TRUE,
-              dom = 'Bfrtip',
-              buttons = c('csv')
-            )
-  )
-
-# ^ how many are missing or error?
-
+  select(-match_new_outbreaks) %>%
+  left_join(status_missing %>%
+              select(-report_semester, -status) %>%
+              distinct() %>%
+              mutate(one_or_more_report_missing = TRUE)) %>%
+  mutate(one_or_more_report_missing = replace_na(one_or_more_report_missing, FALSE)) %>%
+  make_dt()
 ```
 
