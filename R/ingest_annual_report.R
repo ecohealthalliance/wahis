@@ -511,9 +511,11 @@ ingest_annual_report <- function(web_page) {
     wahis <- map(wahis, function(x){
             if(is.null(x)){return()}
             x %>% mutate(country = country,
+                         country_iso3c = country_iso3c,
                          report_year = report_year,
-                         report_months = report_months) %>%
-                select(country, report_year, report_months, everything())
+                         report_months = report_months,
+                         report_semester = report_semester) %>%
+                select(country, country_iso3c, report_year, report_months, report_semester, everything())
     })
     
     return(wahis)

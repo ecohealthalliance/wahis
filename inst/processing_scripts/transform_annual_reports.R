@@ -34,12 +34,14 @@ animal_diseases <- wahis_joined$diseases_present %>%
     rename(serotype = serotype_s) %>%
     filter(occurrence != "empty") %>% # NAs are from nested species data - this is preserved in animal_hosts table
     mutate(status = "present") %>%
-    select(country, report_year, report_months, disease, oie_listed, status,
+    select(country, country_iso3c, report_year, report_months, report_semester,
+           disease, oie_listed, status,
            occurrence, serotype, new_outbreaks, total_outbreaks, notes)
 
 # Add Absent table to animal disease table ----------------------------------------------------
 animal_diseases_absent <- wahis_joined$diseases_absent %>%
-    select(country, report_year, report_months, disease, oie_listed, taxa, date_of_last_occurrence_if_absent = date_of_last_occurrence) %>% 
+    select(country, country_iso3c, report_year, report_months, report_semester,
+           disease, oie_listed, taxa, date_of_last_occurrence_if_absent = date_of_last_occurrence) %>% 
     group_by(country, report_year, report_months, disease) %>%
     mutate(date_of_last_occurrence_if_absent = na_if(date_of_last_occurrence_if_absent, "empty")) %>% # filling and then taking distinct, rather than just dropping NAs, because there can be some cases where there is empty date of last occurrence and we do not want to filter out
     fill(date_of_last_occurrence_if_absent) %>%
@@ -78,7 +80,8 @@ animal_diseases <- animal_diseases %>%
 
 # Animal diseases detail --------------------------------------------------
 animal_diseases_detail <- wahis_joined$diseases_present_detail %>%
-    select(country, report_year, report_months, disease, serotype = serotype_s, period,temporal_scale, adm, adm_type, new_outbreaks, total_outbreaks) %>%
+    select(country, country_iso3c, report_year, report_months, report_semester,
+           disease, serotype = serotype_s, period,temporal_scale, adm, adm_type, new_outbreaks, total_outbreaks) %>%
     filter(new_outbreaks != "empty") %>%
     mutate(status = "present")
 
@@ -92,7 +95,8 @@ animal_diseases_detail <- wahis_joined$diseases_present_detail %>%
 
 # Animal host table ----------------------------------------------------
 animal_hosts <- wahis_joined$diseases_present %>%
-    select(country, report_year, report_months, disease, oie_listed, 
+    select(country, country_iso3c, report_year, report_months, report_semester,
+           disease, oie_listed, 
            species:vaccination_in_response_to_the_outbreak_s) %>%
     rename(vaccination_in_response_to_the_outbreak = vaccination_in_response_to_the_outbreak_s) %>%
     group_by(country, report_year, report_months, disease, oie_listed) %>%
@@ -116,7 +120,8 @@ animal_hosts <- wahis_joined$diseases_present %>%
 #     filter(n != n_species)
 
 animal_hosts_absent <- wahis_joined$diseases_absent %>%
-    select(country, report_year, report_months, disease, oie_listed, 
+    select(country, country_iso3c, report_year, report_months, report_semester,
+           disease, oie_listed, 
            species:official_vaccination) %>%
     group_by(country, report_year, report_months, disease, oie_listed) %>%
     mutate(control_measures = na_if(control_measures, "empty")) %>%
@@ -154,7 +159,8 @@ animal_hosts <- animal_hosts %>%
 
 # Animal hosts detail --------------------------------------------------
 animal_hosts_detail <- wahis_joined$diseases_present_detail %>%
-    select(country, report_year, report_months, disease, period,temporal_scale, adm, adm_type, 
+    select(country, country_iso3c, report_year, report_months, report_semester,
+           disease, period,temporal_scale, adm, adm_type, 
            species, family_name: vaccination_in_response_to_the_outbreak_s) %>%
     rename(vaccination_in_response_to_the_outbreak = vaccination_in_response_to_the_outbreak_s) %>%
     mutate(species = str_replace(species, "\\(fau\\)", "\\(wild\\)")) %>% # manual fix
