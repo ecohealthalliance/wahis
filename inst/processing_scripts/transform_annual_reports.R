@@ -85,14 +85,6 @@ animal_diseases_detail <- wahis_joined$diseases_present_detail %>%
     filter(new_outbreaks != "empty") %>%
     mutate(status = "present")
 
-#TODO there's an issue in the scraping, disease names are sometimes column headers
-# see e.g.,
-# animal_diseases_detail %>% filter(country == "Afghanistan", report_year == "2006", report_months == "Jan-Dec")
-
-#TODO cleaning disease names so can be joined with animal_diseases
-
-#TODO QA check that totals in animal_diseases are the sum of the months in animal_diseases_detail
-
 # Animal host table ----------------------------------------------------
 animal_hosts <- wahis_joined$diseases_present %>%
     select(country, country_iso3c, report_year, report_months, report_semester,
@@ -168,8 +160,6 @@ animal_hosts_detail <- wahis_joined$diseases_present_detail %>%
     mutate(species = tolower(coalesce(code_value, species))) %>% # to capture empty/no info
     select(-code_value) 
 
-#TODO Same issues with disease names as in animal_diseases_details
-
 # Add tables to database --------------------------------------------------
 
 index <- names(wahis_joined)[!names(wahis_joined) %in% c("diseases_present", "diseases_absent", "diseases_present_detail", "diseases_unreported")]
@@ -184,6 +174,7 @@ wahis_joined$animal_hosts_detail <- animal_hosts_detail
 # List of al diseases cleaned, with domestic/wild separated out
 diseases <- animal_diseases %>% 
     dplyr::select(disease) %>%
+    bind_rows(animal_diseases_detail %>% dplyr::select(disease)) %>%
     distinct() %>%
     mutate(disease_clean = janitor::make_clean_names(disease)) %>%
     mutate(disease_clean = str_replace(disease_clean, "domesticand_wild", "domestic_and_wild")) %>%
@@ -192,11 +183,22 @@ diseases <- animal_diseases %>%
     mutate(disease_population = ifelse(disease_population=="", "not specified", disease_population)) %>%
     mutate(disease_clean = str_remove(disease_clean, "_domestic_and_wild|_domestic|_wild")) 
 
-wahis_joined <- modify_at(wahis_joined, .at = c("animal_diseases", "animal_hosts"), function(x){ #TODO add in animal_diseases_detail and animal_hosts_detail after fixing disease names
+wahis_joined <- modify_at(wahis_joined, .at = c("animal_diseases", "animal_diseases_detail", "animal_hosts", "animal_hosts_detail"), function(x){ #TODO add in animal_diseases_detail and animal_hosts_detail after fixing disease names
     x %>% left_join(diseases) %>%
         select(-disease) %>%
         rename(disease = disease_clean)
 })
+
+# Do the same for humans
+diseases_human <- wahis_joined$disease_humans %>% 
+    dplyr::select(disease) %>%
+    distinct() %>%
+    mutate(disease_clean = janitor::make_clean_names(disease))  
+
+wahis_joined$disease_humans <- wahis_joined$disease_humans %>%
+    left_join(diseases_human) %>%
+    select(-disease) %>%
+    rename(disease = disease_clean)
 
 # Misc other cleaning items -----------------------------------------------
 wahis_joined$disease_humans  <- wahis_joined$disease_humans %>%
