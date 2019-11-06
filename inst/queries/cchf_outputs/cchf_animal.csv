@@ -1,0 +1,447 @@
+country,disease_population,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018
+Afghanistan,domestic,NA,NA,NA,NA,NA,NA,NA,NA,NA,Disease present,Disease present,Disease present,NA
+Albania,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Suspected,Suspected,NA,NA,NA,NA,NA
+Albania,domestic,NA,NA,NA,NA,NA,NA,NA,NA,Suspected,Suspected,Suspected,NA,NA
+Armenia,not specified,Disease present,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Bulgaria,domestic and wild,NA,NA,NA,Suspected,Never reported,Disease absent,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Bhutan,domestic,NA,NA,NA,NA,NA,NA,NA,NA,NA,Infection/infestation limited to one or more zones (total outbreaks = 1),Disease absent,Disease absent,Disease absent
+Congo (Dem. Rep. of the),domestic,NA,NA,NA,NA,NA,NA,NA,NA,NA,Disease present (total outbreaks = 1),Disease absent,Disease absent,NA
+India,domestic,NA,NA,NA,NA,NA,NA,NA,Infection/infestation,Infection/infestation,Infection/infestation,Infection/infestation,Infection/infestation,NA
+Iran,not specified,NA,Infection/infestation,Infection/infestation,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Iran,domestic,NA,NA,NA,Infection/infestation,Infection/infestation,Infection/infestation,Infection/infestation,Infection/infestation,Infection/infestation limited to one or more zones,Infection/infestation limited to one or more zones,Infection/infestation limited to one or more zones,Infection/infestation limited to one or more zones,NA
+Iraq,domestic,NA,NA,NA,Disease suspected but not confirmed and limited to one or more zones,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Jordan,domestic,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Suspected,Suspected,NA
+Kazakhstan,not specified,NA,Suspected,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Kazakhstan,domestic,NA,NA,NA,NA,Disease absent,Disease absent,Disease absent,NA,NA,NA,Disease present,Disease present,Disease present
+Mauritania,domestic,NA,NA,NA,NA,Suspected,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA
+Oman,domestic,NA,NA,NA,Infection/infestation,Disease absent,Suspected,Suspected,Disease absent,Disease absent,Disease absent,Disease limited to one or more zones,Disease present,Disease present (total outbreaks = 2)
+Pakistan,not specified,Never reported,Disease present,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Pakistan,domestic,NA,NA,NA,Disease limited to one or more zones,NA,NA,NA,NA,NA,NA,NA,NA,Disease present
+Pakistan,domestic and wild,NA,NA,NA,NA,Disease limited to one or more zones,Disease present,Disease present,Disease present,Disease present,Disease present,Disease present,Disease present,NA
+Pakistan,wild,NA,NA,NA,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,Disease limited to one or more zones
+Russia,not specified,Suspected,Suspected,Suspected,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Russia,domestic,NA,NA,NA,Suspected,Suspected,Suspected,Suspected,Suspected,Suspected,Suspected,Suspected,Suspected,Suspected
+Turkey,domestic,NA,NA,NA,NA,NA,Infection/infestation,Infection/infestation,Infection/infestation,Disease present,Disease present,NA,Infection/infestation,NA
+Turkey,wild,NA,NA,NA,NA,NA,Suspected,Never reported,Never reported,Never reported,Never reported,NA,Never reported,NA
+Turkey,domestic and wild,NA,NA,NA,Never reported,Never reported,NA,NA,NA,NA,NA,Disease present,NA,NA
+South Africa,domestic and wild,NA,NA,NA,Infection/infestation,Infection/infestation,NA,NA,NA,NA,NA,NA,NA,NA
+South Africa,wild,NA,NA,NA,NA,NA,Infection/infestation,Infection/infestation,Infection/infestation,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Afghanistan,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Afghanistan,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Never reported,Never reported,NA,NA,NA,NA
+Angola,not specified,Disease absent,NA,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Angola,wild,NA,NA,NA,Disease absent,NA,NA,NA,NA,Disease absent,NA,NA,NA,NA
+Angola,domestic and wild,NA,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,NA,Disease absent,Disease absent,Disease absent,NA
+Albania,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Andorra,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Andorra,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+United Arab Emirates,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+United Arab Emirates,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Argentina,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Argentina,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,Disease absent,Disease absent,Disease absent
+Armenia,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Australia,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Australia,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Azerbaijan,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Azerbaijan,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Burundi,domestic and wild,NA,NA,NA,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA
+Burundi,domestic,NA,NA,NA,NA,NA,NA,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent
+Belgium,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Belgium,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Bangladesh,not specified,NA,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Bangladesh,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Bulgaria,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Bulgaria,domestic,NA,NA,NA,NA,NA,NA,Disease absent,Disease absent,NA,NA,NA,NA,NA
+Bulgaria,wild,NA,NA,NA,NA,NA,NA,Disease absent,Disease absent,NA,NA,NA,NA,NA
+Bahrain,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Bahrain,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,Disease absent,Disease absent,Disease absent,NA
+Bahamas,domestic and wild,NA,NA,NA,NA,NA,NA,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent
+Bosnia and Herzegovina,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Bosnia and Herzegovina,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Belarus,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA
+Belize,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Belize,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,NA
+Bolivia,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Bolivia,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Brazil,not specified,Disease absent,NA,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Brazil,domestic and wild,NA,NA,NA,Disease absent,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Barbados,not specified,NA,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Barbados,domestic and wild,NA,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+Brunei Darussalam,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Brunei Darussalam,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+Bhutan,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Bhutan,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA
+Bhutan,wild,NA,NA,NA,NA,NA,NA,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent
+Botswana,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Botswana,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Canada,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Canada,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Ceuta,domestic and wild,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Disease absent,Disease absent
+Switzerland,not specified,Never reported,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Switzerland,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Switzerland,domestic,NA,NA,NA,NA,NA,NA,Disease absent,NA,NA,NA,NA,NA,NA
+Chile,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Chile,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,Disease absent,Disease absent
+China (People's Rep. of),not specified,Disease absent,Disease absent,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Cameroon,not specified,Disease absent,NA,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Cameroon,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,NA
+Cook Islands,domestic and wild,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Disease absent
+Colombia,not specified,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Colombia,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Comoros,not specified,NA,NA,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Comoros,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,NA,NA,NA,Disease absent,Disease absent,NA,NA
+Cabo Verde,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Cabo Verde,domestic and wild,NA,NA,NA,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,Disease absent
+Cabo Verde,domestic,NA,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+Costa Rica,not specified,NA,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Costa Rica,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,Disease absent,Disease absent,Disease absent
+Cuba,not specified,Never reported,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Cuba,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Cayman Islands,not specified,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Cayman Islands,domestic and wild,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Disease absent
+Cyprus,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Cyprus,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Czech Republic,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Czech Republic,domestic and wild,NA,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+Germany,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Germany,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Denmark,not specified,NA,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Denmark,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Dominican Republic,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Dominican Republic,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,NA,Disease absent,Disease absent,Disease absent,Disease absent,NA
+Algeria,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,NA,NA
+Ecuador,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Ecuador,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Egypt,domestic,NA,NA,NA,NA,NA,NA,NA,Disease absent,NA,NA,NA,NA,NA
+Egypt,wild,NA,NA,NA,NA,NA,NA,NA,Disease absent,NA,NA,NA,NA,NA
+Egypt,domestic and wild,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,NA,Disease absent,Disease absent,Disease absent,Disease absent,NA
+Eritrea,domestic and wild,NA,NA,NA,Never reported,Never reported,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+Eritrea,domestic,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Disease absent
+Spain,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Spain,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Estonia,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Estonia,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,Disease absent
+Ethiopia,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Ethiopia,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+Finland,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Finland,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Fiji,not specified,NA,NA,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Fiji,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Falkland Islands (Malvinas),not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Falkland Islands (Malvinas),domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+France,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+France,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+Micronesia (Federated States),not specified,NA,NA,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Micronesia (Federated States),domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,NA,Disease absent,NA
+United Kingdom,not specified,Never reported,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+United Kingdom,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+Georgia,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Georgia,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Ghana,domestic and wild,NA,NA,NA,Disease absent,Disease absent,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+Equatorial Guinea,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA
+Greece,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Greece,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,NA,Disease absent,Disease absent,Disease absent,NA,NA,NA
+Greenland,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Greenland,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Guatemala,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Guatemala,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+French Guiana,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+French Guiana,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+Guyana,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Guyana,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,Disease absent
+Honduras,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Honduras,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,NA
+Croatia,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Croatia,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Haiti,not specified,Never reported,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Haiti,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Hungary,not specified,NA,NA,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Hungary,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+Indonesia,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Indonesia,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Ireland,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Ireland,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Iraq,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Iraq,wild,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Disease absent,Disease absent,Disease absent,Disease absent
+Iceland,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Iceland,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Israel,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Israel,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,Disease absent,Disease absent,Disease absent
+Italy,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Italy,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Jamaica,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Jamaica,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Jordan,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Japan,domestic and wild,NA,NA,NA,Disease absent,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,NA
+Kazakhstan,domestic and wild,NA,NA,NA,Disease absent,NA,NA,NA,Disease absent,Disease absent,Disease absent,NA,NA,NA
+Kazakhstan,wild,NA,NA,NA,NA,Never reported,Never reported,Never reported,NA,NA,NA,Disease absent,Disease absent,Disease absent
+Kenya,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Kenya,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Kyrgyzstan,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Kiribati,not specified,NA,NA,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Kiribati,domestic and wild,NA,NA,NA,NA,NA,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA
+Korea (Rep. of),not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Korea (Rep. of),domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,NA,NA
+Kuwait,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Kuwait,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Laos,not specified,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Laos,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Lebanon,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Lebanon,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,Disease absent,NA,NA,NA
+Libya,domestic and wild,NA,NA,NA,NA,NA,NA,NA,Disease absent,NA,NA,NA,NA,NA
+Libya,domestic,NA,NA,NA,NA,NA,NA,NA,NA,Disease absent,NA,Disease absent,Disease absent,NA
+St. Lucia,domestic and wild,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Disease absent
+Liechtenstein,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Liechtenstein,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Sri Lanka,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Sri Lanka,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Lesotho,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Lesotho,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,NA
+Lithuania,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Lithuania,domestic,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Lithuania,wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Luxembourg,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Luxembourg,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA
+Latvia,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Latvia,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Morocco,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Moldova,not specified,Never reported,Never reported,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Moldova,domestic,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Moldova,wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Madagascar,not specified,Never reported,Never reported,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Madagascar,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Never reported,Never reported,Never reported,NA
+Maldives,not specified,NA,NA,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Maldives,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA
+Mexico,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Mexico,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+Marshall Islands,domestic and wild,NA,NA,NA,NA,NA,NA,Disease absent,Disease absent,NA,NA,NA,NA,NA
+Former Yug. Rep. of Macedonia,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Former Yug. Rep. of Macedonia,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Mali,domestic and wild,NA,NA,NA,Disease absent,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported
+Malta,not specified,NA,NA,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Malta,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,NA,Disease absent
+Myanmar,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Myanmar,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+Montenegro,not specified,NA,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Montenegro,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Mongolia,not specified,NA,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Mongolia,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Mozambique,domestic and wild,NA,NA,NA,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,Disease absent
+Mozambique,domestic,NA,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+Mozambique,wild,NA,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+Martinique (France),not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Martinique (France),domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Mauritius,not specified,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Mauritius,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Malaysia,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Malaysia,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+Mayotte (France),domestic and wild,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Disease absent,Disease absent,Disease absent
+Namibia,not specified,Never reported,Never reported,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Namibia,domestic,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,NA,Disease absent,Disease absent,Disease absent
+Namibia,wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,NA,Disease absent,Disease absent,Disease absent
+Namibia,domestic and wild,NA,NA,NA,NA,NA,NA,NA,NA,Disease absent,Disease absent,NA,NA,NA
+New Caledonia,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+New Caledonia,domestic and wild,NA,NA,NA,Disease absent,Disease absent,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+Niger,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+Nigeria,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Nigeria,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Nicaragua,not specified,NA,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Nicaragua,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Netherlands,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Netherlands,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+Norway,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Norway,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+Nepal,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Nepal,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+New Zealand,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+New Zealand,domestic and wild,NA,NA,NA,Disease absent,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Oman,wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Panama,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Panama,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Peru,not specified,Never reported,Never reported,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Peru,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Philippines,not specified,Never reported,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Philippines,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+Palau,domestic and wild,NA,NA,NA,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,NA,NA,NA
+Korea (Dem. People's Rep.),not specified,NA,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Korea (Dem. People's Rep.),domestic,NA,NA,NA,NA,NA,Disease absent,NA,NA,NA,NA,NA,NA,NA
+Korea (Dem. People's Rep.),wild,NA,NA,NA,NA,NA,Disease absent,NA,NA,NA,NA,NA,NA,NA
+Portugal,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Portugal,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Paraguay,domestic and wild,NA,NA,NA,Never reported,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Palestinian Auton. Territories,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Palestinian Auton. Territories,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+French Polynesia,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+French Polynesia,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Qatar,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Qatar,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Reunion (France),not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Reunion (France),domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Rwanda,not specified,Never reported,Never reported,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Rwanda,domestic and wild,NA,NA,NA,Never reported,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,Disease absent,NA,NA
+Saudi Arabia,domestic,NA,NA,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+Sudan,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Sudan,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Singapore,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Singapore,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+St. Helena,domestic and wild,NA,NA,NA,NA,NA,NA,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent
+Sierra Leone,domestic,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,NA,NA
+El Salvador,wild,NA,NA,NA,NA,NA,NA,Disease absent,Never reported,Never reported,Never reported,Never reported,NA,NA
+El Salvador,domestic,NA,NA,NA,NA,NA,NA,Never reported,Disease absent,Disease absent,Disease absent,Disease absent,NA,NA
+San Marino,not specified,NA,NA,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+San Marino,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,NA
+Serbia,not specified,NA,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Serbia,domestic and wild,NA,NA,NA,Disease absent,Disease absent,NA,Disease absent,Disease absent,NA,Disease absent,Disease absent,Disease absent,Disease absent
+South Sudan,domestic and wild,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Disease absent,Disease absent,NA
+Sao Tome and Principe,domestic and wild,NA,NA,NA,NA,NA,NA,Disease absent,NA,NA,NA,NA,NA,NA
+Suriname,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Suriname,domestic and wild,NA,NA,NA,Disease absent,Disease absent,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Slovakia,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Slovakia,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Slovenia,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Slovenia,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+Sweden,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Sweden,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Swaziland,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Swaziland,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Seychelles,domestic and wild,NA,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA
+Syria,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Syria,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Chad,domestic,NA,NA,NA,NA,NA,NA,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent
+Togo,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Togo,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+Thailand,domestic and wild,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Tajikistan,not specified,Never reported,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Tajikistan,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,NA,NA,NA,Disease absent,NA,NA,NA
+Turkmenistan,domestic and wild,NA,NA,NA,NA,Never reported,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Tonga,domestic,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Disease absent,Disease absent
+Trinidad and Tobago,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Trinidad and Tobago,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,NA
+Tunisia,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Tunisia,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Chinese Taipei,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Chinese Taipei,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,NA,Disease absent,Disease absent,Disease absent,NA,Disease absent
+Tanzania,wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Uganda,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Uganda,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,Disease absent,Disease absent,Disease absent,NA
+Ukraine,not specified,Disease absent,NA,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Ukraine,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,Disease absent,Disease absent
+Uruguay,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Uruguay,domestic and wild,NA,NA,NA,Disease absent,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+United States of America,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+United States of America,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Uzbekistan,domestic,NA,NA,NA,Disease absent,NA,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Uzbekistan,wild,NA,NA,NA,Disease absent,NA,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+St. Vincent and the Grenadines,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+St. Vincent and the Grenadines,domestic and wild,NA,NA,NA,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,Disease absent,NA
+Venezuela,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Venezuela,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Vietnam,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,Disease absent
+Vanuatu,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Vanuatu,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,NA,NA,Disease absent,NA,NA,NA
+Samoa,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Samoa,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA
+Yemen,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Yemen,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,NA,NA
+South Africa,domestic,NA,NA,NA,NA,NA,Never reported,Never reported,Never reported,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Zambia,not specified,Disease absent,Disease absent,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Zambia,domestic and wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Zimbabwe,not specified,NA,Disease absent,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Zimbabwe,domestic,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Zimbabwe,wild,NA,NA,NA,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent,Disease absent
+Aruba,domestic and wild,NA,NA,NA,NA,NA,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA
+Afghanistan,wild,NA,NA,NA,NA,NA,NA,NA,NA,NA,Never reported,Never reported,Never reported,NA
+Angola,domestic,NA,NA,NA,Never reported,NA,NA,NA,NA,Never reported,NA,NA,NA,NA
+Albania,wild,NA,NA,NA,NA,NA,NA,NA,NA,Never reported,Never reported,Never reported,NA,NA
+Austria,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Austria,domestic and wild,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported
+Burundi,wild,NA,NA,NA,NA,NA,NA,NA,NA,NA,Never reported,Never reported,Never reported,Never reported
+Benin,not specified,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Benin,domestic and wild,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,NA
+Burkina Faso,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Burkina Faso,domestic and wild,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,NA,Never reported,Never reported,Never reported,Never reported,Never reported
+Belarus,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Central African Republic,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Central African Republic,domestic and wild,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,NA
+Switzerland,wild,NA,NA,NA,NA,NA,NA,Never reported,NA,NA,NA,NA,NA,NA
+China (People's Rep. of),domestic and wild,NA,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,Never reported,NA,NA,NA,NA
+Cote D'Ivoire,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Cote D'Ivoire,domestic and wild,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported
+Congo (Dem. Rep. of the),not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Congo (Dem. Rep. of the),domestic and wild,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,NA,NA,NA,NA
+Congo (Dem. Rep. of the),wild,NA,NA,NA,NA,NA,NA,NA,NA,NA,Never reported,Never reported,Never reported,NA
+Congo (Rep. of the),not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Congo (Rep. of the),domestic and wild,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,NA,NA
+Cabo Verde,wild,NA,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,NA
+Djibouti,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Djibouti,domestic and wild,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported
+Algeria,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Egypt,not specified,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Eritrea,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Eritrea,wild,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Never reported
+Gabon,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Gabon,domestic and wild,NA,NA,NA,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA
+Ghana,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Guinea,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Guinea,domestic and wild,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported
+Guadeloupe (France),not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Guadeloupe (France),domestic and wild,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,NA
+Gambia,domestic and wild,NA,NA,NA,Never reported,NA,NA,NA,NA,NA,NA,Never reported,Never reported,Never reported
+Guinea-Bissau,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Guinea-Bissau,domestic and wild,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported
+Hong Kong (SAR - PRC),not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Hong Kong (SAR - PRC),domestic and wild,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported
+India,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+India,domestic and wild,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA
+India,wild,NA,NA,NA,NA,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,Never reported,NA
+Iran,wild,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,NA
+Jordan,wild,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,NA
+Japan,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Kyrgyzstan,not specified,NA,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Cambodia,not specified,NA,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Cambodia,domestic and wild,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,NA,Never reported
+Libya,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Libya,wild,NA,NA,NA,NA,NA,NA,NA,NA,Never reported,NA,Never reported,Never reported,NA
+Morocco,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Melilla,domestic and wild,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Never reported
+Mali,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Mozambique,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Mauritania,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Mauritania,domestic and wild,NA,NA,NA,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Mauritania,wild,NA,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA
+Malawi,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Malawi,domestic and wild,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported
+Niger,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Oman,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Papua New Guinea,not specified,NA,NA,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Papua New Guinea,domestic and wild,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported
+Poland,not specified,Never reported,NA,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Poland,domestic and wild,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported
+Paraguay,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Romania,not specified,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Romania,domestic and wild,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported
+Russia,wild,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported
+Saudi Arabia,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Saudi Arabia,domestic and wild,NA,NA,NA,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA
+Saudi Arabia,wild,NA,NA,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,NA
+Serbia and Montenegro,not specified,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Senegal,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Senegal,domestic and wild,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported
+Solomon Islands,not specified,NA,NA,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Sierra Leone,wild,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,NA,NA,NA
+El Salvador,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+El Salvador,domestic and wild,NA,NA,NA,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA
+Somalia,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Somalia,domestic and wild,NA,NA,NA,Never reported,Never reported,Never reported,NA,NA,NA,Never reported,Never reported,Never reported,Never reported
+Chad,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Chad,domestic and wild,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA
+Chad,wild,NA,NA,NA,NA,NA,NA,NA,NA,NA,Never reported,Never reported,Never reported,Never reported
+Thailand,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Tonga,not specified,NA,NA,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Tonga,domestic and wild,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,NA,NA
+Tonga,wild,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Never reported,Never reported
+Turkey,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Tanzania,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Tanzania,domestic,NA,NA,NA,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported,Never reported
+Uzbekistan,not specified,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Vietnam,not specified,Never reported,Never reported,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+South Africa,not specified,Never reported,NA,Never reported,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
