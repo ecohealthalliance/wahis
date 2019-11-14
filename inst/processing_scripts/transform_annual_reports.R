@@ -8,16 +8,18 @@ library(here)
 wahis <- readr::read_rds(here::here("data-processed", "processed-annual-reports.rds"))
 
 # Remove report errors ---------------------------------------------------
-wahis2 <- discard(wahis, function(x){
-    length(x) == 1
+wahis2 <- keep(wahis, function(x){
+    x$report_status == "available"
 })
 
 # Extract and rbind tables ----------------------------------------------------
-wahis_joined <- map(names(wahis2[[1]]), function(name){
+tnames <- c('metadata', 'submission_info', 'diseases_present', 'diseases_absent', 'diseases_present_detail', 'diseases_unreported', 'disease_humans', 'animal_population', 'veterinarians', 'national_reference_laboratories', 'national_reference_laboratories_detail', 'vaccine_manufacturers', 'vaccine_manufacturers_detail', 'vaccine_production')
+
+wahis_joined <- map(tnames, function(name){
     map_dfr(wahis2, ~magrittr::extract2(., name)) 
 })
 
-names(wahis_joined) <- names(wahis2[[1]])
+names(wahis_joined) <- tnames
 
 # NA handling -------------------------------------------------------------
 # "empty" = missing/NA/blank in the reports
@@ -26,7 +28,7 @@ names(wahis_joined) <- names(wahis2[[1]])
 wahis_joined <- map(wahis_joined, function(x){
     x %>%
         mutate_all(~replace_na(., "empty")) %>%
-        mutate_at(vars(-one_of("occurrence")),  ~ifelse(. %in% c("No", "..."), "no information", .))
+        mutate_at(vars(-one_of("occurrence")),  ~ifelse(. %in% c("No", "..."), "no information", .)) # warning "Unknown columns: `occurrence`" is ok
 })
 
 # Animal disease table ----------------------------------------------------
@@ -229,13 +231,13 @@ wahis_joined$vaccine_production <- wahis_joined$vaccine_production %>%
 
 #TODO note that vaccine_manufacturers_detail and vaccine_production can potentially be joined by vaccine
 
-wahis_joined$metadata <- wahis_joined$metadata %>%
+wahis_joined$submission_info <- wahis_joined$submission_info %>%
     mutate(submission_animal_type = recode(submission_animal_type, "Terrestrial and Aquatic" = "Aquatic and terrestrial"))
 
 
 # Get list of error and missing countries ---------------------------------------------------
 wahis_error <- keep(wahis, function(x){
-    length(x) == 1
+    x$report_status != "available"
 })
 
 wahis_error <- map_dfr(wahis_error, ~magrittr::extract2(., "metadata")) %>%
