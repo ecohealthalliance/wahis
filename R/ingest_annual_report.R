@@ -217,6 +217,8 @@ ingest_annual_report <- function(web_page) {
         # get notes into table
         diseases_present <- add_notes(diseases_present)
         
+    }else{
+        diseases_present <- NULL
     }
     
     # 2 -----------------------------------------------------------------------
@@ -249,14 +251,17 @@ ingest_annual_report <- function(web_page) {
         })
     })
     
-    assertthat::has_name(diseases_absent, c("date_of_last_occurrence", "species"))
-    
-    diseases_absent <- add_notes(diseases_absent)
+    if(nrow(diseases_absent) > 0){
+        assertthat::has_name(diseases_absent, c("date_of_last_occurrence", "species"))
+        diseases_absent <- add_notes(diseases_absent)
+    }else{
+        diseases_absent <- NULL
+    }
     
     # 3 -----------------------------------------------------------------------
     # Detailed quantitative information for OIE-listed diseases/infections present
     # Disease information by State by month
-    # Get every table that has "Month" in it.  Disease names are sometimes in table header and sometime in node above.  
+    # Disease names are sometimes in table header and sometime in node above.  
     
     parent <- xml_nodes(page, xpath=paste0('//table/tr/th[contains(text(),"New outbreaks")]/../..'))
     exclude_tables <- c("1. Summary on OIE-listed diseases/infections present in", "5. Summary on non OIE-Listed diseases/infections present in")
@@ -266,7 +271,7 @@ ingest_annual_report <- function(web_page) {
         parent <- parent[!parent %in% exclude]
     }
     
-    if(!is.null(parent)){
+    if(!is.null(parent) && length(parent)>0){
         
         diseases_present_detail <- map_df(parent, function(node){
             disease <- html_table(node, fill = TRUE)[1,1] # fill needed b/c weirdness in IRQ_2015_sem0.html "/html/body/div/div[3]/div[2]/div/table[27]"
@@ -360,6 +365,8 @@ ingest_annual_report <- function(web_page) {
                 filter(disease != "")
         })
     })
+    
+    if(nrow(diseases_unreported)==0){diseases_unreported <- NULL}
     
     # assertion that you have at least one absense, presence, or unreported table--they can't all be null
     assertthat::assert_that(!all(map_lgl(list(diseases_present, diseases_absent, diseases_unreported), is.null)))
