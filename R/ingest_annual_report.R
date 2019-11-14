@@ -58,7 +58,7 @@ get_tables_by_index <- function(siblings, first_header_name, second_header_name,
     second_header_index <- get_header_index(second_header_name, siblings)
     
     if(end_page) {second_header_index <- length(siblings)}
-        
+    
     # if second header is not in siblings nodeset, check if it's a table (eg this is the case for "Zoonotic diseases in humans")
     if(is.null(second_header_index)){
         ns <- xml_find_all(siblings, paste0('//tr[contains(., "', second_header_name,'")]')) %>%
@@ -128,10 +128,20 @@ add_notes <- function(tbl){
 ingest_annual_report <- function(web_page) {
     
     # get page
-    page <- suppressWarnings(read_xml(web_page, as_html = TRUE, options = c("RECOVER", "NOERROR", 
-                                                                            "NOBLANKS")))
+    page <- suppressWarnings(read_xml(web_page, as_html = TRUE, options = c("RECOVER", "NOERROR", "NOBLANKS")))
+    
+    # get info from file name
+    report_info <- basename(web_page)
+    country_iso3c <- substr(report_info, 1, 3)
+    report_year <- substr(report_info, 5, 8)
+    report_semester <- substr(report_info, 10, 13)
+    report_months <- switch(report_semester, "sem0" = "Jan-Dec", "sem1" = "Jan-Jun", "sem2" = "Jul-Dec")
+    
     # get country name
     country <- try(xml_find_first(page, '//td[contains(., "Country:")]') %>% xml_text() %>% stri_extract_first_regex("(?<=:\\s).*"), silent = TRUE)
+    
+    # metadata for export
+    metadata <- tibble(country_iso3c, report_year, report_semester, report_months)
     
     # return error if country name is NA - indicates that report was not correctly loaded (eg )
     if(is.na(country)||class(country)=="try-error"){
@@ -145,36 +155,24 @@ ingest_annual_report <- function(web_page) {
             }
         }
         
-        report_info <- basename(web_page)
-        country_iso3c <- substr(report_info, 1, 3)
-        report_year <- substr(report_info, 5, 8)
-        report_semester <- substr(report_info, 10, 13)
-        report_months <- switch(report_semester, "sem0" = "Jan-Dec", "sem1" = "Jan-Jun", "sem2" = "Jul-Dec")
-        
-        metadata <- tibble(country_iso3c, report_year, report_semester, report_months, error)
         return(list(
+            "report_status" = error,
             "metadata" = metadata))
+    }else{
+        report_status <- "available"
     }
     
-    country_iso3c <- substr(basename(web_page), 1, 3)
-    
-    # get report period
-    report_period <- xml_find_first(page, '//td[contains(., "Report period:")]') %>% xml_text() %>% stri_extract_first_regex("(?<=:\\s).*")
-    report_year <- str_sub(report_period, start = -4) %>% as.numeric()
-    report_months <- str_sub(report_period, end = -6)
-    report_semester <- substr(basename(web_page), 10, 13)
-    
-    # get full report summary
+    # get full report summary + submission infor for export
     siblings <- xml_nodes(page, xpath='//div[@class="ContentBigTable"]/*')
     
     first_header_name = c("Report Summary") 
     second_header_name = c("1. Summary on OIE-listed diseases/infections present in ") 
     
     index <- get_tables_by_index(siblings = siblings, 
-                        first_header_name = first_header_name, second_header_name = second_header_name)
+                                 first_header_name = first_header_name, second_header_name = second_header_name)
     
     tabs <- siblings[index]
-    metadata <- map_dfr(tabs, function(tb){
+    submission_info <- map_dfr(tabs, function(tb){
         dat <- tb %>% 
             rvest::html_table(fill = TRUE) %>%
             filter(X1 != "") %>%
@@ -185,33 +183,28 @@ ingest_annual_report <- function(web_page) {
             bind_rows(dat[,3:4] %>% set_names(c("submission_info", "submission_value"))) %>%
             mutate(submission_animal_type = .$submission_value[submission_info == "Animal type"]) %>%
             filter(submission_info != "Animal type") %>% 
-            filter(submission_info != "Report Period:") %>% 
-            mutate(report_period = report_period,
-                   report_semester = report_semester, 
-                   country_iso3c = country_iso3c,
-                   web_page = web_page) %>%
-            select(report_period, everything())
-            
+            filter(submission_info != "Report Period:") 
+        
     })
     # 1 -----------------------------------------------------------------------
     # OIE- and non-OIE-listed diseases/infections present
     # pre-2014 also includes non-OIE-listed diseases present
     
     header_name <- c("1. Summary on OIE-listed diseases/infections present in", "5. Summary on non OIE-Listed diseases/infections present in")
-
+    
     parent <- map(header_name, ~xml_node(page, xpath=paste0('//table/tr/td[contains(text(),"', ., '")]/../..'))) %>% compact()
-
+    
     diseases_present <- map_df(parent, ~clean_oie_report_table(.))
-
+    
     if(nrow(diseases_present) > 0){ # may be NULL if no diseases were detected
-
+        
         # check that we have the right table
         assertthat::has_name(diseases_present, c("new_outbreaks", "occurrence"))
-
+        
         # temporarily add non_oie_listed_disease or oie_listed_disease fields
         if(!"non_oie_listed_disease" %in% colnames(diseases_present)){diseases_present$non_oie_listed_disease <- NA_character_}
         if(!"oie_listed_disease" %in% colnames(diseases_present)){diseases_present$oie_listed_disease <- NA_character_}
-
+        
         # light cleaning to format tables identically
         diseases_present <- diseases_present %>%
             mutate(disease = coalesce(oie_listed_disease, non_oie_listed_disease)) %>%
@@ -220,30 +213,30 @@ ingest_annual_report <- function(web_page) {
             select(disease, everything(), -non_oie_listed_disease, -oie_listed_disease) %>%
             fill(disease, .direction = "down") %>%
             fill(oie_listed, .direction = "down")
-
+        
         # get notes into table
         diseases_present <- add_notes(diseases_present)
-
+        
     }
-
+    
     # 2 -----------------------------------------------------------------------
     # OIE- and non-OIE-listed diseases absent
     # Pulls all tables between top div marker and next section
     diseases_absent_siblings <- xml_nodes(page, xpath='//div[@class="ContentBigTable"]/*')
-
+    
     first_header_names = c("OIE-listed diseases absent in ",  # set 1
                            "Non OIE-Listed diseases absent in ") # set 2 (only applies to pre-14)
     second_header_names = c("Detailed quantitative information for OIE-listed diseases/infections present in ", # set 1
                             "Detailed quantitative information for non OIE-Listed diseases/infections present in ") # set 2 (only applies to pre-14)
-
+    
     diseases_absent_index <- map2(first_header_names, second_header_names, function(x, y){
-
+        
         get_tables_by_index(siblings = diseases_absent_siblings,
                             first_header_name = x, second_header_name = y)
     }) %>%
         set_names(first_header_names) %>%
         compact()
-
+    
     # pull data and include oie_listed and taxa
     diseases_absent <- imap_dfr(diseases_absent_index, function(x, y){
         oie_listed <- switch(y, "OIE-listed diseases absent in " = TRUE, "Non OIE-Listed diseases absent in " = FALSE)
@@ -255,9 +248,9 @@ ingest_annual_report <- function(web_page) {
                 mutate(oie_listed = oie_listed)
         })
     })
-
+    
     assertthat::has_name(diseases_absent, c("date_of_last_occurrence", "species"))
-
+    
     diseases_absent <- add_notes(diseases_absent)
     
     # 3 -----------------------------------------------------------------------
@@ -337,16 +330,16 @@ ingest_annual_report <- function(web_page) {
     # Pulls all tables between top div marker and next section 
     
     diseases_unreported_siblings <- xml_nodes(page, xpath='//div[@class="ContentBigTable"]/*')
-
+    
     first_header_names <- c("Unreported OIE-listed diseases during the reporting period",  # set 1
-                           "Unreported non OIE-Listed diseases") # set 2 (only applies to pre-14)
+                            "Unreported non OIE-Listed diseases") # set 2 (only applies to pre-14)
     second_header_names <- c("Summary on non OIE-Listed diseases/infections present in ", # set 1
-                            "Zoonotic diseases in humans") # set 2 (only applies to pre-14)
-
+                             "Zoonotic diseases in humans") # set 2 (only applies to pre-14)
+    
     if(report_year >= 2014){second_header_names[1] <- "Zoonotic diseases in humans"} # special case
-
+    
     diseases_unreported_index <- map2(first_header_names, second_header_names, function(x, y){
-
+        
         end_page <- !str_detect(web_page, "sem0")
         get_tables_by_index(siblings = diseases_unreported_siblings,
                             first_header_name = x, second_header_name = y,
@@ -354,7 +347,7 @@ ingest_annual_report <- function(web_page) {
     }) %>%
         set_names(first_header_names) %>%
         compact()
-
+    
     # pull data and include oie_listed and taxa
     diseases_unreported <- imap_dfr(diseases_unreported_index, function(x, y){
         oie_listed <- switch(y, "Unreported OIE-listed diseases during the reporting period" = TRUE, "Unreported non OIE-Listed diseases" = FALSE)
@@ -367,10 +360,10 @@ ingest_annual_report <- function(web_page) {
                 filter(disease != "")
         })
     })
-
+    
     # assertion that you have at least one absense, presence, or unreported table--they can't all be null
     assertthat::assert_that(!all(map_lgl(list(diseases_present, diseases_absent, diseases_unreported), is.null)))
-
+    
     # 5 -----------------------------------------------------------------------
     # Zoonotic diseases in humans
     tbl_number <- ifelse(report_year >= 2014, 5, 9)
@@ -379,7 +372,7 @@ ingest_annual_report <- function(web_page) {
     if(!is.null(disease_humans)){
         assertthat::has_name(disease_humans, c("no_information_available", "disease_absent"))
     }
-
+    
     # 6 -----------------------------------------------------------------------
     # Animal population
     tbl_number <- ifelse(report_year >= 2014, 6, 10)
@@ -390,47 +383,47 @@ ingest_annual_report <- function(web_page) {
         animal_population <- animal_population %>%
             fill(species, .direction = "down")
     }
-
+    
     # # 7 -----------------------------------------------------------------------
     # Veterinarians and veterinary para-professionals
     parent <- xml_node(page, xpath=paste0('//table/tr/td[text()="Veterinarians:"]/../..'))
     veterinarians <- clean_oie_report_table(parent)
-
+    
     if(!is.null(veterinarians)){
         assertthat::has_name(veterinarians, c("x", "public_sector"))
-
+        
         veterinarians <- veterinarians %>%
             rename(veterinarian_field = x) %>%
             mutate(veterinarian_class = "veterinarians")
-
+        
         note <- veterinarians %>% filter(veterinarian_field == "(specify with a short note)") %>% pull(2)
-
+        
         veterinarians <- veterinarians %>%
             mutate(veterinarian_field = ifelse(veterinarian_field=="Others",
                                                paste0(veterinarian_field, " (", note, ")"),
                                                veterinarian_field)) %>%
             slice(-nrow(.))
-
+        
     }
-
+    
     parent <- xml_node(page, xpath=paste0('//table/tr/td[text()="Veterinary Paraprofessionals"]/../..'))
     veterinarian_paraprofessionals <- clean_oie_report_table(parent)
-
+    
     if(!is.null(veterinarian_paraprofessionals)){
         assertthat::has_name(veterinarian_paraprofessionals, c("x", "public_sector"))
-
+        
         veterinarian_paraprofessionals <- veterinarian_paraprofessionals %>%
             rename(veterinarian_field = x) %>%
             mutate(veterinarian_class = "veterinarian paraprofessionals")
-
+        
         note <- veterinarian_paraprofessionals %>% filter(veterinarian_field == "(specify with a short note)") %>% pull(2)
-
+        
         veterinarian_paraprofessionals <- veterinarian_paraprofessionals %>%
             mutate(veterinarian_field = ifelse(veterinarian_field=="Others",
                                                paste0(veterinarian_field, " (", note, ")"),
                                                veterinarian_field)) %>%
             slice(-nrow(.))
-
+        
     }
     veterinarians <- bind_rows(veterinarians, veterinarian_paraprofessionals)
     if(nrow(veterinarians)==0){veterinarians <- NULL}
@@ -439,64 +432,65 @@ ingest_annual_report <- function(web_page) {
     tbl_number <- ifelse(report_year >= 2014, 8, 12)
     parent <- xml_node(page, xpath=paste0('//table/tr/td[text()="', tbl_number, '. National reference laboratories"]/../..'))
     national_reference_laboratories <- clean_oie_report_table(parent)
-
+    
     if(!is.null(national_reference_laboratories)){
         assertthat::has_name(national_reference_laboratories, c("name", "contacts"))
     }
-
+    
     # 9 -----------------------------------------------------------------------
     # Diagnostic Tests
     tbl_number <- ifelse(report_year >= 2014, 9, 13)
     parent <- xml_node(page, xpath=paste0('//table/tr/td[text()="', tbl_number, '. Diagnostic Tests"]/../..'))
     national_reference_laboratories_detail <- clean_oie_report_table(parent)
-
+    
     if(!is.null(national_reference_laboratories_detail)){
         assertthat::has_name(national_reference_laboratories_detail, c("laboratory", "disease", "test_type"))
-
+        
         national_reference_laboratories_detail <- national_reference_laboratories_detail %>%
             fill(laboratory, .direction = "down") %>%
             fill(disease, .direction = "down")
     }
-
+    
     # 10 -----------------------------------------------------------------------
     # Vaccine Manufacturers
     tbl_number <- ifelse(report_year >= 2014, 10, 14)
     parent <- xml_node(page, xpath=paste0('//table/tr/td[text()="', tbl_number, '. Vaccine Manufacturers"]/../..'))
     vaccine_manufacturers <- clean_oie_report_table(parent)
-
+    
     if(!is.null(vaccine_manufacturers)){
         assertthat::has_name(vaccine_manufacturers, c("manufacturer", "contacts"))
     }
-
+    
     # 11 -----------------------------------------------------------------------
     # Vaccines
     tbl_number <- ifelse(report_year >= 2014, 11, 15)
     parent <- xml_node(page, xpath=paste0('//table/tr/td[text()="', tbl_number, '. Vaccines"]/../..'))
     vaccine_manufacturers_detail <- clean_oie_report_table(parent)
-
+    
     if(!is.null(vaccine_manufacturers_detail)){
         assertthat::has_name(vaccine_manufacturers_detail, c("manufacturer", "disease"))
-
+        
         vaccine_manufacturers_detail <- vaccine_manufacturers_detail %>%
             fill(disease, .direction = "down")
     }
-
+    
     # 12 -----------------------------------------------------------------------
     # Vaccine production
     tbl_number <- ifelse(report_year >= 2014, 12, 16)
     parent <- xml_node(page, xpath=paste0('//table/tr/td[text()="', tbl_number, '. Vaccine production"]/../..'))
-
+    
     vaccine_production <- clean_oie_report_table(parent)
-
+    
     if(!is.null(vaccine_production)){
         assertthat::has_name(vaccine_production, c("manufacturer", "vaccine", "doses_produced"))
     }
-
+    
     # Output -----------------------------------------------------------------------
     wahis <- list(
-       "metadata" = metadata,
-       "diseases_present"= diseases_present,
-       "diseases_absent"= diseases_absent,
+        "metadata" = metadata,
+        "submission_info" = submission_info,
+        "diseases_present"= diseases_present,
+        "diseases_absent"= diseases_absent,
         "diseases_present_detail"= diseases_present_detail,
         "diseases_unreported" = diseases_unreported,
         "disease_humans" = disease_humans,
@@ -509,14 +503,16 @@ ingest_annual_report <- function(web_page) {
         "vaccine_production" = vaccine_production)
     
     wahis <- map(wahis, function(x){
-            if(is.null(x)){return()}
-            x %>% mutate(country = country,
-                         country_iso3c = country_iso3c,
-                         report_year = report_year,
-                         report_months = report_months,
-                         report_semester = report_semester) %>%
-                select(country, country_iso3c, report_year, report_months, report_semester, everything())
+        if(is.null(x)){return()}
+        x %>% mutate(country = country,
+                     country_iso3c = country_iso3c,
+                     report_year = report_year,
+                     report_months = report_months,
+                     report_semester = report_semester) %>%
+            select(country, country_iso3c, report_year, report_months, report_semester, everything())
     })
+    
+    wahis <- c("report_status" = report_status, wahis)
     
     return(wahis)
 }
