@@ -259,7 +259,7 @@ all_combos <- avail_combos %>%
 
 all_combos %>% filter(status=="error") %>% nrow() == nrow(wahis_error)
 
-write_csv(all_combos, here::here("data-processed", "report-status.csv"))
+write_csv(all_combos, here::here("data-processed", "annual-report-status.csv"))
 
 # Export -----------------------------------------------
 dir_create(here("data-processed", "db"))
