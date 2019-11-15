@@ -31,18 +31,22 @@
 #' @export
 #' @import rvest stringi xml2
 ingest_outbreak_report <- function(web_page) {
+    
+    base_page <- basename(web_page)
+    
     page <- suppressWarnings(read_xml(web_page, as_html = TRUE, options = c("RECOVER", "NOERROR", 
                                                            "NOBLANKS")))
     if (length(page) < 2) {
-        return(list(report_status = "error", web_page = web_page))
+        return(list(report_status = "blank page", web_page = base_page))
     }
     record <- list()
     record$report_status = "available"
+    record$web_page <- base_page
     record$id <- xml_find_first(page, xpath="//div[@class='MidBigTable']//a") %>% 
         xml_attr("name") %>% 
         stri_extract_last_regex("(?<=rep_)\\d+$")
     if(is.na(record$id)) {
-        return(list(report_status = "error", web_page = web_page))
+        return(list(report_status = "does not exist", web_page = base_page))
     }
     title_country <- 
         xml_find_all(page, xpath="//div[@class='Rap12-Subtitle']//text()") 

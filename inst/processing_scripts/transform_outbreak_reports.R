@@ -4,12 +4,12 @@ library(tidyverse)
 wahis <- readr::read_rds(here::here("data-processed", "processed-outbreak-reports.rds"))
 
 # Remove report errors ---------------------------------------------------
-wahis <- discard(wahis, function(x){
-    length(x) == 1
+wahis2 <- discard(wahis, function(x){
+    length(x) == 2
 })
 
 # Summary table ---------------------------------------------------
-outbreak_summary <- map_dfr(wahis, function(x){
+outbreak_summary <- map_dfr(wahis2, function(x){
     
     x$related_reports <- paste(x$related_reports, collapse = "; ")
     
@@ -24,31 +24,14 @@ outbreak_summary <- map_dfr(wahis, function(x){
 outbreak_summary <- outbreak_summary %>%
     mutate(related_reports = ifelse(related_reports=="", id, related_reports))
 
-# method 1 - assumes that older reports might not be updated with newer related reports
-# outbreak_summary$thread <- NA
-# thr <- 1
-# for(i in 1:nrow(outbreak_summary)){
-#     
-#     related_reports <- str_split(outbreak_summary$related_reports[i], "; ") %>% unlist()
-#     
-#     if(any(!is.na(outbreak_summary$thread[outbreak_summary$id %in% related_reports]))){
-#         outbreak_summary$thread[outbreak_summary$id %in% related_reports] <- unique(na.omit(outbreak_summary$thread[outbreak_summary$id %in% related_reports]))
-#     }else{
-#         outbreak_summary$thread[outbreak_summary$id %in% related_reports] <- thr
-#         thr <- thr + 1
-#     }
-# }
-
-# method 2 - assumes that older reports might are updated with newer related reports
+# older reports might are updated with newer related reports
 outbreak_summary <- outbreak_summary %>%
     group_by(related_reports) %>%
     mutate(thread = group_indices()) %>%
     ungroup()
 
-
 # Outbreak detail ---------------------------------------------------
-tictoc::tic()
-outbreak_detail <- map_dfr(wahis, function(x){
+outbreak_detail <- map_dfr(wahis2, function(x){
     
     outbreaks <- x$outbreaks
     
@@ -73,10 +56,9 @@ outbreak_detail <- map_dfr(wahis, function(x){
         return(this_outbreak)
     })
 })
-tictoc::toc()
 
 # Diagnostic table ---------------------------------------------------
-outbreak_diagnostics <- map_dfr(wahis, function(x){
+outbreak_diagnostics <- map_dfr(wahis2, function(x){
     
     tests <- x$diagnostic_tests 
     
@@ -89,11 +71,17 @@ outbreak_diagnostics <- map_dfr(wahis, function(x){
 })
 
 
-# R profile
-
 # Export -----------------------------------------------
 wahis_joined <- list(outbreak_summary = outbreak_summary, outbreak_detail = outbreak_detail, outbreak_diagnostics = outbreak_diagnostics)
 fs::dir_create(here::here("data-processed", "db"))
 iwalk(wahis_joined, ~write_csv(.x, here::here("data-processed", "db", paste0("outbreak_reports_", .y, ".csv.xz"))))
 
 write_rds(wahis_joined, here::here("data-processed", "outbreak-reports-data.rds"), compress = "xz", compression = 9L)
+
+# Error reports -----------------------------------------------
+wahis_all <- map_dfr(wahis, function(x){
+    tibble(web_page = x$web_page,
+           report_status = x$report_status,)
+})
+
+write_csv(wahis_all, here::here("data-processed", "outbreak-report-status.csv"))
