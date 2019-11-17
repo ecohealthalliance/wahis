@@ -110,7 +110,8 @@ add_notes <- function(tbl){
 #' Extract the information found in the Annual and Semi-Annual OIE World Animal Health Information
 #' System (WAHIS) HTML reports. These reports have to be provided to this function.
 #'
-#' @param web_page Name of the downloaded web page
+#' @param web_page URL, file, or character/raw vector of a WAHIS annual report
+#' @param encoding encoding of web page.  WAHIS website currently serves ISO-8859-1
 #'
 #' @return A list with elements:
 #' \item{id}{Record id.}
@@ -131,11 +132,10 @@ ingest_annual_report <- function(web_page, encoding = "ISO-8859-1") {
     page <- suppressWarnings(read_xml(web_page, encoding = encoding, as_html = TRUE, options = c("RECOVER", "NOERROR", "NOBLANKS")))
     
     # get info from file name
-    report_info <- basename(web_page)
-    country_iso3c <- substr(report_info, 1, 3)
-    report_year <- substr(report_info, 5, 8)
-    report_semester <- substr(report_info, 10, 13)
-    report_months <- switch(report_semester, "sem0" = "Jan-Dec", "sem1" = "Jan-Jun", "sem2" = "Jul-Dec")
+    country_iso3c <- xml_attr(xml_find_first(page, '//*[@id="header_this_country_code"]'), "value")
+    report_year <- xml_attr(xml_find_first(page, '//*[@id="header_year"]'), "value")
+    report_semester <- xml_attr(xml_find_first(page, '//*[@id="header_semester"]'), "value")
+    report_months <- switch(report_semester, "0" = "Jan-Dec", "1" = "Jan-Jun", "2" = "Jul-Dec")
     
     # get country name
     country <- try(xml_find_first(page, '//td[contains(., "Country:")]') %>% xml_text() %>% stri_extract_first_regex("(?<=:\\s).*"), silent = TRUE)
@@ -324,7 +324,7 @@ ingest_annual_report <- function(web_page, encoding = "ISO-8859-1") {
         })
         
         # Not keeping semester info for yearly reports
-        if(str_detect(web_page, "sem0")){
+        if (report_semester == "0") {
             diseases_present_detail <- diseases_present_detail %>% filter(temporal_scale != "semester")
         }
     }else{
@@ -346,7 +346,7 @@ ingest_annual_report <- function(web_page, encoding = "ISO-8859-1") {
     
     diseases_unreported_index <- map2(first_header_names, second_header_names, function(x, y){
         
-        end_page <- !str_detect(web_page, "sem0")
+        end_page <- report_semester != "0"
         get_tables_by_index(siblings = diseases_unreported_siblings,
                             first_header_name = x, second_header_name = y,
                             end_page = end_page)
@@ -535,7 +535,7 @@ safe_ingest_annual <- function(web_page) {
     if(!is.null(out$result)) {
         return(out$result)
     } else {
-        return(tibble(file = basename(web_page)))
+        return(list(report_status = paste("ingestion error: ", out$error)))
     }
 }
 
