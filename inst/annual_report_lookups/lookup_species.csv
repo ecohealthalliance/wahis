@@ -1,0 +1,25 @@
+code_value,code,group
+bees,api,terrestrial
+birds,avi,terrestrial
+buffaloes,buf,terrestrial
+camelidae,cml,terrestrial
+cats,fel,terrestrial
+cattle,bov,terrestrial
+cervidae,cer,terrestrial
+dogs,can,terrestrial
+equidae,equ,terrestrial
+goats,cap,terrestrial
+hares/rabbits,lep,terrestrial
+sheep,ovi,terrestrial
+sheep/goats,o/c,terrestrial
+swine,sui,terrestrial
+WILDLIFE,fau,terrestrial
+Fish,pis,aquatic
+Wild fish,pis (wild),aquatic
+Crustaceans,cru,aquatic
+Wild crustaceans,cru (wild),aquatic
+Molluscs,mol,aquatic
+Wild molluscs,mol (wild),aquatic
+Amphibians,amp,aquatic
+Wild amphibians,amp (wild),aquatic
+All susceptible species,***,NA
