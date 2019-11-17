@@ -4,7 +4,7 @@
 \alias{ingest_outbreak_report}
 \title{Extract Info from WAHIS Weekly Disease Information}
 \usage{
-ingest_outbreak_report(web_page)
+ingest_outbreak_report(web_page, encoding = "ISO-8859-1")
 }
 \arguments{
 \item{web_page}{Name of the downloaded web page.}

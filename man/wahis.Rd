@@ -3,7 +3,6 @@
 \docType{package}
 \name{wahis}
 \alias{wahis}
-\alias{wahis-package}
 \title{wahis}
 \description{
 Data scraped from the OIE WAHIS system

@@ -4,8 +4,12 @@
 \alias{wahis_db_download}
 \title{Download the WAHIS database to your local computer}
 \usage{
-wahis_db_download(destdir = tempfile(), cleanup = TRUE,
-  verbose = interactive(), load_aws_credentials = TRUE)
+wahis_db_download(
+  destdir = tempfile(),
+  cleanup = TRUE,
+  verbose = interactive(),
+  load_aws_credentials = TRUE
+)
 }
 \arguments{
 \item{destdir}{Where to download the compressed files.}
