@@ -30,11 +30,11 @@
 #' ##ingest_wahis_record("../inst/raw_wahis_pages/25385.html")
 #' @export
 #' @import rvest stringi xml2
-ingest_outbreak_report <- function(web_page) {
+ingest_outbreak_report <- function(web_page, encoding = "ISO-8859-1") {
     
     base_page <- basename(web_page)
     
-    page <- suppressWarnings(read_xml(web_page, as_html = TRUE, options = c("RECOVER", "NOERROR", 
+    page <- suppressWarnings(read_xml(web_page, encoding = encoding, as_html = TRUE, options = c("RECOVER", "NOERROR", 
                                                            "NOBLANKS")))
     if (length(page) < 2) {
         return(list(report_status = "blank page", web_page = base_page))

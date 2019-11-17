@@ -125,10 +125,10 @@ add_notes <- function(tbl){
 #' @importFrom magrittr set_names
 #' @importFrom purrr map map2 map_df imap_dfr map_dfr map_lgl compact
 #' @import dplyr
-ingest_annual_report <- function(web_page) {
+ingest_annual_report <- function(web_page, encoding = "ISO-8859-1") {
     
     # get page
-    page <- suppressWarnings(read_xml(web_page, as_html = TRUE, options = c("RECOVER", "NOERROR", "NOBLANKS")))
+    page <- suppressWarnings(read_xml(web_page, encoding = encoding, as_html = TRUE, options = c("RECOVER", "NOERROR", "NOBLANKS")))
     
     # get info from file name
     report_info <- basename(web_page)
@@ -280,6 +280,7 @@ ingest_annual_report <- function(web_page) {
             # if disease name is not in header, get the node above
             if(disease_check %in% c("Wild", "Domestic")){
                 grandparent <- xml_parent(node)
+                
                 siblings <- xml_children(grandparent)
                 
                 above <- siblings[which(xml_path(siblings) == xml_path(node)) - 1] 
