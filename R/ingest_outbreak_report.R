@@ -137,10 +137,9 @@ if (length(xml_find_first(page, xpath="//tr//td[contains(.,'There are no new out
 }
 
 #' Support function for ingest_outbreak_report to clean html tables
-#' @param xml
+#' @param xml xml data
 #' @param extractor XML extract function
 #' @noRd
-
 table_value <- function(xml, extractor, ...) {
     if(class(xml) == "xml_missing") {
         return(NA)
