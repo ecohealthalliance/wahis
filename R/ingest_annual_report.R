@@ -131,30 +131,30 @@ ingest_annual_report <- function(web_page, encoding = "ISO-8859-1") {
     # get page
     page <- suppressWarnings(read_xml(web_page, encoding = encoding, as_html = TRUE, options = c("RECOVER", "NOERROR", "NOBLANKS")))
     
+    # get country name
+    country <- try(xml_find_first(page, '//td[contains(., "Country:")]') %>% xml_text() %>% stri_extract_first_regex("(?<=:\\s).*"), silent = TRUE)
+    
+    if(class(country)=="try-error") {
+        error <- "blank page"
+        return(list(
+            "report_status" = error))
+    }
+    
     # get info from file name
     country_iso3c <- xml_attr(xml_find_first(page, '//*[@id="header_this_country_code"]'), "value")
     report_year <- xml_attr(xml_find_first(page, '//*[@id="header_year"]'), "value")
     report_semester <- xml_attr(xml_find_first(page, '//*[@id="header_semester"]'), "value")
     report_months <- switch(report_semester, "0" = "Jan-Dec", "1" = "Jan-Jun", "2" = "Jul-Dec")
     
-    # get country name
-    country <- try(xml_find_first(page, '//td[contains(., "Country:")]') %>% xml_text() %>% stri_extract_first_regex("(?<=:\\s).*"), silent = TRUE)
-    
     # metadata for export
     metadata <- tibble(country_iso3c, report_year, report_semester, report_months)
     
-    # return error if country name is NA - indicates that report was not correctly loaded (eg )
-    if(is.na(country)||class(country)=="try-error"){
-        
-        if(class(country)=="try-error") {
-            error <- "blank page"
-        }else{
-            error <- xml_find_first(page, xpath="//h4['Application Error']") %>% xml_text()
-            if(is.na(error)){
-                error <-  "unspecified error"
-            }
+    # return error if country name is NA 
+    if(is.na(country)){
+        error <- xml_find_first(page, xpath="//h4['Application Error']") %>% xml_text()
+        if(is.na(error)){
+            error <-  "unspecified error"
         }
-        
         return(list(
             "report_status" = error,
             "metadata" = metadata))
