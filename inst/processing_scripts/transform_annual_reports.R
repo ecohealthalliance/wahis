@@ -9,8 +9,10 @@ wahis <- readr::read_rds(here::here("data-processed", "processed-annual-reports.
 
 # Remove report errors ---------------------------------------------------
 wahis2 <- keep(wahis, function(x){
-    x$report_status == "available"
+    !is.null(x) && x$report_status == "available"
 })
+
+if(!length(wahis2)) return(NULL)
 
 # Extract and rbind tables ----------------------------------------------------
 tnames <- c('metadata', 'submission_info', 'diseases_present', 'diseases_absent', 'diseases_present_detail', 'diseases_unreported', 'disease_humans', 'animal_population', 'veterinarians', 'national_reference_laboratories', 'national_reference_laboratories_detail', 'vaccine_manufacturers', 'vaccine_manufacturers_detail', 'vaccine_production')

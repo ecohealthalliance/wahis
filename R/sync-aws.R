@@ -49,7 +49,6 @@ push_aws <- function(folder, filename, bucket){
 
 
 #' pull from aws bucket
-#' @param 
 #' @import aws.s3
 #' @importFrom fs dir_create dir_exists
 #' @noRd

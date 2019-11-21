@@ -4,10 +4,12 @@
 \alias{ingest_annual_report}
 \title{Extract Info from WAHIS Annual and Semi-Annual Reports}
 \usage{
-ingest_annual_report(web_page)
+ingest_annual_report(web_page, encoding = "ISO-8859-1")
 }
 \arguments{
-\item{web_page}{Name of the downloaded web page}
+\item{web_page}{URL, file, or character/raw vector of a WAHIS annual report}
+
+\item{encoding}{encoding of web page.  WAHIS website currently serves ISO-8859-1}
 }
 \value{
 A list with elements:

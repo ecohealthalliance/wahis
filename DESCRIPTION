@@ -12,7 +12,7 @@ License: MIT + file LICENSE
 LazyData: true
 URL: https://github.com/ecohealthalliance/wahis
 BugReports: https://github.com/ecohealthalliance/wahis/issues
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.0
 Encoding: UTF-8
 Language: en-US
 Imports:
@@ -56,6 +56,3 @@ Suggests:
 Remotes:
   cran/MonetDBLite@0.6.0,
   ropensci/arkdb@comment-char
-
-
-

@@ -1,0 +1,93 @@
+table_name,variable_name,variable_name_clean,description,data_type_r,data_type_postgres,allowed_values
+metadata,NA,country,report country,character,NA,NA
+metadata,NA,report_period,report month range and year,character,NA,NA
+metadata,NA,report_year,report year,double,NA,NA
+metadata,NA,report_months,report month range,character,NA,NA
+metadata,NA,submission_info,fields pertaining to submitter contact info,character,NA,NA
+metadata,NA,submission_value,values pertaining to submitter contact info,character,NA,NA
+metadata,NA,submission_animal_type,submission info for terrestrial or aquatic?,character,NA,NA
+diseases_present,OIE-Listed disease or NON OIE-Listed disease,disease,Present disease,character,NA,NA
+diseases_present,occurrence,occurrence_code,Code indicating disease occurrence status,character,NA,NA
+diseases_present,Serotype(s),serotype_s,Serotype (... = no information),character,NA,NA
+diseases_present,New outbreaks,new_outbreaks,Count of new cases in the year,character,NA,NA
+diseases_present,Total outbreaks,total_outbreaks,Count of total cases in the year,character,NA,NA
+diseases_present,Species,species,"Code indicating species affected, line separated",character,NA,NA
+diseases_present,Control Measures,control_measures,"Code indicating control measures, space separated",character,NA,NA
+diseases_present,Official vaccination,official_vaccination,?,character,NA,NA
+diseases_present,Measuring units,measurement_units,"Measurement unit for susceptible, cases, deaths, killed and disposed, slaughtered, and vaccination in response to outbreak counts",character,NA,NA
+diseases_present,Susceptible,susceptible,Count susceptible,character,NA,NA
+diseases_present,Cases,cases,Count cases,character,NA,NA
+diseases_present,Deaths,deaths,Count deaths,character,NA,NA
+diseases_present,Killed and disposed of,killed_and_disposed_of,Count killed/disposed,character,NA,NA
+diseases_present,Slaughtered,slaughtered,Count slaughtered (for food???),character,NA,NA
+diseases_present,Vaccination in response to the outbreak(s),vaccination_in_response_to_the_outbreak_s,Count vaccinations administered,character,NA,NA
+diseases_present,NA,oie_listed,Whether or not the disease is oie-listed. Pre-2014 reports have tables for non-oie-listed diseases,logical,NA,NA
+diseases_present,NOTE,notes,Free text notes about disease,character,NA,NA
+diseases_absent,Disease,disease,Disease that is reported absent,character,NA,NA
+diseases_absent,Date of last occurrence,date_of_last_occurence,Date (dd/mm/yyyy),character,NA,NA
+diseases_absent,Species,species,"Code indicating species affected, line separated",character,NA,NA
+diseases_absent,Control Measures,control_measures,"Code indicating control measures, space separated",character,NA,NA
+diseases_absent,Official vaccination,official_vaccination,?,character,NA,NA
+diseases_absent,NA,oie_listed,Whether or not the disease is oie-listed. Pre-2014 reports have tables for non-oie-listed diseases,logical,NA,NA
+disease_present_detail,OIE-Listed disease,disease,Presence disease,character,NA,NA
+disease_present_detail,Month,period,outbreak month or semester depending on what is reported,character,NA,NA
+disease_present_detail,NA,temporal_scale,Whether the period is on a monthly or semester basis,character,NA,NA
+disease_present_detail,"State, Province, etc",adm,Sub region,character,NA,NA
+disease_present_detail,NA,adm_type,"""State"", ""Province"", etc",character,NA,NA
+disease_present_detail,Serotype(s),serotype_s,Serotype (... = no information),character,NA,NA
+disease_present_detail,New outbreaks,new_outbreaks,Count of new cases in the time period,character,NA,NA
+disease_present_detail,Total outbreaks,total_outbreaks,Count of total cases in the year,character,NA,NA
+disease_present_detail,Species,species,"Code indicating species affected, line separated",character,NA,NA
+disease_present_detail,Family name,family_name,Taxa family,character,NA,NA
+disease_present_detail,Latin name,latin_name,Taxa latin name,character,NA,NA
+disease_present_detail,Measuring units,measurement_units,"Measurement unit for susceptible, cases, deaths, killed and disposed, slaughtered, and vaccination in response to outbreak counts",character,NA,NA
+disease_present_detail,Susceptible,susceptible,Count susceptible,character,NA,NA
+disease_present_detail,Cases,cases,Count cases,character,NA,NA
+disease_present_detail,Deaths,deaths,Count deaths,character,NA,NA
+disease_present_detail,Killed and disposed of,killed_and_disposed_of,Count killed/disposed,character,NA,NA
+disease_present_detail,Slaughtered,slaughtered,Count slaughtered (for food???),character,NA,NA
+disease_present_detail,Vaccination in response to the outbreak(s),vaccination_in_response_to_the_outbreak_s,Count vaccinations administered,character,NA,NA
+disease_unreported,NA,taxa,Taxa group affected by disease,character,NA,NA
+disease_unreported,NA,disease,Disease name,character,NA,NA
+disease_unreported,NA,oie_listed,Whether or not the disease is oie-listed. Pre-2014 reports have tables for non-oie-listed diseases,logical,NA,NA
+disease_humans,Disease,disease,Disease that can be in humans,character,NA,NA
+disease_humans,No information available,no_information_available,T/F no information,character,NA,NA
+disease_humans,Disease absent,disease_absent,T/F no disease absent,character,NA,NA
+disease_humans,"Disease present
+(number of cases unknown",disease_present_number_of_cases_unknown,T/F disease present and number of cases known,character,NA,NA
+disease_humans,"Disease present
+(number of cases known)",disease_present_number_of_cases_known,T/F disease present and number of cases known,character,NA,NA
+disease_humans,Human cases,human_cases,Count human cases,character,NA,NA
+disease_humans,Human deaths,human_deaths,Count human deaths,character,NA,NA
+animal_population,Species,species,"This matches ""taxa"" not ""species"" from previous tables",character,NA,NA
+animal_population,Production,production,Spatial coverage of animal production,character,NA,NA
+animal_population,Total,total,Population count,character,NA,NA
+animal_population,Units,units,Population count units,character,NA,NA
+animal_population,Number,number,Producers count,character,NA,NA
+animal_population,Units,units_2,Producers count units,character,NA,NA
+veterinarians,NA,veterinarian_class,Veterinarians or Veterinary Paraprofessionals,character,NA,NA
+veterinarians,NA,veterinarian_field,Veterinarian field of work,character,NA,NA
+veterinarians,Public sector,public_sector,Count of veterinarians in public sector,character,NA,NA
+veterinarians,Total,total,Total count of veterinarians,character,NA,NA
+veterinarians,Private Sector,private_sector,Count of veterinarians in private sector,character,NA,NA
+national_reference_laboratories,Name,name,Name of laboratory,character,NA,NA
+national_reference_laboratories,Contacts,contacts,Laboratory contact,character,NA,NA
+national_reference_laboratories,Latitude,latitude,Laboratory latitude,character,NA,NA
+national_reference_laboratories,Longitude,longitude,Laboratory longitude,character,NA,NA
+national_reference_laboratories_detail,Laboratory,laboratory,Name of laboratory,character,NA,NA
+national_reference_laboratories_detail,Disease,disease,Disease that can be tested for,character,NA,NA
+national_reference_laboratories_detail,Test Type,test_type,Laboratory test,character,NA,NA
+vaccine_manufacturers,Manufacturer,manufacturer,Name of vaccine manufacturer,character,NA,NA
+vaccine_manufacturers,Contacts,contacts,Contact of vaccine manufacturer,character,NA,NA
+vaccine_manufacturers,Year of start of activity,year_of_start_of_activity,NA,character,NA,NA
+vaccine_manufacturers,Year of cessation of activity,year_of_cessation_of_activity,NA,character,NA,NA
+vaccine_manufacturers_detail,Disease,disease,Disease that vaccination is for,character,NA,NA
+vaccine_manufacturers_detail,Manufacturer,manufacturer,Name of vaccine manufacturer,character,NA,NA
+vaccine_manufacturers_detail,Vaccine,vaccinne,Name of vaccine,character,NA,NA
+vaccine_manufacturers_detail,Vaccine Type,vaccine_type,Type of vaccine,character,NA,NA
+vaccine_manufacturers_detail,Year of start of production,year_of_start_of_production,NA,character,NA,NA
+vaccine_manufacturers_detail,Year of end of production (if production ended),year_of_end_of_production_if_production_ended,NA,character,NA,NA
+vaccine_production,Manufacturer,manufacturer,Name of vaccine manufacturer,character,NA,NA
+vaccine_production,Vaccine,vaccine,Name of vaccine,character,NA,NA
+vaccine_production,Doses produced,doses_produced,Doses produced,character,NA,NA
+vaccine_production,Doses exported,doses_exported,Doses exported,character,NA,NA

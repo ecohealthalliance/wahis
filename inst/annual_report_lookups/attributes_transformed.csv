@@ -1,0 +1,135 @@
+table_name,variable_name,description,data_type_r,data_type_postgres,allowed_values
+metadata,country,report country,character,NA,country names
+metadata,report_year,report year,numeric,NA,2005 to present
+metadata,report_months,report months,character,NA,"Jan-Dec, Jan-Jun, Jul-Dec"
+metadata,report_period,report months and year,character,NA,NA
+metadata,submission_info,"type of submission information (e.g., submitter name, address)",character,NA,"Submitted, Name of sender of the report, Position, Email, Date of report, Address, Telephone, Fax"
+metadata,submission_value,value of submission info,character,NA,NA
+metadata,submission_animal_type,the semester reports have separate submission info for aquatic and terrestrial,character,NA,"Aquatic and terrestrial, Terrestrial, Aquatic"
+metadata,web_page,html page name (country and semester),character,NA,NA
+disease_humans,country,report country,character,NA,country names
+disease_humans,report_year,report year,numeric,NA,2005 to present
+disease_humans,report_months,report months,character,NA,"""Jan-Dec"", ""Jan-Jun"", ""Jul-Dec"""
+disease_humans,human_cases,number of human cases,character,NA,NA
+disease_humans,human_deaths,number of human deaths,character,NA,NA
+disease_humans,disease,disease name,character,NA,NA
+disease_humans,occurrence,disease status,character,NA,"no_information_available"", ""disease_absent"", ""disease_present_number_of_cases_unknown"" , ""disease_present_number_of_cases_known"""
+animal_population,country,report country,character,NA,country names
+animal_population,report_year,report year,numeric,NA,2005 to present
+animal_population,report_months,report months,character,NA,"""Jan-Dec"", ""Jan-Jun"", ""Jul-Dec"""
+animal_population,taxa,taxa,character,NA,NA
+animal_population,production,location of production,character,NA,NA
+animal_population,population_count,count of animal population,character,NA,NA
+animal_population,population_units,units of population count,character,NA,NA
+animal_population,producers_count,count of animal producers,character,NA,NA
+animal_population,producers_units,units of producers count,character,NA,"""Establishments"" ""Apiaries"""
+veterinarians,country,report country,character,NA,country names
+veterinarians,report_year,report year,numeric,NA,2005 to present
+veterinarians,report_months,report months,character,NA,"""Jan-Dec"", ""Jan-Jun"", ""Jul-Dec"""
+veterinarians,veterinarian_field,field that veterinarian works in (eg laboratory),character,NA,NA
+veterinarians,public_sector_count,count of veterinarians in the public sector,character,NA,NA
+veterinarians,total_count,total count of veterinarians,character,NA,NA
+veterinarians,private_sector_count,count of veterinarians in the private sector,character,NA,NA
+veterinarians,veterinarian_class,veterinarian or veterinarians paraprofessionals,character,NA,NA
+national_reference_laboratories,country,report country,character,NA,country names
+national_reference_laboratories,report_year,report year,numeric,NA,2005 to present
+national_reference_laboratories,report_months,report months,character,NA,"""Jan-Dec"", ""Jan-Jun"", ""Jul-Dec"""
+national_reference_laboratories,laboratory_name,name of laboratory,character,NA,NA
+national_reference_laboratories,laboratory_contact,name of contact for laboratory,character,NA,NA
+national_reference_laboratories,laboratory_latitude,latitude of laboratory,character,NA,NA
+national_reference_laboratories,laboratory_longitude,longitude of laboratory,character,NA,NA
+national_reference_laboratories_detail,country,report country,character,NA,country names
+national_reference_laboratories_detail,report_year,report year,numeric,NA,2005 to present
+national_reference_laboratories_detail,report_months,report months,character,NA,"""Jan-Dec"", ""Jan-Jun"", ""Jul-Dec"""
+national_reference_laboratories_detail,laboratory_name,name of laboratory,character,NA,NA
+national_reference_laboratories_detail,test_type,test performed at laboratory,character,NA,NA
+national_reference_laboratories_detail,disease,diseases tested for,character,NA,NA
+vaccine_manufacturers,country,report country,character,NA,country names
+vaccine_manufacturers,report_year,report year,numeric,NA,2005 to present
+vaccine_manufacturers,report_months,report months,character,NA,"""Jan-Dec"", ""Jan-Jun"", ""Jul-Dec"""
+vaccine_manufacturers,vaccine_manufacturer,name of vaccine manufacturer,character,NA,NA
+vaccine_manufacturers,vaccine_contact,name of contact for manufacturer,character,NA,NA
+vaccine_manufacturers,year_start_vaccine_activity,year started producing vaccines,character,NA,NA
+vaccine_manufacturers,year_cessation_vaccine_activity,year stopped producing vaccines,character,NA,NA
+vaccine_manufacturers_detail,country,report country,character,NA,country names
+vaccine_manufacturers_detail,report_year,report year,numeric,NA,2005 to present
+vaccine_manufacturers_detail,report_months,report months,character,NA,"""Jan-Dec"", ""Jan-Jun"", ""Jul-Dec"""
+vaccine_manufacturers_detail,vaccine_manufacturer,name of vaccine manufacturer,character,NA,NA
+vaccine_manufacturers_detail,vaccine,name of vaccine,character,NA,NA
+vaccine_manufacturers_detail,vaccine_type,type of vaccine,character,NA,"Live Attenuated Vaccine, Inactivated Vaccine, Conjugate Vaccine, DNA vaccine, Recombinant Vector Vaccine, Subunit Vaccine"
+vaccine_manufacturers_detail,year_start_vaccine_production,year started producing vaccines,character,NA,NA
+vaccine_manufacturers_detail,year_end_vaccine_production,year started producing vaccine,character,NA,NA
+vaccine_manufacturers_detail,disease,disease vaccine treats,character,NA,NA
+vaccine_production,country,report country,character,NA,country names
+vaccine_production,report_year,report year,numeric,NA,2005 to present
+vaccine_production,report_months,report months,character,NA,"""Jan-Dec"", ""Jan-Jun"", ""Jul-Dec"""
+vaccine_production,vaccine_manufacturer,name of vaccine manufacturer,character,NA,NA
+vaccine_production,vaccine,name of vaccine,character,NA,NA
+vaccine_production,doses_produced,number of doses produced,character,NA,NA
+vaccine_production,doses_exported,number of doses exported,character,NA,NA
+animal_diseases,country,report country,character,NA,country names
+animal_diseases,report_year,report year,numeric,NA,2005 to present
+animal_diseases,report_months,report months,character,NA,"""Jan-Dec"", ""Jan-Jun"", ""Jul-Dec"""
+animal_diseases,disease,disease name,character,NA,NA
+animal_diseases,disease_population,whether disease is in domestic or wild populations,character,NA,"""domestic"" , ""not specified"" , ""wild"", ""domestic and wild"""
+animal_diseases,oie_listed,whether disease is in OIE listed,logical,NA,"TRUE, FALSE"
+animal_diseases,status,"whether disease is present, absent, or unreported",character,NA,"""present"" ,   ""absent"" ,    ""unreported"""
+animal_diseases,serotype,disease serotype (comma separated),character,NA,NA
+animal_diseases,new_outbreaks,"count of new outbreaks in report period. ""..."" = no information",character,NA,NA
+animal_diseases,total_outbreaks,"count of total ongoing outbreaks in report period. ""..."" = no information",character,NA,NA
+animal_diseases_detail,country,report country,character,NA,country names
+animal_diseases_detail,report_year,report year,numeric,NA,2005 to present
+animal_diseases_detail,report_months,report months,character,NA,"""Jan-Dec"", ""Jan-Jun"", ""Jul-Dec"""
+animal_diseases_detail,period,"time period (eg ""January"")",character,NA,NA
+animal_diseases_detail,temporal_scale,month/season,character,NA,NA
+animal_diseases_detail,adm,"spatial unit (eg ""New York"")",character,NA,NA
+animal_diseases_detail,adm_type,state/province/etc,character,NA,NA
+animal_diseases_detail,disease,disease name,character,NA,NA
+animal_diseases_detail,disease_population,whether disease is in domestic or wild populations,character,NA,"""domestic"" , ""not specified"" , ""wild"", ""domestic and wild"""
+animal_diseases_detail,status,"whether disease is present, absent, or unreported",character,NA,"""present"" ,   ""absent"" ,    ""unreported"""
+animal_diseases_detail,serotype,disease serotype (comma separated),character,NA,NA
+animal_diseases_detail,new_outbreaks,"count of new outbreaks in report period. ""..."" = no information",character,NA,NA
+animal_diseases_detail,total_outbreaks,"count of total ongoing outbreaks in report period. ""..."" = no information",character,NA,NA
+animal_diseases,notes,disease notes,character,NA,NA
+animal_diseases,taxa,taxa affected by disease. NA if disease is absent or not reported,character,NA,"Multiple species, Swine, Equidae, Lagomorphs, Birds, Fish, Molluscs, Crustaceans, Amphibians, Cattle, Sheep/Goats, Bees, Other"
+animal_diseases,date_of_last_occurrence_if_absent,date disease last occurred,character,NA,NA
+animal_diseases,occurrence,information about status of disease. code lookup from https://www.oie.int/fileadmin/Home/eng/Animal_Health_in_the_World/docs/pdf/Demonstration_guides/Semestrial_Terrestrial__A_Guidelines_2016.pdf,character,NA,NA
+animal_diseases,occurrence_description,detailed information about status of disease. code lookup from https://www.oie.int/fileadmin/Home/eng/Animal_Health_in_the_World/docs/pdf/Demonstration_guides/Semestrial_Terrestrial__A_Guidelines_2016.pdf,character,NA,NA
+animal_hosts,country,report country,character,NA,country names
+animal_hosts,report_year,report year,numeric,NA,2005 to present
+animal_hosts,report_months,report months,character,NA,"""Jan-Dec"", ""Jan-Jun"", ""Jul-Dec"""
+animal_hosts,disease,disease name,character,NA,NA
+animal_hosts,disease_population,whether disease is in domestic or wild populations,character,NA,"""domestic"" , ""not specified"" , ""wild"", ""domestic and wild"""
+animal_hosts,oie_listed,whether disease is in OIE listed,logical,NA,"TRUE, FALSE"
+animal_hosts,species,species affected by disease. there is not 1:1 match wth animal_disease taxa.,character,NA,NA
+animal_hosts,control_measures,measures taken to control the outbreak. based on code from https://www.oie.int/fileadmin/Home/eng/Animal_Health_in_the_World/docs/pdf/Demonstration_guides/Semestrial_Terrestrial__A_Guidelines_2016.pdf,character,NA,"""Disease notification, Control of vectors, Control of wildlife reservoirs, General surveillance, Monitoring, Precautions at the borders, Movement control inside the country, Stamping out, Modified stamping out, Treatment, Screening, Targeted Surveillance, Official vaccination, Vaccination prohibited, Vaccination in response to the outbreak(s), Zoning, empty"""
+animal_hosts,official_vaccination,count vaccinated,character,NA,NA
+animal_hosts,measuring_units,measurement units for counts in this table,character,NA,"""Animals""  , ""Hives""  , ""Tonnes"" ,   ""Kilograms"" ,""Unknown"""
+animal_hosts,susceptible,count susceptible,character,NA,NA
+animal_hosts,cases,count of cases,character,NA,NA
+animal_hosts,deaths,count deaths,character,NA,NA
+animal_hosts,killed_and_disposed_of,count killed and disposed,character,NA,NA
+animal_hosts,slaughtered,count slaughtered,character,NA,NA
+animal_hosts,vaccination_in_response_to_the_outbreak,count vaccinated in response to outbreak,character,NA,NA
+animal_hosts,species_class,terrestrial or aquatic,character,NA,"""terrestrial"" , ""aquatic""  , ""all"""
+animal_hosts_detail,country,report country,character,NA,country names
+animal_hosts_detail,report_year,report year,numeric,NA,2005 to present
+animal_hosts_detail,report_months,report months,character,NA,"""Jan-Dec"", ""Jan-Jun"", ""Jul-Dec"""
+animal_hosts_detail,disease,disease name,character,NA,NA
+animal_hosts_detail,disease_population,whether disease is in domestic or wild populations,character,NA,"""domestic"" , ""not specified"" , ""wild"", ""domestic and wild"""
+animal_hosts_detail,period,"time period (eg ""January"")",character,NA,NA
+animal_hosts_detail,temporal_scale,month/season,character,NA,NA
+animal_hosts_detail,adm,"spatial unit (eg ""New York"")",character,NA,NA
+animal_hosts_detail,adm_type,state/province/etc,character,NA,NA
+animal_hosts_detail,species,species affected by disease. there is not 1:1 match wth animal_disease taxa.,character,NA,NA
+animal_hosts_detail,official_vaccination,count vaccinated,character,NA,NA
+animal_hosts_detail,measuring_units,measurement units for counts in this table,character,NA,"""Animals""  , ""Hives""  , ""Tonnes"" ,   ""Kilograms"" ,""Unknown"""
+animal_hosts_detail,family_name,species family name,character,NA,NA
+animal_hosts_detail,latin_name,species latin name,character,NA,NA
+animal_hosts_detail,susceptible,count susceptible,character,NA,NA
+animal_hosts_detail,cases,count of cases,character,NA,NA
+animal_hosts_detail,deaths,count deaths,character,NA,NA
+animal_hosts_detail,killed_and_disposed_of,count killed and disposed,character,NA,NA
+animal_hosts_detail,slaughtered,count slaughtered,character,NA,NA
+animal_hosts_detail,vaccination_in_response_to_the_outbreak,count vaccinated in response to outbreak,character,NA,NA
+animal_hosts_detail,species_class,terrestrial or aquatic,character,NA,"""terrestrial"" , ""aquatic""  , ""all"""
