@@ -2,10 +2,10 @@
 
 #' Convert a list of scraped annual reports to a list of table
 #' @param annual_reports a list of annual reports produced by [ingest_annual_report]
-#' @import dplyr tidyr purrr
+#' @import dplyr tidyr stringr
+#' @importFrom purrr keep map map_chr map_dfr map_lgl modify_at
 #' @importFrom janitor make_clean_names
 #' @importFrom readr read_csv
-#' @importFrom magrittr extract extract2
 #' @export
 transform_annual_reports <- function(annual_reports) {
     
@@ -20,7 +20,7 @@ transform_annual_reports <- function(annual_reports) {
     tnames <- c('metadata', 'submission_info', 'diseases_present', 'diseases_absent', 'diseases_present_detail', 'diseases_unreported', 'disease_humans', 'animal_population', 'veterinarians', 'national_reference_laboratories', 'national_reference_laboratories_detail', 'vaccine_manufacturers', 'vaccine_manufacturers_detail', 'vaccine_production')
     
     wahis_joined <- map(tnames, function(name){
-        map_dfr(annual_reports2, ~magrittr::extract2(., name)) 
+        map_dfr(annual_reports2, ~`[[`(., name)) 
     })
     
     names(wahis_joined) <- tnames
@@ -203,7 +203,7 @@ transform_annual_reports <- function(annual_reports) {
     # Add tables to database --------------------------------------------------
     
     index <- names(wahis_joined)[!names(wahis_joined) %in% c("diseases_present", "diseases_absent", "diseases_present_detail", "diseases_unreported")]
-    wahis_joined <- wahis_joined %>%  magrittr::extract(index) 
+    wahis_joined <- wahis_joined %>% `[`(index) 
     wahis_joined$animal_diseases <- animal_diseases
     wahis_joined$animal_hosts <- animal_hosts
     wahis_joined$animal_diseases_detail <- animal_diseases_detail
