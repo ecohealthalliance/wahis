@@ -2,9 +2,10 @@
 
 #' Convert a list of scraped annual reports to a list of table
 #' @param annual_reports a list of annual reports produced by [ingest_annual_report]
-#' @import dplyr tidyr
-#' @importFrom purrr keep map modify_at
+#' @import dplyr tidyr purrr
+#' @importFrom janitor make_clean_names
 #' @importFrom readr read_csv
+#' @importFrom magrittr extract extract2
 #' @export
 transform_annual_reports <- function(annual_reports) {
     
@@ -299,34 +300,6 @@ transform_annual_reports <- function(annual_reports) {
     wahis_joined$submission_info <- wahis_joined$submission_info %>%
         mutate(submission_animal_type = recode(submission_animal_type, "Terrestrial and Aquatic" = "Aquatic and terrestrial"))
     
-    
-    # Get list of error and missing countries ---------------------------------------------------
-    # avail_combos <- wahis_joined$metadata %>% 
-    #     select(country_iso3c, report_year, report_semester) %>%
-    #     distinct() %>%
-    #     mutate(status = "available")
-    # 
-    # wahis_error <- keep(annual_reports, function(x){
-    #     x$report_status != "available"
-    # })
-    # 
-    # if(length(wahis_error)) {
-    #     wahis_error <- map_dfr(wahis_error, ~magrittr::extract2(., "metadata")) %>%
-    #         select(country_iso3c, report_year, report_semester) %>%
-    #         mutate(status = "error")
-    # }
-    # 
-    # all_combos <- avail_combos %>%
-    #     expand(country_iso3c, report_year, report_semester) %>%
-    #     left_join(avail_combos, by = c( "country_iso3c", "report_year", "report_semester")) %>%
-    #     left_join(wahis_error, by = c( "country_iso3c", "report_year", "report_semester")) %>%
-    #     mutate(status = coalesce(status.x, status.y)) %>%
-    #     select(-status.x, -status.y) %>%
-    #     mutate(status = replace_na(status, "not available"))
-    
-    #all_combos %>% filter(status=="error") %>% nrow() == nrow(wahis_error)
-    
-    # attr(wahis_joined, "status") <- all_combos
     return(wahis_joined)
     
 }
