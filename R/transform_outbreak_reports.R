@@ -3,11 +3,11 @@
 #' @import dplyr tidyr
 #' @importFrom purrr keep map map_dfr map_lgl imodify reduce
 #' @importFrom janitor clean_names
+#' @importFrom stringr str_detect str_extract
 #' @export
 
 transform_outbreak_reports <- function(outbreak_reports) {
-    # wahis <- readr::read_rds(here::here("data-processed", "processed-outbreak-reports.rds"))
-    
+
     # Remove report errors ---------------------------------------------------
     outbreak_reports2 <- keep(outbreak_reports, function(x){
         !is.null(x) && !is.null(x$report_status) && x$report_status == "available"
@@ -16,27 +16,21 @@ transform_outbreak_reports <- function(outbreak_reports) {
     if(!length(outbreak_reports2)) return(NULL)
     
     # Summary table ---------------------------------------------------
-    exclude_fields <- c("Related reports", "outbreaks", "diagnostic_tests" )
+    exclude_fields <- c("Related reports", "outbreaks", "diagnostic_tests", "related_reports" )
     
     outbreak_summary <- map_dfr(outbreak_reports2, function(x){
-        
-        x$related_reports <- paste(x$related_reports, collapse = "; ")
-        
         exclude_index <- which(names(x) %in% exclude_fields)
         as_tibble(x[-exclude_index])
-        
     }) %>% 
         janitor::clean_names() 
     
-    # Thread ID in summary table ---------------------------------------------------
+    # Immediate report threads ---------------------------------------------------
     outbreak_summary <- outbreak_summary %>%
-        mutate(related_reports = ifelse(related_reports=="", id, related_reports))
-    
-    # older reports might are updated with newer related reports
-    outbreak_summary <- outbreak_summary %>%
-        group_by(related_reports) %>%
-        mutate(thread = group_indices()) %>%
-        ungroup()
+        mutate(immediate_report = ifelse(str_detect(report_type, "Immediate notification"), id, immediate_report)) %>%
+        mutate(follow_up = ifelse(str_detect(report_type, "Immediate notification"), 0, str_extract(report_type, "[[:digit:]]+"))) %>%
+        mutate(final_report = str_detect(report_type, "Final report"))
+
+    #TODO QA check outbreak_summary %>% filter(is.na(immediate_report))
     
     # Outbreak detail ---------------------------------------------------
     outbreak_detail <- map_dfr(outbreak_reports2, function(x){
