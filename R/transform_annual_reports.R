@@ -11,10 +11,11 @@ transform_annual_reports <- function(annual_reports) {
     
     # Remove report errors ---------------------------------------------------
     annual_reports2 <- keep(annual_reports, function(x){
-        !is.null(x) && !is.null(x$report_status) && x$report_status == "available"
+        !is.null(x) && !is.null(x$ingest_status) && x$ingest_status == "available"
     })
     
     if(!length(annual_reports2)) return(NULL)
+    
     
     # Extract and rbind tables ----------------------------------------------------
     tnames <- c('metadata', 'submission_info', 'diseases_present', 'diseases_absent', 'diseases_present_detail', 'diseases_unreported', 'disease_humans', 'animal_population', 'veterinarians', 'national_reference_laboratories', 'national_reference_laboratories_detail', 'vaccine_manufacturers', 'vaccine_manufacturers_detail', 'vaccine_production')
@@ -299,6 +300,10 @@ transform_annual_reports <- function(annual_reports) {
     
     wahis_joined$submission_info <- wahis_joined$submission_info %>%
         mutate(submission_animal_type = recode(submission_animal_type, "Terrestrial and Aquatic" = "Aquatic and terrestrial"))
+    
+    names(wahis_joined) <- paste0("annual_reports_", names(wahis_joined))
+    
+    
     
     return(wahis_joined)
     
