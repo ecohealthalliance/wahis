@@ -33,13 +33,12 @@ readr::write_rds(wahis_outbreak, here::here("data-processed", "processed-outbrea
 # Transform files   ------------------------------------------------------
 outbreak_reports <-  readr::read_rds(here::here("data-processed", "processed-outbreak-reports.rds"))
 
-outbreak_reports_transformed <- wahis::transform_annual_reports(outbreak_reports)
+outbreak_reports_transformed <- transform_outbreak_reports(outbreak_reports)
 
 # Export transformed files-----------------------------------------------
 dir_create( here::here("data-processed", "db"))
-purrr::iwalk(annual_reports_transformed, ~readr::write_csv(.x, here::here("data-processed", "db", paste0(.y, ".csv.xz"))))
-readr::write_csv(ingest_status_log, here::here("data-processed", "db", "annual_reports_ingest_status_log.csv.xz"))
+purrr::iwalk(outbreak_reports_transformed, ~readr::write_csv(.x, here::here("data-processed", "db", paste0(.y, ".csv.xz"))))
 
-readr::write_rds(annual_reports_transformed, here::here("data-processed", "annual-reports-data.rds"), compress = "xz", compression = 9L)
+readr::write_rds(outbreak_reports_transformed, here::here("data-processed", "outbreak-reports-data.rds"), compress = "xz", compression = 9L)
 
 

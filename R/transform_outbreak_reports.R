@@ -16,7 +16,10 @@ transform_outbreak_reports <- function(outbreak_reports) {
     if(!length(outbreak_reports2)) return(NULL)
     
     # Summary table ---------------------------------------------------
-    exclude_fields <- c("Related reports", "outbreaks", "diagnostic_tests", "related_reports" )
+    exclude_fields <- c("Related reports", "related_reports", # can be determined from immediatate reports
+                        "outbreaks", # addressed in detail below
+                        "diagnostic_tests" # addressed in detail below 
+                        )
     
     outbreak_summary <- map_dfr(outbreak_reports2, function(x){
         exclude_index <- which(names(x) %in% exclude_fields)
@@ -74,7 +77,8 @@ transform_outbreak_reports <- function(outbreak_reports) {
     
     
     # Export -----------------------------------------------
-    wahis_joined <- list(outbreak_summary = outbreak_summary, outbreak_detail = outbreak_detail, outbreak_diagnostics = outbreak_diagnostics)
+    wahis_joined <- list("outbreak_summary" = outbreak_summary, "outbreak_detail" = outbreak_detail, "outbreak_diagnostics" = outbreak_diagnostics)
     return(wahis_joined)
     
 }
+
