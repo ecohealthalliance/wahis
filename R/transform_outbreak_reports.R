@@ -77,7 +77,7 @@ transform_outbreak_reports <- function(outbreak_reports) {
     
     
     # Export -----------------------------------------------
-    wahis_joined <- list("outbreak_summary" = outbreak_summary, "outbreak_detail" = outbreak_detail, "outbreak_diagnostics" = outbreak_diagnostics)
+    wahis_joined <- list("outbreak_reports_summary" = outbreak_summary, "outbreak_reports_detail" = outbreak_detail, "outbreak_reports_diagnostics" = outbreak_diagnostics)
     return(wahis_joined)
     
 }
