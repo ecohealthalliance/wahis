@@ -48,7 +48,7 @@ wahis_db <- function(dbdir = wahis_path()) {
             if (grepl("(Database lock|bad rolemask)", e)) {
                 stop(paste(
                     "Local WAHIS database is locked by another R session.\n",
-                    "Try closing or running wahis_disconect() in that session."
+                    "Try closing or running wahis_disconnect() in that session."
                 ),
                 call. = FALSE
                 )
