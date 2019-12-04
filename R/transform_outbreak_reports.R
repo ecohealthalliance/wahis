@@ -53,12 +53,12 @@ transform_outbreak_reports <- function(outbreak_reports) {
       mutate(outbreak_number = trimws(outbreak_number))
   }
   
-  outbreak_reports_summmary <- map_df(outbreak_reports2, function(x){
+  outbreak_reports_summary <- map_df(outbreak_reports2, function(x){
     if(length(x$outbreak_summary) == 1){return()}
     x$outbreak_summary %>% mutate_all(as.character)}) 
   
-  if(nrow(outbreak_reports_summmary)) {
-    outbreak_reports_summmary <- outbreak_reports_summmary %>%
+  if(nrow(outbreak_reports_summary)) {
+    outbreak_reports_summary <- outbreak_reports_summary %>%
       janitor::clean_names() %>%
       mutate_all(~str_remove(., "%")) %>%
       rename(total_morbidity_perc = total_apparent_morbidity_rate,
@@ -81,7 +81,7 @@ transform_outbreak_reports <- function(outbreak_reports) {
     # Export -----------------------------------------------
     wahis_joined <- list("outbreak_reports_events" = outbreak_reports_events, 
                          "outbreak_reports_outbreaks" = outbreak_reports_detail, 
-                         "outbreak_reports_outbreaks_summmary" = outbreak_reports_summmary,
+                         "outbreak_reports_outbreaks_summary" = outbreak_reports_summary,
                          "outbreak_reports_laboratories" = outbreak_reports_laboratories)
     return(wahis_joined)
     
