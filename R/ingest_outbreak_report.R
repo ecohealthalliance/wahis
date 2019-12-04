@@ -195,7 +195,7 @@ ingest_outbreak_report <- function(web_page, encoding = "ISO-8859-1") {
     
     record$diagnostic_tests <- xml_find_first(page, xpath = "//div[contains(text(),'Diagnostic test results')]/following-sibling::table[1]") %>% 
         table_value(html_table, trim = TRUE, header=TRUE) 
-    if(nrow(record$diagnostic_tests)){
+    if(!is.null(dim(record$diagnostic_tests))){
         record$diagnostic_tests <- record$diagnostic_tests %>%
             mutate(id = record$id) %>%
             select(id, everything())
