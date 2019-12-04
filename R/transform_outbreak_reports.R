@@ -7,78 +7,75 @@
 #' @export
 
 transform_outbreak_reports <- function(outbreak_reports) {
-
-    # Remove report errors ---------------------------------------------------
-    outbreak_reports2 <- keep(outbreak_reports, function(x){
-        !is.null(x) && !is.null(x$report_status) && x$report_status == "available"
-    })
-    
-    if(!length(outbreak_reports2)) return(NULL)
-    
-    # Summary table ---------------------------------------------------
-    exclude_fields <- c("Related reports", "related_reports", # can be determined from immediatate reports
-                        "outbreaks", # addressed in detail below
-                        "diagnostic_tests" # addressed in detail below 
-                        )
-    
-    outbreak_summary <- map_dfr(outbreak_reports2, function(x){
-        exclude_index <- which(names(x) %in% exclude_fields)
-        as_tibble(x[-exclude_index])
-    }) %>% 
-        janitor::clean_names() 
-    
-    # Immediate report threads ---------------------------------------------------
-    outbreak_summary <- outbreak_summary %>%
-        mutate(immediate_report = ifelse(str_detect(report_type, "Immediate notification"), id, immediate_report)) %>%
-        mutate(follow_up = ifelse(str_detect(report_type, "Immediate notification"), 0, str_extract(report_type, "[[:digit:]]+"))) %>%
-        mutate(final_report = str_detect(report_type, "Final report"))
-
-    #TODO QA check outbreak_summary %>% filter(is.na(immediate_report))
-    
-    # Outbreak detail ---------------------------------------------------
-    outbreak_detail <- map_dfr(outbreak_reports2, function(x){
-        
-        outbreaks <- x$outbreaks
-        
-        map_dfr(outbreaks, function(y){
-            
-            if(length(y) == 1 && y == "There are no new outbreaks in this report"){
-                return(tibble(outbreak_location = outbreaks, id = x$id))
-            } 
-            
-            this_outbreak <- y[map_lgl(y, ~is.list(.))] 
-            this_outbreak <- imodify(this_outbreak, ~mutate(.x, desc = .y)) %>%
-                reduce(bind_rows) %>%
-                mutate(id = x$id)
-            
-            outbreak_desc <- y[map_lgl(y, ~!is.list(.))] %>%
-                as_tibble() %>%
-                mutate(outbreak = colnames(.)[1]) %>%
-                rename(outbreak_location = 1)
-            
-            this_outbreak <- crossing(outbreak_desc, this_outbreak)
-            
-            return(this_outbreak)
-        })
-    })
-    
-    # Diagnostic table ---------------------------------------------------
-    outbreak_diagnostics <- map_dfr(outbreak_reports2, function(x){
-        
-        tests <- x$diagnostic_tests 
-        
-        if(is.null(dim(tests))){
-            return(tibble(id = x$id))
-        }
-        
-        tests <- tests %>% mutate(id = x$id)
-        return(tests)
-    })
-    
-    
-    # Export -----------------------------------------------
-    wahis_joined <- list("outbreak_reports_summary" = outbreak_summary, "outbreak_reports_detail" = outbreak_detail, "outbreak_reports_diagnostics" = outbreak_diagnostics)
-    return(wahis_joined)
-    
+  
+  # Remove report errors ---------------------------------------------------
+  outbreak_reports2 <- keep(outbreak_reports, function(x){
+    !is.null(x) && !is.null(x$ingest_status) && x$ingest_status == "available"
+  })
+  
+  if(!length(outbreak_reports2)) return(NULL)
+  
+  # Events table ---------------------------------------------------
+  exclude_fields <- c("Related reports", "related_reports", # can be determined from immediatate reports
+                      "outbreak_detail", "outbreak_summary", "diagnostic_tests" # addressed in detail below
+  )
+  
+  outbreak_reports2 <-  modify(outbreak_reports2, function(x){
+    x$total_new_outbreaks <- as.character(x$total_new_outbreaks)
+    return(x)
+  })
+  
+  outbreak_reports_events <- map_dfr(outbreak_reports2, function(x){
+    exclude_index <- which(names(x) %in% exclude_fields)
+    as_tibble(x[-exclude_index])
+  }) %>% 
+    janitor::clean_names() 
+  
+  # Immediate report threads ---------------------------------------------------
+  outbreak_reports_events <- outbreak_reports_events %>%
+    mutate(immediate_report = ifelse(str_detect(report_type, "Immediate notification"), id, immediate_report)) %>%
+    mutate(follow_up = ifelse(str_detect(report_type, "Immediate notification"), 0, str_extract(report_type, "[[:digit:]]+"))) %>%
+    mutate(final_report = str_detect(report_type, "Final report"))
+  
+  # New outbreak?
+  outbreak_reports_events <- outbreak_reports_events %>%
+    mutate(new_outbreak_in_report = map_lgl(outbreak_reports2, ~length(.$outbreak_summary) == 1))
+  
+  # Outbreaks ---------------------------------------------------
+  
+  outbreak_reports_detail <- map_df(outbreak_reports2, function(x){
+    if(length(x$outbreak_detail) == 1){return()}
+    x$outbreak_detail }) %>% 
+    janitor::clean_names() %>%
+    mutate(outbreak_number = trimws(outbreak_number))
+  
+  outbreak_reports_summmary <- map_df(outbreak_reports2, function(x){
+    if(length(x$outbreak_summary) == 1){return()}
+    x$outbreak_summary %>% mutate_all(as.character)}) %>% 
+    janitor::clean_names() %>%
+    mutate_all(~str_remove(., "%")) %>%
+    rename(total_morbidity_perc = total_apparent_morbidity_rate,
+           total_mortality_perc = total_apparent_mortality_rate,
+           total_case_fatality_perc = total_apparent_case_fatality_rate,
+           total_susceptible_animals_lost_perc = total_proportion_susceptible_animals_lost
+    )
+  
+  # Laboratories table ---------------------------------------------------
+  outbreak_reports_laboratories <- map_dfr(outbreak_reports2, function(x){
+    tests <- x$diagnostic_tests 
+    if(is.null(dim(tests))){
+      return()
+    }
+    return(tests)
+  }) %>%
+    janitor::clean_names() 
+  
+  # Export -----------------------------------------------
+  wahis_joined <- list("outbreak_reports_events" = outbreak_reports_events, 
+                       "outbreak_reports_outbreaks" = outbreak_reports_detail, 
+                       "outbreak_reports_outbreaks_summmary" = outbreak_reports_summmary,
+                       "outbreak_reports_laboratories" = outbreak_reports_laboratories)
+  return(wahis_joined)
+  
 }
 
