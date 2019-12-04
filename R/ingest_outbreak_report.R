@@ -35,15 +35,15 @@ ingest_outbreak_report <- function(web_page, encoding = "ISO-8859-1") {
     page <- suppressWarnings(read_xml(web_page, encoding = encoding, as_html = TRUE, options = c("RECOVER", "NOERROR", 
                                                                                                  "NOBLANKS")))
     if (length(page) < 2) {
-        return(list(report_status = "blank page"))
+        return(list(ingest_status = "blank page"))
     }
     record <- list()
-    record$report_status = "available"
+    record$ingest_status = "available"
     record$id <- xml_find_first(page, xpath="//div[@class='MidBigTable']//a") %>% 
         xml_attr("name") %>% 
         stri_extract_last_regex("(?<=rep_)\\d+$")
     if(is.na(record$id)) {
-        return(list(report_status = "does not exist"))
+        return(list(ingest_status = "does not exist"))
     }
     title_country <- 
         xml_find_all(page, xpath="//div[@class='Rap12-Subtitle']//text()") 
@@ -89,10 +89,11 @@ ingest_outbreak_report <- function(web_page, encoding = "ISO-8859-1") {
     
     record <- c(record, summary_table)
     
-    if (length(xml_find_first(page, xpath="//tr//td[contains(.,'There are no new outbreaks in this report')]")) !=0) {
-        record$outbreak_detail = "There are no new outbreaks in this report"
-    } else if (length(xml_find_first(page, xpath="//div[@class='ReviewSubmitBox']/table")) == 0) {
-        record$outbreak_detail = "There are no new outbreaks in this report"
+    if (length(xml_find_first(page, xpath="//tr//td[contains(.,'There are no new outbreaks in this report')]")) !=0 ||
+        length(xml_find_first(page, xpath="//div[@class='ReviewSubmitBox']/table")) == 0) {
+        record$outbreak_detail <- "There are no new outbreaks in this report"
+        record$outbreak_summary <- "There are no new outbreaks in this report"
+        record$total_new_outbreaks <- "0"
     } else {
         
         # get outbreak data
@@ -138,7 +139,9 @@ ingest_outbreak_report <- function(web_page, encoding = "ISO-8859-1") {
             table_contents <- table_contents %>% reduce(bind_rows)
             
             out <- crossing(out, table_contents)
-        })
+        }) %>%
+            mutate(id = record$id) %>%
+            select(id, everything())
         
         # summary
         table <- xml_find_all(outbreak_summary, xpath = "tr/td[2][table]") 
@@ -147,17 +150,20 @@ ingest_outbreak_report <- function(web_page, encoding = "ISO-8859-1") {
             xml_find_all(xpath = "tr/td[2][not(table)]") %>%
             xml_text() %>%
             str_extract("[0-9]+")
-
+        
         outbreak_summary <- table %>%
             xml_children() %>%
             table_value(html_table, trim = TRUE, header=TRUE) %>%
             reduce(full_join) %>%
-            mutate(outbreaks = total_outbreaks)
+            #mutate(outbreaks = total_outbreaks) %>%
+            mutate(id = record$id) %>%
+            select(id, everything())
         
-        names(outbreak_summary)[2:ncol(outbreak_summary)] <- paste0("total_", names(outbreak_summary)[2:ncol(outbreak_summary)])
-
+        names(outbreak_summary)[3:ncol(outbreak_summary)] <- paste0("total_", names(outbreak_summary)[3:ncol(outbreak_summary)])
+        
         record$outbreak_detail <- outbreak_detail
         record$outbreak_summary <- outbreak_summary
+        record$total_new_outbreaks <- total_outbreaks
         
     }
     
@@ -173,7 +179,7 @@ ingest_outbreak_report <- function(web_page, encoding = "ISO-8859-1") {
         table_value(xml_text, trim = TRUE)
     
     record$control_applied <- 
-        xml_find_first(page, xpath = "//tr/td[contains(text(),'Measures applied')]") %>% 
+        xml_find_first(page, xpath = "//tr/td[contains(text(),'Measures applied')]") %>% #TODO - there are some cases where this is not the first mention of measures applied - eg 11825.html
         xml_siblings() %>%
         xml_child() %>%
         xml_children()  %>% 
@@ -188,7 +194,12 @@ ingest_outbreak_report <- function(web_page, encoding = "ISO-8859-1") {
         paste(., collapse = "; ")
     
     record$diagnostic_tests <- xml_find_first(page, xpath = "//div[contains(text(),'Diagnostic test results')]/following-sibling::table[1]") %>% 
-        table_value(html_table, trim = TRUE, header=TRUE)
+        table_value(html_table, trim = TRUE, header=TRUE) 
+    if(nrow(record$diagnostic_tests)){
+        record$diagnostic_tests <- record$diagnostic_tests %>%
+            mutate(id = record$id) %>%
+            select(id, everything())
+    }
     
     record$future_reporting <- xml_find_first(page, xpath = "//div[contains(text(),'Future Reporting')]/following-sibling::table[1]/tr/td") %>% 
         table_value(xml_text, trim = TRUE)
@@ -218,7 +229,8 @@ safe_ingest_outbreak <- function(web_page) {
     if(!is.null(out$result)) {
         return(out$result)
     } else {
-        return(tibble(file = basename(web_page)))
+        return(list(ingest_status = paste("ingestion error: ", out$error)))
     }
 }
+
 
