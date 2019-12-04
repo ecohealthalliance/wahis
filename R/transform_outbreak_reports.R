@@ -39,7 +39,7 @@ transform_outbreak_reports <- function(outbreak_reports) {
   
   # New outbreak?
   outbreak_reports_events <- outbreak_reports_events %>%
-    mutate(new_outbreak_in_report = map_lgl(outbreak_reports2, ~length(.$outbreak_summary) == 1))
+    mutate(new_outbreak_in_report = map_lgl(outbreak_reports2, ~length(.$outbreak_summary) > 1))
   
   # Outbreaks ---------------------------------------------------
   
