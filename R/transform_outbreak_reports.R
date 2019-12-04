@@ -45,37 +45,45 @@ transform_outbreak_reports <- function(outbreak_reports) {
   
   outbreak_reports_detail <- map_df(outbreak_reports2, function(x){
     if(length(x$outbreak_detail) == 1){return()}
-    x$outbreak_detail }) %>% 
-    janitor::clean_names() %>%
-    mutate(outbreak_number = trimws(outbreak_number))
+    x$outbreak_detail })
+  
+  if(nrow(outbreak_reports_detail)) {
+    outbreak_reports_detail <- outbreak_reports_detail %>%
+      janitor::clean_names() %>%
+      mutate(outbreak_number = trimws(outbreak_number))
+  }
   
   outbreak_reports_summmary <- map_df(outbreak_reports2, function(x){
     if(length(x$outbreak_summary) == 1){return()}
-    x$outbreak_summary %>% mutate_all(as.character)}) %>% 
-    janitor::clean_names() %>%
-    mutate_all(~str_remove(., "%")) %>%
-    rename(total_morbidity_perc = total_apparent_morbidity_rate,
-           total_mortality_perc = total_apparent_mortality_rate,
-           total_case_fatality_perc = total_apparent_case_fatality_rate,
-           total_susceptible_animals_lost_perc = total_proportion_susceptible_animals_lost
-    )
+    x$outbreak_summary %>% mutate_all(as.character)}) 
   
-  # Laboratories table ---------------------------------------------------
-  outbreak_reports_laboratories <- map_dfr(outbreak_reports2, function(x){
-    tests <- x$diagnostic_tests 
-    if(is.null(dim(tests))){
-      return()
-    }
-    return(tests)
-  }) %>%
-    janitor::clean_names() 
-  
-  # Export -----------------------------------------------
-  wahis_joined <- list("outbreak_reports_events" = outbreak_reports_events, 
-                       "outbreak_reports_outbreaks" = outbreak_reports_detail, 
-                       "outbreak_reports_outbreaks_summmary" = outbreak_reports_summmary,
-                       "outbreak_reports_laboratories" = outbreak_reports_laboratories)
-  return(wahis_joined)
-  
+  if(nrow(outbreak_reports_summmary)) {
+    outbreak_reports_summmary <- outbreak_reports_summmary %>%
+      janitor::clean_names() %>%
+      mutate_all(~str_remove(., "%")) %>%
+      rename(total_morbidity_perc = total_apparent_morbidity_rate,
+             total_mortality_perc = total_apparent_mortality_rate,
+             total_case_fatality_perc = total_apparent_case_fatality_rate,
+             total_susceptible_animals_lost_perc = total_proportion_susceptible_animals_lost)
+  }
+      
+    
+    # Laboratories table ---------------------------------------------------
+    outbreak_reports_laboratories <- map_dfr(outbreak_reports2, function(x){
+      tests <- x$diagnostic_tests 
+      if(is.null(dim(tests))){
+        return()
+      }
+      return(tests)
+    }) %>%
+      janitor::clean_names() 
+    
+    # Export -----------------------------------------------
+    wahis_joined <- list("outbreak_reports_events" = outbreak_reports_events, 
+                         "outbreak_reports_outbreaks" = outbreak_reports_detail, 
+                         "outbreak_reports_outbreaks_summmary" = outbreak_reports_summmary,
+                         "outbreak_reports_laboratories" = outbreak_reports_laboratories)
+    return(wahis_joined)
+    
 }
 
