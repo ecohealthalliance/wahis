@@ -37,7 +37,8 @@ assertthat::are_equal(length(filenames), length(outbreak_reports))
 ingest_status_log <- tibble(id = gsub(".html", "", basename(filenames)), 
                             ingest_status = map_chr(outbreak_reports, ~.x$ingest_status)) %>%
     mutate(in_database = ingest_status == "available") %>%
-    mutate(ingest_error = ifelse(!in_database, ingest_status, NA)) 
+    mutate(ingest_error = ifelse(!in_database, ingest_status, NA)) %>%
+    select(-ingest_status)
 
 outbreak_reports_transformed <- transform_outbreak_reports(outbreak_reports)
 
