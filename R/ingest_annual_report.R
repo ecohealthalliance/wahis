@@ -137,8 +137,15 @@ ingest_annual_report <- function(web_page, encoding = "ISO-8859-1") {
     if(class(country)=="try-error") {
         error <- "blank page"
         return(list(
-            "report_status" = error))
+            "ingest_status" = error))
     }
+    
+    # if(xml_node(page, xpath="/html/body") %>% html_text() == "Zend_Db_Adapter_Exception caught: SQLSTATE[28000] Login incorrect. (severity 2)\n"){
+    #     error <- "incorrect login"
+    #     return(list(
+    #         "ingest_status" = error))
+    #     
+    # }
     
     # get info from file name
     country_iso3c <- xml_attr(xml_find_first(page, '//*[@id="header_this_country_code"]'), "value")
@@ -151,15 +158,15 @@ ingest_annual_report <- function(web_page, encoding = "ISO-8859-1") {
     
     # return error if country name is NA 
     if(is.na(country)){
-        error <- xml_find_first(page, xpath="//h4['Application Error']") %>% xml_text()
+        error <- xml_find_first(page, xpath="//h4['Application Error']") %>% xml_text() %>% tolower()
         if(is.na(error)){
             error <-  "unspecified error"
         }
         return(list(
-            "report_status" = error,
+            "ingest_status" = error,
             "metadata" = metadata))
     }else{
-        report_status <- "available"
+        ingest_status <- "available"
     }
     
     # get full report summary + submission infor for export
@@ -520,7 +527,7 @@ ingest_annual_report <- function(web_page, encoding = "ISO-8859-1") {
             select(country, country_iso3c, report_year, report_months, report_semester, everything())
     })
     
-    wahis <- c("report_status" = report_status, wahis)
+    wahis <- c("ingest_status" = ingest_status, wahis)
     
     return(wahis)
 }
@@ -535,7 +542,7 @@ safe_ingest_annual <- function(web_page) {
     if(!is.null(out$result)) {
         return(out$result)
     } else {
-        return(list(report_status = paste("ingestion error: ", out$error)))
+        return(list(ingest_status = paste("ingestion error: ", out$error)))
     }
 }
 
