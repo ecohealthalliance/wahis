@@ -162,7 +162,9 @@ transform_annual_reports <- function(annual_reports) {
         mutate_at(.vars = ah_names, ~replace_na(., "disease absent")) 
     
     # Look up species codes -------------- --------------------------------------
-    species <- read_csv(system.file("annual_report_lookups", "lookup_species.csv", package = "wahis"))
+    species <- read_csv(system.file("annual_report_lookups", "lookup_species.csv", package = "wahis")) %>%
+        rename(species_class = group)
+    
     if(nrow(animal_hosts)){
         animal_hosts <- animal_hosts %>%
             mutate(species = str_replace(species, "\\(fau\\)", "\\(wild\\)")) %>% # manual fix
@@ -184,8 +186,8 @@ transform_annual_reports <- function(annual_reports) {
             mutate(control_measures = map(control_measures, ~control_lookup[.])) %>% # lookup all items in list
             mutate(control_measures = map(control_measures, ~replace_na(., "code not recognized"))) %>% # NAs are not recognized
             mutate(control_measures = map_chr(control_measures, ~str_flatten(., collapse = "; "))) %>% # back to string, now with full code measures
-            rename(species_class = group) %>%
-            mutate(species_class = replace_na(species_class, "all"))
+            mutate(species_class = ifelse(species == "all susceptible species", "all",
+                                          ifelse(species %in% c("empty", "no information"), species, species_class)))
     }
     
     # Animal hosts detail --------------------------------------------------
@@ -193,12 +195,14 @@ transform_annual_reports <- function(annual_reports) {
     if(nrow(animal_hosts_detail)){
         animal_hosts_detail <- animal_hosts_detail %>%
             select(country, country_iso3c, report_year, report_months, report_semester,
-                   disease, period,temporal_scale, adm, adm_type, 
+                   disease, period, temporal_scale, adm, adm_type, 
                    species, family_name: vaccination_in_response_to_the_outbreak_s) %>%
             rename(vaccination_in_response_to_the_outbreak = vaccination_in_response_to_the_outbreak_s) %>%
             mutate(species = str_replace(species, "\\(fau\\)", "\\(wild\\)")) %>% # manual fix
             left_join(species, by = c("species" = "code")) %>%
             mutate(species = tolower(coalesce(code_value, species))) %>% # to capture empty/no info
+            mutate(species_class = ifelse(species == "all susceptible species", "all",
+                                          ifelse(species %in% c("empty", "no information"), species, species_class))) %>%
             select(-code_value) 
     }
     # Add tables to database --------------------------------------------------
@@ -262,33 +266,33 @@ transform_annual_reports <- function(annual_reports) {
     
     # Misc other cleaning items -----------------------------------------------
     if (nrow(wahis_joined$animal_population)) {
-    wahis_joined$animal_population <- wahis_joined$animal_population %>%
-        rename(taxa = species, population_count = total, population_units = units, producers_count = number, producers_units = units_2)
+        wahis_joined$animal_population <- wahis_joined$animal_population %>%
+            rename(taxa = species, population_count = total, population_units = units, producers_count = number, producers_units = units_2)
     }
     
     if (nrow(wahis_joined$veterinarians)) {
-    wahis_joined$veterinarians <- wahis_joined$veterinarians %>%
-        rename(public_sector_count = public_sector, private_sector_count = private_sector, total_count = total)
+        wahis_joined$veterinarians <- wahis_joined$veterinarians %>%
+            rename(public_sector_count = public_sector, private_sector_count = private_sector, total_count = total)
     }
     
     if (nrow(wahis_joined$national_reference_laboratories)) {
-    wahis_joined$national_reference_laboratories <- wahis_joined$national_reference_laboratories %>%
-        rename(laboratory_name = name, laboratory_contact = contacts, laboratory_latitude = latitude, laboratory_longitude = longitude)
+        wahis_joined$national_reference_laboratories <- wahis_joined$national_reference_laboratories %>%
+            rename(laboratory_name = name, laboratory_contact = contacts, laboratory_latitude = latitude, laboratory_longitude = longitude)
     }
     
     if (nrow(wahis_joined$national_reference_laboratories_detail)) {
-    wahis_joined$national_reference_laboratories_detail <- wahis_joined$national_reference_laboratories_detail %>%
-        rename(laboratory_name = laboratory)
+        wahis_joined$national_reference_laboratories_detail <- wahis_joined$national_reference_laboratories_detail %>%
+            rename(laboratory_name = laboratory)
     }
     
     if (nrow(wahis_joined$vaccine_manufacturers)) {
-    wahis_joined$vaccine_manufacturers <- wahis_joined$vaccine_manufacturers %>%
-        rename(vaccine_manufacturer = manufacturer, vaccine_contact = contacts, year_start_vaccine_activity = year_of_start_of_activity, year_cessation_vaccine_activity = year_of_cessation_of_activity)
+        wahis_joined$vaccine_manufacturers <- wahis_joined$vaccine_manufacturers %>%
+            rename(vaccine_manufacturer = manufacturer, vaccine_contact = contacts, year_start_vaccine_activity = year_of_start_of_activity, year_cessation_vaccine_activity = year_of_cessation_of_activity)
     }
     
     if (nrow(wahis_joined$vaccine_manufacturers_detail)) {
-    wahis_joined$vaccine_manufacturers_detail <- wahis_joined$vaccine_manufacturers_detail %>%
-        rename(vaccine_manufacturer = manufacturer, year_start_vaccine_production = year_of_start_of_production, year_end_vaccine_production = year_of_end_of_production_if_production_ended)
+        wahis_joined$vaccine_manufacturers_detail <- wahis_joined$vaccine_manufacturers_detail %>%
+            rename(vaccine_manufacturer = manufacturer, year_start_vaccine_production = year_of_start_of_production, year_end_vaccine_production = year_of_end_of_production_if_production_ended)
     }
     
     if (nrow(wahis_joined$vaccine_production)) {
@@ -303,8 +307,19 @@ transform_annual_reports <- function(annual_reports) {
     
     names(wahis_joined) <- paste0("annual_reports_", names(wahis_joined))
     
+    # check no NAs
+    map(wahis_joined, function(x){
+        map_int(x %>% select(-suppressWarnings(one_of("notes"))), ~sum(is.na(.))) %>%
+            sum() %>%
+            assertthat::are_equal(., 0)})
     
-    
+    # now replace "no information" and "empty" with NA
+    wahis_joined <- map(wahis_joined, function(x){
+      x %>%
+            mutate_all(~na_if(., c("empty"))) %>%
+            mutate_all(~na_if(., c("no information")))
+        })
+
     return(wahis_joined)
     
 }
