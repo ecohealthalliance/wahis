@@ -9,9 +9,10 @@ plan(multiprocess) # This takes a bit to load on many cores as all the processes
 devtools::load_all(here::here()) #doing this as scraping functions may not be exported
 
 # List all files  ---------------------------------------------------------
+#! These are example files for testing the scraper functions. Actual files are downloaded and processed in repel-infrastructure/repeldb
 filenames <- list.files(here::here("data-raw/wahis-raw-annual-reports"),
                         pattern = "*.html",
-                        full.names = TRUE)
+                        full.names = TRUE)[1]
 
 # Run scraper (~25 mins) ---------------------------------------------------------
 message(paste(length(filenames), "files to process"))
@@ -23,7 +24,11 @@ wahis_annual <- future_map(filenames, wahis:::safe_ingest_annual, .progress = TR
 # Rprof(NULL)
 # noamtools::proftable("out.prof")
 
-
 # Save processed files   ------------------------------------------------------
 dir_create(here::here("data-processed"))
 readr::write_rds(wahis_annual, here::here("data-processed", "processed-annual-reports.rds"), compress = "xz", compression = 9L)
+
+
+# Transform files ---------------------------------------------------------
+wahis_annual <- readr::read_rds(here::here("data-processed", "processed-annual-reports.rds"))
+wahis_annual_transformed <- transform_annual_reports(wahis_annual)
