@@ -2,8 +2,7 @@
 
 #' Convert a list of scraped annual reports to a list of table
 #' @param annual_reports a list of annual reports produced by [ingest_annual_report]
-#' @import dplyr tidyr stringr
-#' @importFrom purrr keep map map_chr map_dfr map_lgl modify_at
+#' @import dplyr tidyr stringr purrr
 #' @importFrom janitor make_clean_names
 #' @importFrom readr read_csv
 #' @export
