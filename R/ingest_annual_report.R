@@ -119,13 +119,9 @@ add_notes <- function(tbl){
 #' @examples
 #' ##ingest_annual_report("../data-raw/raw_wahis_reports/BWA_2016_sem0.html")
 #' @export
-#' @import xml2 
+#' @import xml2 purrr dplyr tidyr stringr
+#' @importFrom rvest html_table
 #' @importFrom stringi stri_extract_first_regex
-#' @importFrom stringr str_remove str_trim str_detect str_sub
-#' @importFrom tidyr fill
-#' @importFrom magrittr set_names
-#' @importFrom purrr map map2 map_df imap_dfr map_dfr map_lgl compact
-#' @import dplyr
 ingest_annual_report <- function(web_page, encoding = "ISO-8859-1") {
     
     # get page

@@ -1,7 +1,6 @@
 #' Convert a list of scraped ourbreak reports to a list of table
 #' @param outbreak_reports a list of outbreak reports produced by [ingest_outbreak_report]
-#' @import dplyr tidyr
-#' @importFrom purrr keep map map_dfr map_lgl imodify reduce
+#' @import dplyr tidyr purrr
 #' @importFrom janitor clean_names
 #' @importFrom stringr str_detect str_extract
 #' @export

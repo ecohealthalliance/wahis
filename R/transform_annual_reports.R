@@ -104,7 +104,7 @@ transform_annual_reports <- function(annual_reports) {
   # Handling animal diseases listed with more than once status ----------------------------------------------------
   status_check <- function(x){
     x %>%
-      group_by(country,country_iso3c, report_year, report_months, report_semester, oie_listed, disease) %>% 
+      group_by(country, country_iso3c, report_year, report_months, report_semester, oie_listed, disease) %>% 
       filter(n() > 1) %>%
       mutate(status = paste(status, collapse = "; ")) %>%
       mutate(serotype = paste(serotype, collapse = "; ")) %>%

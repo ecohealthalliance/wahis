@@ -14,7 +14,7 @@ devtools::load_all(here::here()) #doing this as scraping functions may not be ex
 #! These are example files for testing the scraper functions. Actual files are downloaded and processed in repel-infrastructure/repeldb
 filenames <- list.files(here::here("data-raw/wahis-raw-annual-reports"),
                         pattern = "*.html",
-                        full.names = TRUE)[1]
+                        full.names = TRUE)
 
 # Run ingest (~25 mins) ---------------------------------------------------------
 message(paste(length(filenames), "files to process"))
@@ -34,7 +34,7 @@ readr::write_rds(wahis_annual, here::here("data-processed", "processed-annual-re
 annual_reports <-  readr::read_rds(here::here("data-processed", "processed-annual-reports.rds"))
 
 assertthat::are_equal(length(filenames), length(annual_reports))
-ingest_status_log <- tibble(web_page = basename(filenames), 
+ingest_status_log <- tibble(web_page = basename(filenames),
                             ingest_status = map_chr(annual_reports, ~.x$ingest_status)) %>%
     mutate(code = substr(web_page, 1, 3),
            report_year = substr(web_page, 5, 8),
@@ -44,8 +44,19 @@ ingest_status_log <- tibble(web_page = basename(filenames),
     mutate(ingest_error = ifelse(!in_database, ingest_status, NA)) %>%
     select(code, report_year, semester, in_database, ingest_error)
 
-
-annual_reports_transformed <- transform_annual_reports(annual_reports)
+annual_reports_transformed <- wahis::transform_annual_reports(annual_reports)
+# check diseases listed more than once
+# annual_reports_transformed$annual_reports_animal_diseases %>% 
+#     group_by(country, country_iso3c, report_year, report_months, report_semester, oie_listed, disease, disease_population) %>% 
+#     count %>%
+#     filter(n>1)
+# check measuring units
+# annual_reports_transformed$annual_reports_animal_hosts %>% 
+#     count(measuring_units, species) %>%
+#     View
+# annual_reports_transformed$annual_reports_animal_hosts_detail %>%
+#     count(measuring_units, species) %>%
+#     View
 
 # Export transformed files-----------------------------------------------
 dir_create( here::here("data-processed", "db"))
