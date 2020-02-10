@@ -13,7 +13,7 @@ ingest_outbreak_report(web_page, encoding = "ISO-8859-1")
 A list with elements:
 \item{id}{Record id.}
 \item{country}{Country of outbreak.}
-\item{title}{Name of disease.}
+\item{disease}{Name of disease.}
 \item{received}{Information on reporting authority.}
 \item{Report type}{Type of report}
 \item{Date of start of the event}{Self-explanatory.}
