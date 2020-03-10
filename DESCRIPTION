@@ -16,17 +16,13 @@ RoxygenNote: 7.0.2
 Encoding: UTF-8
 Language: en-US
 Imports:
-    DBI,
     dplyr,
     httr,
-    rappdirs,
     purrr,
     stringi,
     stringr, 
     tidyr,
-    MonetDBLite,
     fs,
-    arkdb,
     magrittr,
     aws.s3,
     aws.signature,
