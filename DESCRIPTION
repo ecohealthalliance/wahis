@@ -27,7 +27,8 @@ Imports:
     aws.s3,
     aws.signature,
     rvest,
-    xml2
+    xml2,
+    scrapetools
 Suggests:
     spelling, 
     testthat,
