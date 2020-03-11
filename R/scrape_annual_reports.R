@@ -28,10 +28,7 @@ report_rab <- function(resp) {
     }
 }
 
-#' Extract Info from WAHIS Annual and Semi-Annual Reports
-#'
-#' Extract the information found in the Annual and Semi-Annual OIE World Animal Health Information
-#' System (WAHIS) HTML reports. These reports have to be provided to this function.
+#' Extract list of WAHIS Annual and Semi-Annual Reports
 #' @return A tibble with annual report status by country
 #' @export
 #' @import xml2 purrr dplyr tidyr stringr
