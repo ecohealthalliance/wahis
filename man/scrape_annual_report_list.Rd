@@ -2,7 +2,7 @@
 % Please edit documentation in R/scrape_annual_reports.R
 \name{scrape_annual_report_list}
 \alias{scrape_annual_report_list}
-\title{Extract Info from WAHIS Annual and Semi-Annual Reports}
+\title{Extract list of WAHIS Annual and Semi-Annual Reports}
 \usage{
 scrape_annual_report_list()
 }
@@ -10,6 +10,5 @@ scrape_annual_report_list()
 A tibble with annual report status by country
 }
 \description{
-Extract the information found in the Annual and Semi-Annual OIE World Animal Health Information
-System (WAHIS) HTML reports. These reports have to be provided to this function.
+Extract list of WAHIS Annual and Semi-Annual Reports
 }
