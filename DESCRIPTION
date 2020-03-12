@@ -28,7 +28,8 @@ Imports:
     aws.signature,
     rvest,
     xml2,
-    scrapetools
+    scrapetools,
+    janitor
 Suggests:
     spelling, 
     testthat,
@@ -41,7 +42,6 @@ Suggests:
     googledrive,
     readxl,
     here,
-    janitor,
     glue,
     digest,
     pbapply,
