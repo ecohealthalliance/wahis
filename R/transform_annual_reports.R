@@ -47,9 +47,9 @@ transform_annual_reports <- function(annual_reports) {
     animal_diseases <- animal_diseases %>%
       rename(serotype = serotype_s) %>%
       filter(occurrence != "empty") %>% # NAs are from nested species data - this is preserved in animal_hosts table
-      mutate(status = "present") %>%
+      mutate(disease_status = "present") %>%
       select(country, country_iso3c, report_year, report_months, report_semester,
-             disease, oie_listed, status,
+             disease, oie_listed, disease_status,
              occurrence, serotype, new_outbreaks, total_outbreaks, notes)
   }
   
@@ -66,7 +66,7 @@ transform_annual_reports <- function(annual_reports) {
       ungroup() %>%
       mutate(date_of_last_occurrence_if_absent = replace_na(date_of_last_occurrence_if_absent, "empty")) %>%
       distinct() %>% 
-      mutate(occurrence = "-", new_outbreaks = "0", total_outbreaks = "0", status = "absent") 
+      mutate(occurrence = "-", new_outbreaks = "0", total_outbreaks = "0", disease_status = "absent") 
   }
   
   animal_diseases <- bind_rows(animal_diseases %>%
@@ -79,7 +79,7 @@ transform_annual_reports <- function(annual_reports) {
   
   if(nrow(animal_diseases_unreported)){
     animal_diseases_unreported <- animal_diseases_unreported %>% 
-      mutate(occurrence = "0000", new_outbreaks = "0", total_outbreaks = "0",  status = "unreported") 
+      mutate(occurrence = "0000", new_outbreaks = "0", total_outbreaks = "0",  disease_status = "absent") 
   }
   
   animal_diseases <- bind_rows(animal_diseases, animal_diseases_unreported %>% 
@@ -87,13 +87,14 @@ transform_annual_reports <- function(annual_reports) {
                                  mutate(serotype = "empty"))
   
   # Look up occurrence codes ----------------------------------------------------
-  occurrence <- read_csv(system.file("annual_report_lookups", "lookup_occurrence.csv", package = "wahis")) %>%
+  suspected_code <- read_csv(system.file("annual_report_lookups", "lookup_occurrence.csv", package = "wahis")) %>%
     mutate(code = str_remove_all(code, "\"")) %>% 
-    select(code, disease_status)
+    filter(disease_status == "suspected") %>% 
+    pull(code)
   
   if(nrow(animal_diseases)){
-    test <- animal_diseases %>%
-      left_join(occurrence, by = c("occurrence" = "code")) %>% 
+    animal_diseases <- animal_diseases %>%
+      mutate(disease_status = ifelse(occurrence %in% suspected_code, "suspected", disease_status)) %>% 
       select(-occurrence) %>%
       mutate(date_of_last_occurrence_if_absent = recode(date_of_last_occurrence_if_absent,
                                                         "-" = "empty",
@@ -101,12 +102,12 @@ transform_annual_reports <- function(annual_reports) {
       distinct() # Remove dupes
   }
   
-  # Handling animal diseases listed with more than once status ----------------------------------------------------
+  # Handling animal diseases listed with more than once disease_status ----------------------------------------------------
   status_check <- function(x){
     x %>%
       group_by(country, country_iso3c, report_year, report_months, report_semester, oie_listed, disease) %>% 
       filter(n() > 1) %>%
-      mutate(status = paste(status, collapse = "; ")) %>%
+      mutate(disease_status = paste(disease_status, collapse = "; ")) %>%
       mutate(serotype = paste(serotype, collapse = "; ")) %>%
       ungroup()  
   }
@@ -125,21 +126,17 @@ transform_annual_reports <- function(annual_reports) {
   }
   
   animal_diseases <- animal_diseases %>%
-    mutate(status_rank = recode(status, "present" = 1, "absent" = 2, "unreported" = 3)) %>% 
+    mutate(disease_status_rank = recode(disease_status, "present" = 1, "suspected" = 2, "absent" = 3)) %>% 
     group_by(country, country_iso3c, report_year, report_months, report_semester, oie_listed, disease) %>% 
-    filter(status_rank == min(status_rank)) %>% 
+    filter(disease_status_rank == min(disease_status_rank)) %>% 
     ungroup() %>%
-    select(-status_rank)
+    select(-disease_status_rank)
   
   # some remaining diseases listed as absent twice
   #status_check(animal_diseases) 
   
   animal_diseases <- animal_diseases %>%
-    mutate(date_rank =  recode(date_of_last_occurrence_if_absent, 
-                               "disease absent" = 2, 
-                               "never reported" = 3,
-                               "empty" = 4,
-                               .default = 1)) %>% 
+    mutate(date_rank =  ifelse(date_of_last_occurrence_if_absent == "empty", 2, 1)) %>% 
     group_by(country, country_iso3c, report_year, report_months, report_semester, oie_listed, disease) %>% 
     filter(date_rank == min(date_rank)) %>% 
     ungroup() %>%
@@ -157,7 +154,7 @@ transform_annual_reports <- function(annual_reports) {
       select(country, country_iso3c, report_year, report_months, report_semester,
              disease, serotype = serotype_s, period,temporal_scale, adm, adm_type, new_outbreaks, total_outbreaks) %>%
       filter(new_outbreaks != "empty") %>%
-      mutate(status = "present")
+      mutate(disease_status = "present")
   }
   
   # Animal host table ----------------------------------------------------
@@ -175,7 +172,7 @@ transform_annual_reports <- function(annual_reports) {
       mutate(control_measures = na_if(control_measures, "empty")) %>%
       fill(control_measures, .direction = "down")  %>%
       ungroup() %>%
-      mutate(status = "present") %>%
+      mutate(disease_status = "present") %>%
       mutate(control_measures = replace_na(control_measures, "")) %>%
       mutate(vaccination_in_response_to_the_outbreak_num = suppressWarnings(as.numeric(vaccination_in_response_to_the_outbreak))) %>%
       mutate(control_measures2 = ifelse(!is.na(vaccination_in_response_to_the_outbreak_num) & vaccination_in_response_to_the_outbreak_num>0,
@@ -189,11 +186,15 @@ transform_annual_reports <- function(annual_reports) {
     animal_hosts <- animal_hosts %>%
       mutate(measuring_units = ifelse(measuring_units == "Hives" & species != "api" & species != "***",  "Animals",  measuring_units))
   }
+  
   # confirming we do not have dupe species: (ie it's okay not to include serotypes in this table)
-  # animal_hosts %>% 
-  #     group_by(country, report_months, report_year,  disease, oie_listed) %>%
-  #     summarize(n = n(), n_species = n_distinct(species)) %>%
-  #     filter(n != n_species)
+  species_check <- animal_hosts %>%
+    group_by(country, report_months, report_year,  disease, oie_listed) %>%
+    summarize(n = n(), n_species = n_distinct(species)) %>%
+    filter(n != n_species) 
+  assertthat::assert_that(nrow(species_check)==0)
+  
+  # Add Absent data to animal host table ----------------------------------------------------
   
   animal_hosts_absent <- wahis_joined$diseases_absent 
   
@@ -206,7 +207,7 @@ transform_annual_reports <- function(annual_reports) {
       mutate(control_measures = na_if(control_measures, "empty")) %>%
       fill(control_measures, .direction = "down")  %>%
       ungroup() %>%
-      mutate(status = "absent") %>%
+      mutate(disease_status = "absent") %>%
       mutate(control_measures = replace_na(control_measures, "empty"))
     
   }
@@ -321,15 +322,6 @@ transform_annual_reports <- function(annual_reports) {
       select(-value)
   }
   
-  
-  # Combine occurrence and status fields ------------------------------------
-  
-  wahis_joined <- modify_at(wahis_joined, .at = c("animal_diseases", "animal_diseases_detail", "animal_hosts", "animal_hosts_detail"), function(x){ 
-    
-    
-    
-  })
-  
   # Misc other cleaning items -----------------------------------------------
   if (nrow(wahis_joined$animal_population)) {
     wahis_joined$animal_population <- wahis_joined$animal_population %>%
@@ -396,8 +388,7 @@ transform_annual_reports <- function(annual_reports) {
   # wahis_joined$annual_reports_animal_hosts_detail %>% 
   #   count(measuring_units, species) %>%
   #   View
-  
-  
+
   
   return(wahis_joined)
   
