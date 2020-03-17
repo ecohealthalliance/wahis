@@ -160,6 +160,8 @@ transform_annual_reports <- function(annual_reports) {
     select(-date_rank)
   
   assert_that(nrow(status_check(animal_diseases)) == 0)
+  # animal_diseases %>%  distinct(disease, serotype) %>% filter(!serotype %in% c("empty", "no information")) %>% 
+  #   group_by(disease) %>% count(sort = TRUE)
   
   # Animal diseases detail --------------------------------------------------
   # TABLE 2 - contains disease occurrence and at finer spatial (ADM) and temporal (monthly) resolutions

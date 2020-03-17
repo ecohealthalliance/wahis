@@ -1,0 +1,785 @@
+disease,disease_clean,disease_population
+Abalone viral mortality,abalone_viral_mortality,not specified
+Abalone viral mortality (Domestic),abalone_viral_mortality,domestic
+Abalone viral mortality (Domestic andWild),abalone_viral_mortality,domestic and wild
+Abalone viral mortality (Wild),abalone_viral_mortality,wild
+Acarapisosis of honey bees,acarapisosis_of_honey_bees,not specified
+Acarapisosis of honey bees (Domestic),acarapisosis_of_honey_bees,domestic
+Acarapisosis of honey bees (Domestic andWild),acarapisosis_of_honey_bees,domestic and wild
+Acarapisosis of honey bees (Wild),acarapisosis_of_honey_bees,wild
+Actinomycosis (Domestic),actinomycosis,domestic
+Acute hepatopancreatic necrosis disease(Domestic),acute_hepatopancreatic_necrosis_disease,domestic
+Acute hepatopancreatic necrosis disease (Domestic),acute_hepatopancreatic_necrosis_disease,domestic
+Acute hepatopancreatic necrosis disease(Domestic and Wild),acute_hepatopancreatic_necrosis_disease,domestic and wild
+Acute hepatopancreatic necrosis disease(Wild),acute_hepatopancreatic_necrosis_disease,wild
+African horse sickness,african_horse_sickness,not specified
+African horse sickness (Domestic),african_horse_sickness,domestic
+African horse sickness (Domestic andWild),african_horse_sickness,domestic and wild
+African horse sickness (Domestic and Wild),african_horse_sickness,domestic and wild
+African horse sickness (Wild),african_horse_sickness,wild
+African swine fever,african_swine_fever,not specified
+African swine fever (Domestic),african_swine_fever,domestic
+African swine fever (Domestic and Wild),african_swine_fever,domestic and wild
+African swine fever (Wild),african_swine_fever,wild
+American foulbrood of honey bees,american_foulbrood_of_honey_bees,not specified
+American foulbrood of honey bees(Domestic),american_foulbrood_of_honey_bees,domestic
+American foulbrood of honey bees (Domestic),american_foulbrood_of_honey_bees,domestic
+American foulbrood of honey bees(Domestic and Wild),american_foulbrood_of_honey_bees,domestic and wild
+American foulbrood of honey bees (Wild),american_foulbrood_of_honey_bees,wild
+Anthrax,anthrax,not specified
+Anthrax (Domestic),anthrax,domestic
+Anthrax (Domestic and Wild),anthrax,domestic and wild
+Anthrax (Wild),anthrax,wild
+Atrophic rhinitis of swine,atrophic_rhinitis_of_swine,not specified
+Aujeszkys disease,aujeszky_s_disease,not specified
+Aujeszkys disease (Domestic),aujeszky_s_disease,domestic
+Aujeszkys disease (Domestic and Wild),aujeszky_s_disease,domestic and wild
+Aujeszkys disease (Wild),aujeszky_s_disease,wild
+Avian chlamydiosis,avian_chlamydiosis,not specified
+Avian chlamydiosis (Domestic),avian_chlamydiosis,domestic
+Avian chlamydiosis (Domestic and Wild),avian_chlamydiosis,domestic and wild
+Avian chlamydiosis (Wild),avian_chlamydiosis,wild
+Avian encephalomyelitis (Domestic),avian_encephalomyelitis,domestic
+Avian infect. laryngotracheitis,avian_infect_laryngotracheitis,not specified
+Avian infect. laryngotracheitis(Domestic),avian_infect_laryngotracheitis,domestic
+Avian infect. laryngotracheitis (Domestic),avian_infect_laryngotracheitis,domestic
+Avian infect. laryngotracheitis(Domestic and Wild),avian_infect_laryngotracheitis,domestic and wild
+Avian infect. laryngotracheitis (Wild),avian_infect_laryngotracheitis,wild
+Avian infectious bronchitis,avian_infectious_bronchitis,not specified
+Avian infectious bronchitis (Domestic),avian_infectious_bronchitis,domestic
+Avian infectious bronchitis (Domesticand Wild),avian_infectious_bronchitis,domestic and wild
+Avian infectious bronchitis (Wild),avian_infectious_bronchitis,wild
+Avian infectious laryngotracheitis,avian_infectious_laryngotracheitis,not specified
+Avian infectious laryngotracheitis(Domestic),avian_infectious_laryngotracheitis,domestic
+Avian infectious laryngotracheitis(Domestic and Wild),avian_infectious_laryngotracheitis,domestic and wild
+Avian infectious laryngotracheitis(Wild),avian_infectious_laryngotracheitis,wild
+Avian leukosis (Domestic),avian_leukosis,domestic
+Avian mycoplasmosis (M. gallisepticum),avian_mycoplasmosis_m_gallisepticum,not specified
+Avian mycoplasmosis (M. gallisepticum)(Domestic),avian_mycoplasmosis_m_gallisepticum,domestic
+Avian mycoplasmosis (M. gallisepticum)(Domestic and Wild),avian_mycoplasmosis_m_gallisepticum,domestic and wild
+Avian mycoplasmosis (M. gallisepticum)(Wild),avian_mycoplasmosis_m_gallisepticum,wild
+Avian mycoplasmosis (M.synoviae),avian_mycoplasmosis_m_synoviae,not specified
+Avian mycoplasmosis (M.synoviae)(Domestic),avian_mycoplasmosis_m_synoviae,domestic
+Avian mycoplasmosis (M.synoviae) (Domestic),avian_mycoplasmosis_m_synoviae,domestic
+Avian mycoplasmosis (M.synoviae)(Domestic and Wild),avian_mycoplasmosis_m_synoviae,domestic and wild
+Avian mycoplasmosis (M.synoviae) (Wild),avian_mycoplasmosis_m_synoviae,wild
+Avian salmonellosis (excluding fowltyphoid and pullorum disease) (Domestic),avian_salmonellosis_excluding_fowltyphoid_and_pullorum_disease,domestic
+Avian spirochaetosis (Domestic),avian_spirochaetosis,domestic
+Avian tuberculosis,avian_tuberculosis,not specified
+Bacterial kidney disease (R.salmoninarum),bacterial_kidney_disease_r_salmoninarum,not specified
+Bacterial kidney disease (R. salmoninarum),bacterial_kidney_disease_r_salmoninarum,not specified
+Bacterial kidney disease (Renibacteriumsalmoninarum),bacterial_kidney_disease_renibacteriumsalmoninarum,not specified
+Blackleg (Domestic),blackleg,domestic
+Bluetongue,bluetongue,not specified
+Bluetongue (Domestic),bluetongue,domestic
+Bluetongue (Domestic and Wild),bluetongue,domestic and wild
+Bluetongue (Wild),bluetongue,wild
+Botulism (Domestic),botulism,domestic
+Bov. genital campylobacteriosis,bov_genital_campylobacteriosis,not specified
+Bov. genital campylobacteriosis(Domestic),bov_genital_campylobacteriosis,domestic
+Bov. genital campylobacteriosis (Domestic),bov_genital_campylobacteriosis,domestic
+Bov. genital campylobacteriosis(Domestic and Wild),bov_genital_campylobacteriosis,domestic and wild
+Bov. genital campylobacteriosis (Domestic and Wild),bov_genital_campylobacteriosis,domestic and wild
+Bov. genital campylobacteriosis (Wild),bov_genital_campylobacteriosis,wild
+Bovine anaplasmosis,bovine_anaplasmosis,not specified
+Bovine anaplasmosis (Domestic),bovine_anaplasmosis,domestic
+Bovine anaplasmosis (Domestic and Wild),bovine_anaplasmosis,domestic and wild
+Bovine anaplasmosis (Wild),bovine_anaplasmosis,wild
+Bovine babesiosis,bovine_babesiosis,not specified
+Bovine babesiosis (Domestic),bovine_babesiosis,domestic
+Bovine babesiosis (Domestic and Wild),bovine_babesiosis,domestic and wild
+Bovine babesiosis (Wild),bovine_babesiosis,wild
+Bovine brucellosis,bovine_brucellosis,not specified
+Bovine cysticercosis,bovine_cysticercosis,not specified
+Bovine genital campylobacteriosis,bovine_genital_campylobacteriosis,not specified
+Bovine genital campylobacteriosis(Domestic),bovine_genital_campylobacteriosis,domestic
+Bovine genital campylobacteriosis(Domestic and Wild),bovine_genital_campylobacteriosis,domestic and wild
+Bovine genital campylobacteriosis (Wild),bovine_genital_campylobacteriosis,wild
+Bovine spongiform encephalopathy,bovine_spongiform_encephalopathy,not specified
+Bovine spongiform encephalopathy(Domestic),bovine_spongiform_encephalopathy,domestic
+Bovine spongiform encephalopathy (Domestic),bovine_spongiform_encephalopathy,domestic
+Bovine spongiform encephalopathy(Domestic and Wild),bovine_spongiform_encephalopathy,domestic and wild
+Bovine spongiform encephalopathy (Wild),bovine_spongiform_encephalopathy,wild
+Bovine tuberculosis,bovine_tuberculosis,not specified
+Bovine tuberculosis (Domestic),bovine_tuberculosis,domestic
+Bovine tuberculosis (Domestic and Wild),bovine_tuberculosis,domestic and wild
+Bovine tuberculosis (Wild),bovine_tuberculosis,wild
+Bovine viral diarrhoea,bovine_viral_diarrhoea,not specified
+Bovine viral diarrhoea (Domestic),bovine_viral_diarrhoea,domestic
+Bovine viral diarrhoea (Domestic andWild),bovine_viral_diarrhoea,domestic and wild
+Bovine viral diarrhoea (Domestic and Wild),bovine_viral_diarrhoea,domestic and wild
+Bovine viral diarrhoea (Wild),bovine_viral_diarrhoea,wild
+Brucellosis (Brucella abortus),brucellosis_brucella_abortus,not specified
+Brucellosis (Brucella abortus)(Domestic),brucellosis_brucella_abortus,domestic
+Brucellosis (Brucella abortus) (Domestic),brucellosis_brucella_abortus,domestic
+Brucellosis (Brucella abortus) (Domestic and Wild),brucellosis_brucella_abortus,domestic and wild
+Brucellosis (Brucella abortus) (Domesticand Wild),brucellosis_brucella_abortus,domestic and wild
+Brucellosis (Brucella abortus) (Wild),brucellosis_brucella_abortus,wild
+Brucellosis (Brucella melitensis),brucellosis_brucella_melitensis,not specified
+Brucellosis (Brucella melitensis)(Domestic),brucellosis_brucella_melitensis,domestic
+Brucellosis (Brucella melitensis) (Domestic),brucellosis_brucella_melitensis,domestic
+Brucellosis (Brucella melitensis)(Domestic and Wild),brucellosis_brucella_melitensis,domestic and wild
+Brucellosis (Brucella melitensis) (Domestic and Wild),brucellosis_brucella_melitensis,domestic and wild
+Brucellosis (Brucella melitensis) (Wild),brucellosis_brucella_melitensis,wild
+Brucellosis (Brucella suis),brucellosis_brucella_suis,not specified
+Brucellosis (Brucella suis) (Domestic),brucellosis_brucella_suis,domestic
+Brucellosis (Brucella suis) (Domestic and Wild),brucellosis_brucella_suis,domestic and wild
+Brucellosis (Brucella suis) (Domesticand Wild),brucellosis_brucella_suis,domestic and wild
+Brucellosis (Brucella suis) (Wild),brucellosis_brucella_suis,wild
+Camelpox,camelpox,not specified
+Camelpox (Domestic),camelpox,domestic
+Camelpox (Domestic and Wild),camelpox,domestic and wild
+Cap/ovi brucel. (not B. ovis),cap_ovi_brucel_not_b_ovis,not specified
+Caprine and ovine brucellosis (excludingB. ovis),caprine_and_ovine_brucellosis_excluding_b_ovis,not specified
+Caprine arthritis/encephalitis,caprine_arthritis_encephalitis,not specified
+Caprine arthritis/encephalitis(Domestic),caprine_arthritis_encephalitis,domestic
+Caprine arthritis/encephalitis (Domestic),caprine_arthritis_encephalitis,domestic
+Caprine arthritis/encephalitis (Domestic and Wild),caprine_arthritis_encephalitis,domestic and wild
+Caprine arthritis/encephalitis (Domesticand Wild),caprine_arthritis_encephalitis,domestic and wild
+Caprine arthritis/encephalitis (Wild),caprine_arthritis_encephalitis,wild
+Caseous lymphadenitis (Domestic),caseous_lymphadenitis,domestic
+Channel catfish virus disease,channel_catfish_virus_disease,not specified
+Channel catfish virus disease(herpesvirus of Ictaluridae type 1),channel_catfish_virus_disease_herpesvirus_of_ictaluridae_type_1,not specified
+Classical swine fever,classical_swine_fever,not specified
+Classical swine fever (Domestic),classical_swine_fever,domestic
+Classical swine fever (Domestic andWild),classical_swine_fever,domestic and wild
+Classical swine fever (Domestic and Wild),classical_swine_fever,domestic and wild
+Classical swine fever (Wild),classical_swine_fever,wild
+Coccidiosis (Domestic),coccidiosis,domestic
+Contagious agalactia,contagious_agalactia,not specified
+Contagious agalactia (Domestic),contagious_agalactia,domestic
+Contagious agalactia (Domestic and Wild),contagious_agalactia,domestic and wild
+Contagious agalactia (Wild),contagious_agalactia,wild
+Contagious bov. pleuropneumonia,contagious_bov_pleuropneumonia,not specified
+Contagious bov. pleuropneumonia(Domestic),contagious_bov_pleuropneumonia,domestic
+Contagious bov. pleuropneumonia (Domestic),contagious_bov_pleuropneumonia,domestic
+Contagious bov. pleuropneumonia(Domestic and Wild),contagious_bov_pleuropneumonia,domestic and wild
+Contagious bov. pleuropneumonia (Domestic and Wild),contagious_bov_pleuropneumonia,domestic and wild
+Contagious bov. pleuropneumonia (Wild),contagious_bov_pleuropneumonia,wild
+Contagious bovine pleuropneumonia,contagious_bovine_pleuropneumonia,not specified
+Contagious bovine pleuropneumonia(Domestic),contagious_bovine_pleuropneumonia,domestic
+Contagious bovine pleuropneumonia(Domestic and Wild),contagious_bovine_pleuropneumonia,domestic and wild
+Contagious bovine pleuropneumonia (Wild),contagious_bovine_pleuropneumonia,wild
+Contagious cap. pleuropneumonia,contagious_cap_pleuropneumonia,not specified
+Contagious cap. pleuropneumonia(Domestic),contagious_cap_pleuropneumonia,domestic
+Contagious cap. pleuropneumonia (Domestic),contagious_cap_pleuropneumonia,domestic
+Contagious cap. pleuropneumonia(Domestic and Wild),contagious_cap_pleuropneumonia,domestic and wild
+Contagious cap. pleuropneumonia (Wild),contagious_cap_pleuropneumonia,wild
+Contagious caprine pleuropneumonia,contagious_caprine_pleuropneumonia,not specified
+Contagious caprine pleuropneumonia(Domestic),contagious_caprine_pleuropneumonia,domestic
+Contagious caprine pleuropneumonia(Domestic and Wild),contagious_caprine_pleuropneumonia,domestic and wild
+Contagious caprine pleuropneumonia(Wild),contagious_caprine_pleuropneumonia,wild
+Contagious equine metritis,contagious_equine_metritis,not specified
+Contagious equine metritis (Domestic),contagious_equine_metritis,domestic
+Contagious equine metritis (Domestic andWild),contagious_equine_metritis,domestic and wild
+Contagious equine metritis (Wild),contagious_equine_metritis,wild
+Contagious ophthalmia (Domestic),contagious_ophthalmia,domestic
+Contagious pustular dermatitis(Domestic),contagious_pustular_dermatitis,domestic
+Crayfish plague (Aphanomyces astaci),crayfish_plague_aphanomyces_astaci,not specified
+Crayfish plague (Aphanomyces astaci)(Domestic),crayfish_plague_aphanomyces_astaci,domestic
+Crayfish plague (Aphanomyces astaci) (Domestic),crayfish_plague_aphanomyces_astaci,domestic
+Crayfish plague (Aphanomyces astaci)(Domestic and Wild),crayfish_plague_aphanomyces_astaci,domestic and wild
+Crayfish plague (Aphanomyces astaci) (Domestic and Wild),crayfish_plague_aphanomyces_astaci,domestic and wild
+Crayfish plague (Aphanomyces astaci)(Wild),crayfish_plague_aphanomyces_astaci,wild
+Crayfish plague (Aphanomyces astaci) (Wild),crayfish_plague_aphanomyces_astaci,wild
+Crimean Congo haemorrhagic fever,crimean_congo_haemorrhagic_fever,not specified
+Crimean Congo haemorrhagic fever(Domestic),crimean_congo_haemorrhagic_fever,domestic
+Crimean Congo haemorrhagic fever (Domestic),crimean_congo_haemorrhagic_fever,domestic
+Crimean Congo haemorrhagic fever(Domestic and Wild),crimean_congo_haemorrhagic_fever,domestic and wild
+Crimean Congo haemorrhagic fever (Wild),crimean_congo_haemorrhagic_fever,wild
+Dermatophilosis,dermatophilosis,not specified
+Distomatosis (liver fluke) (Domestic),distomatosis_liver_fluke,domestic
+Dourine,dourine,not specified
+Dourine (Domestic),dourine,domestic
+Dourine (Domestic and Wild),dourine,domestic and wild
+Dourine (Wild),dourine,wild
+Duck virus enteritis,duck_virus_enteritis,not specified
+Duck virus hepatitis,duck_virus_hepatitis,not specified
+Duck virus hepatitis (Domestic),duck_virus_hepatitis,domestic
+Duck virus hepatitis (Domestic and Wild),duck_virus_hepatitis,domestic and wild
+Echinococcosis/hydatidosis,echinococcosis_hydatidosis,not specified
+Echinococcosis/hydatidosis (Domestic),echinococcosis_hydatidosis,domestic
+Echinococcosis/hydatidosis (Domestic andWild),echinococcosis_hydatidosis,domestic and wild
+Echinococcosis/hydatidosis (Domestic and Wild),echinococcosis_hydatidosis,domestic and wild
+Echinococcosis/hydatidosis (Wild),echinococcosis_hydatidosis,wild
+Echinococcus granulosus (Infection with)(Domestic),echinococcus_granulosus_infection_with,domestic
+Echinococcus granulosus (Infection with) (Domestic),echinococcus_granulosus_infection_with,domestic
+Echinococcus granulosus (Infection with)(Domestic and Wild),echinococcus_granulosus_infection_with,domestic and wild
+Echinococcus granulosus (Infection with) (Domestic and Wild),echinococcus_granulosus_infection_with,domestic and wild
+Echinococcus granulosus (Infection with)(Wild),echinococcus_granulosus_infection_with,wild
+Echinococcus granulosus (Infection with) (Wild),echinococcus_granulosus_infection_with,wild
+Echinococcus multilocularis (Infection with) (Domestic),echinococcus_multilocularis_infection_with,domestic
+Echinococcus multilocularis (Infection with) (Domestic and Wild),echinococcus_multilocularis_infection_with,domestic and wild
+Echinococcus multilocularis (Infection with) (Wild),echinococcus_multilocularis_infection_with,wild
+Echinococcus multilocularis (Infectionwith) (Domestic),echinococcus_multilocularis_infectionwith,domestic
+Echinococcus multilocularis (Infectionwith) (Domestic and Wild),echinococcus_multilocularis_infectionwith,domestic and wild
+Echinococcus multilocularis (Infectionwith) (Wild),echinococcus_multilocularis_infectionwith,wild
+Encephalomyelitis (East.),encephalomyelitis_east,not specified
+Encephalomyelitis (East. and W.),encephalomyelitis_east_and_w,not specified
+Encephalomyelitis (West.),encephalomyelitis_west,not specified
+Encephalomyelitis (West.) (Domestic),encephalomyelitis_west,domestic
+Encephalomyelitis (West.) (Domestic andWild),encephalomyelitis_west,domestic and wild
+Encephalomyelitis (West.) (Wild),encephalomyelitis_west,wild
+Enteric septicaemia of catfish (E.ictaluri),enteric_septicaemia_of_catfish_e_ictaluri,not specified
+Enteric septicaemia of catfish(Edwardsiella ictaluri),enteric_septicaemia_of_catfish_edwardsiella_ictaluri,not specified
+Enterotoxaemia (Domestic),enterotoxaemia,domestic
+Enterovirus encephalomyelitis,enterovirus_encephalomyelitis,not specified
+Enzootic abortion (chlamydiosis),enzootic_abortion_chlamydiosis,not specified
+Enzootic abortion (chlamydiosis)(Domestic),enzootic_abortion_chlamydiosis,domestic
+Enzootic abortion (chlamydiosis) (Domestic),enzootic_abortion_chlamydiosis,domestic
+Enzootic abortion (chlamydiosis)(Domestic and Wild),enzootic_abortion_chlamydiosis,domestic and wild
+Enzootic abortion (chlamydiosis) (Domestic and Wild),enzootic_abortion_chlamydiosis,domestic and wild
+Enzootic abortion (chlamydiosis) (Wild),enzootic_abortion_chlamydiosis,wild
+Enzootic abortion of ewes (ovinechlamydiosis),enzootic_abortion_of_ewes_ovinechlamydiosis,not specified
+Enzootic abortion of ewes (ovinechlamydiosis) (Domestic),enzootic_abortion_of_ewes_ovinechlamydiosis,domestic
+Enzootic abortion of ewes (ovinechlamydiosis) (Domestic and Wild),enzootic_abortion_of_ewes_ovinechlamydiosis,domestic and wild
+Enzootic abortion of ewes (ovinechlamydiosis) (Wild),enzootic_abortion_of_ewes_ovinechlamydiosis,wild
+Enzootic bovine leukosis,enzootic_bovine_leukosis,not specified
+Enzootic bovine leukosis (Domestic),enzootic_bovine_leukosis,domestic
+Enzootic bovine leukosis (Domestic andWild),enzootic_bovine_leukosis,domestic and wild
+Enzootic bovine leukosis (Wild),enzootic_bovine_leukosis,wild
+Epizoot. haematopoietic necrosis,epizoot_haematopoietic_necrosis,not specified
+Epizoot. haematopoietic necrosis(Domestic and Wild),epizoot_haematopoietic_necrosis,domestic and wild
+Epizoot. haematopoietic necrosis (Wild),epizoot_haematopoietic_necrosis,wild
+Epizootic haematopoietic necrosis,epizootic_haematopoietic_necrosis,not specified
+Epizootic haematopoietic necrosis(Domestic),epizootic_haematopoietic_necrosis,domestic
+Epizootic haematopoietic necrosis(Domestic and Wild),epizootic_haematopoietic_necrosis,domestic and wild
+Epizootic haematopoietic necrosis (Wild),epizootic_haematopoietic_necrosis,wild
+Epizootic haemorrhagic disease(Domestic),epizootic_haemorrhagic_disease,domestic
+Epizootic haemorrhagic disease (Domestic),epizootic_haemorrhagic_disease,domestic
+Epizootic haemorrhagic disease (Domesticand Wild),epizootic_haemorrhagic_disease,domestic and wild
+Epizootic haemorrhagic disease (Wild),epizootic_haemorrhagic_disease,wild
+Epizootic lymphangitis,epizootic_lymphangitis,not specified
+Epizootic ulcerative syndrome,epizootic_ulcerative_syndrome,not specified
+Epizootic ulcerative syndrome (Domestic),epizootic_ulcerative_syndrome,domestic
+Epizootic ulcerative syndrome (Domestic and Wild),epizootic_ulcerative_syndrome,domestic and wild
+Epizootic ulcerative syndrome (Domesticand Wild),epizootic_ulcerative_syndrome,domestic and wild
+Epizootic ulcerative syndrome (Wild),epizootic_ulcerative_syndrome,wild
+Equid herpesvirus-1 (EHV-1) (Infection with) (Domestic),equid_herpesvirus_1_ehv_1_infection_with,domestic
+Equid herpesvirus-1 (EHV-1) (Infectionwith) (Domestic),equid_herpesvirus_1_ehv_1_infectionwith,domestic
+Equid herpesvirus-1 (EHV-1) (Infectionwith) (Domestic and Wild),equid_herpesvirus_1_ehv_1_infectionwith,domestic and wild
+Equid herpesvirus-1 (EHV-1) (Infectionwith) (Wild),equid_herpesvirus_1_ehv_1_infectionwith,wild
+Equine coital exanthema (Domestic),equine_coital_exanthema,domestic
+Equine encephalomyelitis (Eastern),equine_encephalomyelitis_eastern,not specified
+Equine encephalomyelitis (Eastern andWestern),equine_encephalomyelitis_eastern_and_western,not specified
+Equine encephalomyelitis (Eastern)(Domestic),equine_encephalomyelitis_eastern,domestic
+Equine encephalomyelitis (Eastern) (Domestic),equine_encephalomyelitis_eastern,domestic
+Equine encephalomyelitis (Eastern)(Domestic and Wild),equine_encephalomyelitis_eastern,domestic and wild
+Equine encephalomyelitis (Eastern)(Wild),equine_encephalomyelitis_eastern,wild
+Equine encephalomyelitis (Western),equine_encephalomyelitis_western,not specified
+Equine encephalomyelitis (Western)(Domestic),equine_encephalomyelitis_western,domestic
+Equine encephalomyelitis (Western)(Domestic and Wild),equine_encephalomyelitis_western,domestic and wild
+Equine encephalomyelitis (Western)(Wild),equine_encephalomyelitis_western,wild
+Equine infectious anaemia,equine_infectious_anaemia,not specified
+Equine infectious anaemia (Domestic),equine_infectious_anaemia,domestic
+Equine infectious anaemia (Domestic andWild),equine_infectious_anaemia,domestic and wild
+Equine infectious anaemia (Wild),equine_infectious_anaemia,wild
+Equine influenza,equine_influenza,not specified
+Equine influenza (Domestic),equine_influenza,domestic
+Equine influenza (Domestic and Wild),equine_influenza,domestic and wild
+Equine influenza (Wild),equine_influenza,wild
+Equine piroplasmosis,equine_piroplasmosis,not specified
+Equine piroplasmosis (Domestic),equine_piroplasmosis,domestic
+Equine piroplasmosis (Domestic and Wild),equine_piroplasmosis,domestic and wild
+Equine piroplasmosis (Wild),equine_piroplasmosis,wild
+Equine rhinopneumonitis,equine_rhinopneumonitis,not specified
+Equine rhinopneumonitis (Domestic),equine_rhinopneumonitis,domestic
+Equine rhinopneumonitis (Domestic andWild),equine_rhinopneumonitis,domestic and wild
+Equine rhinopneumonitis (Wild),equine_rhinopneumonitis,wild
+Equine viral arteritis,equine_viral_arteritis,not specified
+Equine viral arteritis (Domestic),equine_viral_arteritis,domestic
+Equine viral arteritis (Domestic andWild),equine_viral_arteritis,domestic and wild
+Equine viral arteritis (Wild),equine_viral_arteritis,wild
+European foulbrood of honey bees,european_foulbrood_of_honey_bees,not specified
+European foulbrood of honey bees(Domestic),european_foulbrood_of_honey_bees,domestic
+European foulbrood of honey bees (Domestic),european_foulbrood_of_honey_bees,domestic
+European foulbrood of honey bees(Domestic and Wild),european_foulbrood_of_honey_bees,domestic and wild
+European foulbrood of honey bees (Wild),european_foulbrood_of_honey_bees,wild
+Filariosis (Domestic),filariosis,domestic
+Foot and mouth disease,foot_and_mouth_disease,not specified
+Foot and mouth disease (Domestic),foot_and_mouth_disease,domestic
+Foot and mouth disease (Domestic andWild),foot_and_mouth_disease,domestic and wild
+Foot and mouth disease (Domestic and Wild),foot_and_mouth_disease,domestic and wild
+Foot and mouth disease (Wild),foot_and_mouth_disease,wild
+Foot-rot (Domestic),foot_rot,domestic
+Fowl cholera,fowl_cholera,not specified
+Fowl cholera (Domestic),fowl_cholera,domestic
+Fowl cholera (Domestic and Wild),fowl_cholera,domestic and wild
+Fowl cholera (Wild),fowl_cholera,wild
+Fowl pox,fowl_pox,not specified
+Fowl typhoid,fowl_typhoid,not specified
+Fowl typhoid (Domestic),fowl_typhoid,domestic
+Fowl typhoid (Domestic and Wild),fowl_typhoid,domestic and wild
+Fowl typhoid (Wild),fowl_typhoid,wild
+Glanders,glanders,not specified
+Glanders (Domestic),glanders,domestic
+Glanders (Domestic and Wild),glanders,domestic and wild
+Glanders (Wild),glanders,wild
+Gyrodactylosis (Gyrodactylus salaris),gyrodactylosis_gyrodactylus_salaris,not specified
+Gyrodactylosis (Gyrodactylus salaris)(Domestic),gyrodactylosis_gyrodactylus_salaris,domestic
+Gyrodactylosis (Gyrodactylus salaris) (Domestic),gyrodactylosis_gyrodactylus_salaris,domestic
+Gyrodactylosis (Gyrodactylus salaris)(Domestic and Wild),gyrodactylosis_gyrodactylus_salaris,domestic and wild
+Gyrodactylosis (Gyrodactylus salaris) (Domestic and Wild),gyrodactylosis_gyrodactylus_salaris,domestic and wild
+Gyrodactylosis (Gyrodactylus salaris)(Wild),gyrodactylosis_gyrodactylus_salaris,wild
+Gyrodactylosis (Gyrodactylus salaris) (Wild),gyrodactylosis_gyrodactylus_salaris,wild
+Haemorrhagic septicaemia,haemorrhagic_septicaemia,not specified
+Haemorrhagic septicaemia (Domestic),haemorrhagic_septicaemia,domestic
+Haemorrhagic septicaemia (Domestic andWild),haemorrhagic_septicaemia,domestic and wild
+Haemorrhagic septicaemia (Domestic and Wild),haemorrhagic_septicaemia,domestic and wild
+Haemorrhagic septicaemia (Wild),haemorrhagic_septicaemia,wild
+Heartwater,heartwater,not specified
+Heartwater (Domestic),heartwater,domestic
+Heartwater (Domestic and Wild),heartwater,domestic and wild
+Heartwater (Wild),heartwater,wild
+Highly path. avian influenza,highly_path_avian_influenza,not specified
+Highly path. avian influenza (Domestic),highly_path_avian_influenza,domestic
+Highly path. avian influenza (Domestic and Wild),highly_path_avian_influenza,domestic and wild
+Highly path. avian influenza (Domesticand Wild),highly_path_avian_influenza,domestic and wild
+Highly path. avian influenza (Wild),highly_path_avian_influenza,wild
+Highly pathogenic avian influenza,highly_pathogenic_avian_influenza,not specified
+Highly pathogenic avian influenza(Domestic),highly_pathogenic_avian_influenza,domestic
+Highly pathogenic avian influenza(Domestic and Wild),highly_pathogenic_avian_influenza,domestic and wild
+Highly pathogenic avian influenza (Wild),highly_pathogenic_avian_influenza,wild
+Highly pathogenic influenza A viruses (infection with) (non-poultry including wild birds) (Domestic),highly_pathogenic_influenza_a_viruses_infection_with_non_poultry_including_birds_domestic,domestic and wild
+Highly pathogenic influenza A viruses (infection with) (non-poultry including wild birds) (Domestic and Wild),highly_pathogenic_influenza_a_viruses_infection_with_non_poultry_including_birds_domestic_and_wild,domestic and wild
+Highly pathogenic influenza A viruses (infection with) (non-poultry including wild birds) (Wild),highly_pathogenic_influenza_a_viruses_infection_with_non_poultry_including_birds_wild,wild
+Highly pathogenic influenza A viruses(infection with) (non-poultry includingwild birds) (Domestic),highly_pathogenic_influenza_a_viruses_infection_with_non_poultry_includingwild_birds,domestic and wild
+Highly pathogenic influenza A viruses(infection with) (non-poultry includingwild birds) (Domestic and Wild),highly_pathogenic_influenza_a_viruses_infection_with_non_poultry_includingwild_birds,domestic and wild
+Highly pathogenic influenza A viruses(infection with) (non-poultry includingwild birds) (Wild),highly_pathogenic_influenza_a_viruses_infection_with_non_poultry_includingwild_birds,wild
+Horse mange,horse_mange,not specified
+Horse pox,horse_pox,not specified
+Inf.bov.rhinotracheit. (IBR/IPV),inf_bov_rhinotracheit_ibr_ipv,not specified
+Inf.bov.rhinotracheit. (IBR/IPV)(Domestic),inf_bov_rhinotracheit_ibr_ipv,domestic
+Inf.bov.rhinotracheit. (IBR/IPV) (Domestic),inf_bov_rhinotracheit_ibr_ipv,domestic
+Inf.bov.rhinotracheit. (IBR/IPV)(Domestic and Wild),inf_bov_rhinotracheit_ibr_ipv,domestic and wild
+Inf.bov.rhinotracheit. (IBR/IPV) (Domestic and Wild),inf_bov_rhinotracheit_ibr_ipv,domestic and wild
+Inf.bov.rhinotracheit. (IBR/IPV) (Wild),inf_bov_rhinotracheit_ibr_ipv,wild
+Infec bursal disease (Gumboro),infec_bursal_disease_gumboro,not specified
+Infec bursal disease (Gumboro)(Domestic),infec_bursal_disease_gumboro,domestic
+Infec bursal disease (Gumboro) (Domestic),infec_bursal_disease_gumboro,domestic
+Infec bursal disease (Gumboro) (Domestic and Wild),infec_bursal_disease_gumboro,domestic and wild
+Infec bursal disease (Gumboro) (Domesticand Wild),infec_bursal_disease_gumboro,domestic and wild
+Infec bursal disease (Gumboro) (Wild),infec_bursal_disease_gumboro,wild
+Infect. haematopoietic necrosis,infect_haematopoietic_necrosis,not specified
+Infect. haematopoietic necrosis(Domestic),infect_haematopoietic_necrosis,domestic
+Infect. haematopoietic necrosis (Domestic),infect_haematopoietic_necrosis,domestic
+Infect. haematopoietic necrosis(Domestic and Wild),infect_haematopoietic_necrosis,domestic and wild
+Infect. haematopoietic necrosis (Domestic and Wild),infect_haematopoietic_necrosis,domestic and wild
+Infect. haematopoietic necrosis (Wild),infect_haematopoietic_necrosis,wild
+Infection with abalone herpes-like virus(Domestic),infection_with_abalone_herpes_like_virus,domestic
+Infection with abalone herpes-like virus (Domestic),infection_with_abalone_herpes_like_virus,domestic
+Infection with abalone herpes-like virus(Domestic and Wild),infection_with_abalone_herpes_like_virus,domestic and wild
+Infection with abalone herpes-like virus (Domestic and Wild),infection_with_abalone_herpes_like_virus,domestic and wild
+Infection with abalone herpes-like virus(Wild),infection_with_abalone_herpes_like_virus,wild
+Infection with abalone herpes-like virus (Wild),infection_with_abalone_herpes_like_virus,wild
+Infection with abalone herpesvirus(Domestic),infection_with_abalone_herpesvirus,domestic
+Infection with abalone herpesvirus(Domestic and Wild),infection_with_abalone_herpesvirus,domestic and wild
+Infection with abalone herpesvirus(Wild),infection_with_abalone_herpesvirus,wild
+Infection with Batrachochytrium dendrobatidis (Domestic),infection_with_batrachochytrium_dendrobatidis,domestic
+Infection with Batrachochytrium dendrobatidis (Wild),infection_with_batrachochytrium_dendrobatidis,wild
+Infection with Batrachochytrium salamandrivorans  (Wild),infection_with_batrachochytrium_salamandrivorans,wild
+Infection with Batrachochytriumdendrobatidis (Domestic),infection_with_batrachochytriumdendrobatidis,domestic
+Infection with Batrachochytriumdendrobatidis (Domestic and Wild),infection_with_batrachochytriumdendrobatidis,domestic and wild
+Infection with Batrachochytriumdendrobatidis (Wild),infection_with_batrachochytriumdendrobatidis,wild
+Infection with Batrachochytriumsalamandrivorans  (Domestic),infection_with_batrachochytriumsalamandrivorans,domestic
+Infection with Batrachochytriumsalamandrivorans  (Domestic and Wild),infection_with_batrachochytriumsalamandrivorans,domestic and wild
+Infection with Batrachochytriumsalamandrivorans  (Wild),infection_with_batrachochytriumsalamandrivorans,wild
+Infection with Bonamia exitiosa,infection_with_bonamia_exitiosa,not specified
+Infection with Bonamia exitiosa(Domestic),infection_with_bonamia_exitiosa,domestic
+Infection with Bonamia exitiosa (Domestic),infection_with_bonamia_exitiosa,domestic
+Infection with Bonamia exitiosa(Domestic and Wild),infection_with_bonamia_exitiosa,domestic and wild
+Infection with Bonamia exitiosa (Domestic and Wild),infection_with_bonamia_exitiosa,domestic and wild
+Infection with Bonamia exitiosa (Wild),infection_with_bonamia_exitiosa,wild
+Infection with Bonamia ostreae,infection_with_bonamia_ostreae,not specified
+Infection with Bonamia ostreae(Domestic),infection_with_bonamia_ostreae,domestic
+Infection with Bonamia ostreae (Domestic),infection_with_bonamia_ostreae,domestic
+Infection with Bonamia ostreae (Domestic and Wild),infection_with_bonamia_ostreae,domestic and wild
+Infection with Bonamia ostreae (Domesticand Wild),infection_with_bonamia_ostreae,domestic and wild
+Infection with Bonamia ostreae (Wild),infection_with_bonamia_ostreae,wild
+Infection with Candidatus Xenohaliotiscaliforniensis,infection_with_candidatus_xenohaliotiscaliforniensis,not specified
+Infection with Gyrodactylus salaris(Domestic),infection_with_gyrodactylus_salaris,domestic
+Infection with Gyrodactylus salaris (Domestic),infection_with_gyrodactylus_salaris,domestic
+Infection with Gyrodactylus salaris(Domestic and Wild),infection_with_gyrodactylus_salaris,domestic and wild
+Infection with Gyrodactylus salaris (Domestic and Wild),infection_with_gyrodactylus_salaris,domestic and wild
+Infection with Gyrodactylus salaris(Wild),infection_with_gyrodactylus_salaris,wild
+Infection with Gyrodactylus salaris (Wild),infection_with_gyrodactylus_salaris,wild
+Infection with Haplosporidium costale,infection_with_haplosporidium_costale,not specified
+Infection with Haplosporidium nelsoni,infection_with_haplosporidium_nelsoni,not specified
+Infection with Marteilia refringens,infection_with_marteilia_refringens,not specified
+Infection with Marteilia refringens(Domestic),infection_with_marteilia_refringens,domestic
+Infection with Marteilia refringens (Domestic),infection_with_marteilia_refringens,domestic
+Infection with Marteilia refringens(Domestic and Wild),infection_with_marteilia_refringens,domestic and wild
+Infection with Marteilia refringens (Domestic and Wild),infection_with_marteilia_refringens,domestic and wild
+Infection with Marteilia refringens(Wild),infection_with_marteilia_refringens,wild
+Infection with Marteilia refringens (Wild),infection_with_marteilia_refringens,wild
+Infection with Marteilia sydneyi,infection_with_marteilia_sydneyi,not specified
+Infection with Mikrocytos mackini,infection_with_mikrocytos_mackini,not specified
+Infection with Mikrocytos roughleyi,infection_with_mikrocytos_roughleyi,not specified
+Infection with ostreid herpesvirus-1 microvariant (Domestic),infection_with_ostreid_herpesvirus_1_microvariant,domestic
+Infection with ostreid herpesvirus-1 microvariant (Domestic and Wild),infection_with_ostreid_herpesvirus_1_microvariant,domestic and wild
+Infection with ostreid herpesvirus-1microvariant (Domestic),infection_with_ostreid_herpesvirus_1microvariant,domestic
+Infection with ostreid herpesvirus-1microvariant (Domestic and Wild),infection_with_ostreid_herpesvirus_1microvariant,domestic and wild
+Infection with ostreid herpesvirus-1microvariant (Wild),infection_with_ostreid_herpesvirus_1microvariant,wild
+Infection with Perkinsus marinus,infection_with_perkinsus_marinus,not specified
+Infection with Perkinsus marinus(Domestic),infection_with_perkinsus_marinus,domestic
+Infection with Perkinsus marinus (Domestic),infection_with_perkinsus_marinus,domestic
+Infection with Perkinsus marinus(Domestic and Wild),infection_with_perkinsus_marinus,domestic and wild
+Infection with Perkinsus marinus (Wild),infection_with_perkinsus_marinus,wild
+Infection with Perkinsus olseni,infection_with_perkinsus_olseni,not specified
+Infection with Perkinsus olseni/atlanticus,infection_with_perkinsus_olseni_atlanticus,not specified
+Infection with Perkinsus olseni(Domestic),infection_with_perkinsus_olseni,domestic
+Infection with Perkinsus olseni (Domestic),infection_with_perkinsus_olseni,domestic
+Infection with Perkinsus olseni(Domestic and Wild),infection_with_perkinsus_olseni,domestic and wild
+Infection with Perkinsus olseni (Domestic and Wild),infection_with_perkinsus_olseni,domestic and wild
+Infection with Perkinsus olseni (Wild),infection_with_perkinsus_olseni,wild
+Infection with Perkinsusolseni/atlanticus,infection_with_perkinsusolseni_atlanticus,not specified
+Infection with ranavirus (Domestic),infection_with_ranavirus,domestic
+Infection with ranavirus (Domestic andWild),infection_with_ranavirus,domestic and wild
+Infection with ranavirus (Wild),infection_with_ranavirus,wild
+Infection with salmonid alphavirus(Domestic),infection_with_salmonid_alphavirus,domestic
+Infection with salmonid alphavirus (Domestic),infection_with_salmonid_alphavirus,domestic
+Infection with salmonid alphavirus(Domestic and Wild),infection_with_salmonid_alphavirus,domestic and wild
+Infection with salmonid alphavirus(Wild),infection_with_salmonid_alphavirus,wild
+Infection with Xenohaliotis californiensis,infection_with_xenohaliotis_californiensis,not specified
+Infection with Xenohaliotis californiensis (Domestic),infection_with_xenohaliotis_californiensis,domestic
+Infection with Xenohaliotis californiensis (Domestic and Wild),infection_with_xenohaliotis_californiensis,domestic and wild
+Infection with Xenohaliotiscaliforniensis,infection_with_xenohaliotiscaliforniensis,not specified
+Infection with Xenohaliotiscaliforniensis (Domestic),infection_with_xenohaliotiscaliforniensis,domestic
+Infection with Xenohaliotiscaliforniensis (Domestic and Wild),infection_with_xenohaliotiscaliforniensis,domestic and wild
+Infection with Xenohaliotiscaliforniensis (Wild),infection_with_xenohaliotiscaliforniensis,wild
+Infectious bovinerhinotracheitis/infectious pustularvulvovaginitis,infectious_bovinerhinotracheitis_infectious_pustularvulvovaginitis,not specified
+Infectious bovinerhinotracheitis/infectious pustularvulvovaginitis (Domestic),infectious_bovinerhinotracheitis_infectious_pustularvulvovaginitis,domestic
+Infectious bovinerhinotracheitis/infectious pustularvulvovaginitis (Domestic and Wild),infectious_bovinerhinotracheitis_infectious_pustularvulvovaginitis,domestic and wild
+Infectious bovinerhinotracheitis/infectious pustularvulvovaginitis (Wild),infectious_bovinerhinotracheitis_infectious_pustularvulvovaginitis,wild
+Infectious bursal disease (Gumborodisease),infectious_bursal_disease_gumborodisease,not specified
+Infectious bursal disease (Gumborodisease) (Domestic),infectious_bursal_disease_gumborodisease,domestic
+Infectious bursal disease (Gumborodisease) (Domestic and Wild),infectious_bursal_disease_gumborodisease,domestic and wild
+Infectious bursal disease (Gumborodisease) (Wild),infectious_bursal_disease_gumborodisease,wild
+Infectious coryza (Domestic),infectious_coryza,domestic
+Infectious haematopoietic necrosis,infectious_haematopoietic_necrosis,not specified
+Infectious haematopoietic necrosis(Domestic),infectious_haematopoietic_necrosis,domestic
+Infectious haematopoietic necrosis(Domestic and Wild),infectious_haematopoietic_necrosis,domestic and wild
+Infectious haematopoietic necrosis(Wild),infectious_haematopoietic_necrosis,wild
+Infectious hypodermal and haematopoietic necrosis,infectious_hypodermal_and_haematopoietic_necrosis,not specified
+Infectious hypodermal and haematopoietic necrosis (Domestic),infectious_hypodermal_and_haematopoietic_necrosis,domestic
+Infectious hypodermal and haematopoietic necrosis (Domestic and Wild),infectious_hypodermal_and_haematopoietic_necrosis,domestic and wild
+Infectious hypodermal and haematopoietic necrosis (Wild),infectious_hypodermal_and_haematopoietic_necrosis,wild
+Infectious hypodermal and haematopoieticnecrosis,infectious_hypodermal_and_haematopoieticnecrosis,not specified
+Infectious hypodermal and haematopoieticnecrosis (Domestic),infectious_hypodermal_and_haematopoieticnecrosis,domestic
+Infectious hypodermal and haematopoieticnecrosis (Domestic and Wild),infectious_hypodermal_and_haematopoieticnecrosis,domestic and wild
+Infectious hypodermal and haematopoieticnecrosis (Wild),infectious_hypodermal_and_haematopoieticnecrosis,wild
+Infectious myonecrosis,infectious_myonecrosis,not specified
+Infectious myonecrosis (Domestic),infectious_myonecrosis,domestic
+Infectious myonecrosis (Domestic andWild),infectious_myonecrosis,domestic and wild
+Infectious myonecrosis (Wild),infectious_myonecrosis,wild
+Infectious pancreatic necrosis,infectious_pancreatic_necrosis,not specified
+Infectious salmon anaemia,infectious_salmon_anaemia,not specified
+Infectious salmon anaemia (Domestic),infectious_salmon_anaemia,domestic
+Infectious salmon anaemia (Domestic andWild),infectious_salmon_anaemia,domestic and wild
+Infectious salmon anaemia virus(HPR-deleted or HPR0 genotypes)(Infection with)  (Domestic),infectious_salmon_anaemia_virus_hpr_deleted_or_hpr0_genotypes_infection_with,domestic
+Infectious salmon anaemia virus (HPR-deleted or HPR0 genotypes) (Infection with)  (Domestic),infectious_salmon_anaemia_virus_hpr_deleted_or_hpr0_genotypes_infection_with,domestic
+Infectious salmon anaemia virus(HPR-deleted or HPR0 genotypes)(Infection with)  (Domestic and Wild),infectious_salmon_anaemia_virus_hpr_deleted_or_hpr0_genotypes_infection_with,domestic and wild
+Infectious salmon anaemia virus(HPR-deleted or HPR0 genotypes)(Infection with)  (Wild),infectious_salmon_anaemia_virus_hpr_deleted_or_hpr0_genotypes_infection_with,wild
+Infectious salmon anaemia (Wild),infectious_salmon_anaemia,wild
+Intestinal Salmonella infections(Domestic),intestinal_salmonella_infections,domestic
+Japanese encephalitis,japanese_encephalitis,not specified
+Japanese encephalitis (Domestic),japanese_encephalitis,domestic
+Japanese encephalitis (Domestic andWild),japanese_encephalitis,domestic and wild
+Japanese encephalitis (Wild),japanese_encephalitis,wild
+Koi herpesvirus disease,koi_herpesvirus_disease,not specified
+Koi herpesvirus disease (Domestic),koi_herpesvirus_disease,domestic
+Koi herpesvirus disease (Domestic andWild),koi_herpesvirus_disease,domestic and wild
+Koi herpesvirus disease (Domestic and Wild),koi_herpesvirus_disease,domestic and wild
+Koi herpesvirus disease (Wild),koi_herpesvirus_disease,wild
+Leishmaniosis,leishmaniosis,not specified
+Leishmaniosis (Domestic),leishmaniosis,domestic
+Leishmaniosis (Domestic and Wild),leishmaniosis,domestic and wild
+Leishmaniosis (Wild),leishmaniosis,wild
+Leptospirosis,leptospirosis,not specified
+Leptospirosis (Domestic),leptospirosis,domestic
+Leptospirosis (Domestic and Wild),leptospirosis,domestic and wild
+Leptospirosis (Wild),leptospirosis,wild
+Listeriosis (Domestic),listeriosis,domestic
+Low pathogenic avian influenza (poultry),low_pathogenic_avian_influenza_poultry,not specified
+Low pathogenic avian influenza (poultry)(Domestic),low_pathogenic_avian_influenza_poultry,domestic
+Low pathogenic avian influenza (poultry) (Domestic),low_pathogenic_avian_influenza_poultry,domestic
+Low pathogenic avian influenza (poultry)(Domestic and Wild),low_pathogenic_avian_influenza_poultry,domestic and wild
+Low pathogenic avian influenza (poultry) (Domestic and Wild),low_pathogenic_avian_influenza_poultry,domestic and wild
+Lumpy skin disease,lumpy_skin_disease,not specified
+Lumpy skin disease (Domestic),lumpy_skin_disease,domestic
+Lumpy skin disease (Domestic and Wild),lumpy_skin_disease,domestic and wild
+Lumpy skin disease (Wild),lumpy_skin_disease,wild
+Maedi-visna,maedi_visna,not specified
+Maedi-visna (Domestic),maedi_visna,domestic
+Maedi-visna (Domestic and Wild),maedi_visna,domestic and wild
+Maedi-visna (Wild),maedi_visna,wild
+Malignant catarrhal fever,malignant_catarrhal_fever,not specified
+Malignant catarrhal fever (wildebeest only),malignant_catarrhal_feverebeest_only,wild
+Malignant catarrhal fever (wildebeestonly),malignant_catarrhal_feverebeestonly,wild
+Marek's disease,mareks_disease,not specified
+Marek's disease (Domestic),mareks_disease,domestic
+Marek's disease (Domestic and Wild),mareks_disease,domestic and wild
+Marek's disease (Wild),mareks_disease,wild
+Melioidosis (Domestic),melioidosis,domestic
+Mucosal disease/Bovine virus diarrhoea(Domestic),mucosal_disease_bovine_virus_diarrhoea,domestic
+Mucosal disease/DVB (Domestic),mucosal_disease_dvb,domestic
+Mycobacterium tuberculosis complex(Infection with) (Domestic),mycobacterium_tuberculosis_complex_infection_with,domestic
+Mycobacterium tuberculosis complex (Infection with) (Domestic),mycobacterium_tuberculosis_complex_infection_with,domestic
+Mycobacterium tuberculosis complex(Infection with) (Domestic and Wild),mycobacterium_tuberculosis_complex_infection_with,domestic and wild
+Mycobacterium tuberculosis complex (Infection with) (Domestic and Wild),mycobacterium_tuberculosis_complex_infection_with,domestic and wild
+Mycobacterium tuberculosis complex(Infection with) (Wild),mycobacterium_tuberculosis_complex_infection_with,wild
+Mycoplasmosis (M. gallisepticum),mycoplasmosis_m_gallisepticum,not specified
+Mycoplasmosis (M. gallisepticum)(Domestic),mycoplasmosis_m_gallisepticum,domestic
+Mycoplasmosis (M. gallisepticum) (Domestic),mycoplasmosis_m_gallisepticum,domestic
+Mycoplasmosis (M. gallisepticum)(Domestic and Wild),mycoplasmosis_m_gallisepticum,domestic and wild
+Mycoplasmosis (M. gallisepticum) (Domestic and Wild),mycoplasmosis_m_gallisepticum,domestic and wild
+Mycoplasmosis (M. gallisepticum) (Wild),mycoplasmosis_m_gallisepticum,wild
+Myxomatosis,myxomatosis,not specified
+Myxomatosis (Domestic),myxomatosis,domestic
+Myxomatosis (Domestic and Wild),myxomatosis,domestic and wild
+Myxomatosis (Wild),myxomatosis,wild
+N. w. screwworm (C. hominivorax),n_w_screwworm_c_hominivorax,not specified
+N. w. screwworm (C. hominivorax)(Domestic),n_w_screwworm_c_hominivorax,domestic
+N. w. screwworm (C. hominivorax) (Domestic),n_w_screwworm_c_hominivorax,domestic
+N. w. screwworm (C. hominivorax)(Domestic and Wild),n_w_screwworm_c_hominivorax,domestic and wild
+N. w. screwworm (C. hominivorax) (Domestic and Wild),n_w_screwworm_c_hominivorax,domestic and wild
+N. w. screwworm (C. hominivorax) (Wild),n_w_screwworm_c_hominivorax,wild
+Nairobi sheep disease,nairobi_sheep_disease,not specified
+Nairobi sheep disease (Domestic),nairobi_sheep_disease,domestic
+Nairobi sheep disease (Domestic andWild),nairobi_sheep_disease,domestic and wild
+Nairobi sheep disease (Wild),nairobi_sheep_disease,wild
+Necrotising hepatopancreatitis(Domestic),necrotising_hepatopancreatitis,domestic
+Necrotising hepatopancreatitis (Domestic),necrotising_hepatopancreatitis,domestic
+Necrotising hepatopancreatitis (Domestic and Wild),necrotising_hepatopancreatitis,domestic and wild
+Necrotising hepatopancreatitis (Domesticand Wild),necrotising_hepatopancreatitis,domestic and wild
+Necrotising hepatopancreatitis (Wild),necrotising_hepatopancreatitis,wild
+New world screwworm (Cochliomyiahominivorax),new_world_screwworm_cochliomyiahominivorax,not specified
+New world screwworm (Cochliomyiahominivorax) (Domestic),new_world_screwworm_cochliomyiahominivorax,domestic
+New world screwworm (Cochliomyiahominivorax) (Domestic and Wild),new_world_screwworm_cochliomyiahominivorax,domestic and wild
+New world screwworm (Cochliomyiahominivorax) (Wild),new_world_screwworm_cochliomyiahominivorax,wild
+Newcastle disease,newcastle_disease,not specified
+Newcastle disease (Domestic),newcastle_disease,domestic
+Newcastle disease (Domestic and Wild),newcastle_disease,domestic and wild
+Newcastle disease (Wild),newcastle_disease,wild
+Nipah virus encephalitis,nipah_virus_encephalitis,not specified
+Nipah virus encephalitis (Domestic),nipah_virus_encephalitis,domestic
+Nipah virus encephalitis (Domestic andWild),nipah_virus_encephalitis,domestic and wild
+Nipah virus encephalitis (Wild),nipah_virus_encephalitis,wild
+Nosemosis of bees (Domestic),nosemosis_of_bees,domestic
+O. w. screwworm (C. bezziana),o_w_screwworm_c_bezziana,not specified
+O. w. screwworm (C. bezziana) (Domestic),o_w_screwworm_c_bezziana,domestic
+O. w. screwworm (C. bezziana) (Domestic and Wild),o_w_screwworm_c_bezziana,domestic and wild
+O. w. screwworm (C. bezziana) (Domesticand Wild),o_w_screwworm_c_bezziana,domestic and wild
+O. w. screwworm (C. bezziana) (Wild),o_w_screwworm_c_bezziana,wild
+Old world screwworm (Chrysomya bezziana),old_world_screwworm_chrysomya_bezziana,not specified
+Old world screwworm (Chrysomya bezziana)(Domestic),old_world_screwworm_chrysomya_bezziana,domestic
+Old world screwworm (Chrysomya bezziana)(Domestic and Wild),old_world_screwworm_chrysomya_bezziana,domestic and wild
+Old world screwworm (Chrysomya bezziana)(Wild),old_world_screwworm_chrysomya_bezziana,wild
+Oncorhynchus masou virus disease,oncorhynchus_masou_virus_disease,not specified
+Other avian salmonellosis (Domestic),other_avian_salmonellosis,domestic
+Other clostridial infections (Domestic),other_clostridial_infections,domestic
+Other pasteurelloses (Domestic),other_pasteurelloses,domestic
+Ovine epididymitis (B. ovis),ovine_epididymitis_b_ovis,not specified
+Ovine epididymitis (B. ovis) (Domestic),ovine_epididymitis_b_ovis,domestic
+Ovine epididymitis (B. ovis) (Domestic and Wild),ovine_epididymitis_b_ovis,domestic and wild
+Ovine epididymitis (B. ovis) (Domesticand Wild),ovine_epididymitis_b_ovis,domestic and wild
+Ovine epididymitis (B. ovis) (Wild),ovine_epididymitis_b_ovis,wild
+Ovine epididymitis (Brucella ovis),ovine_epididymitis_brucella_ovis,not specified
+Ovine epididymitis (Brucella ovis)(Domestic),ovine_epididymitis_brucella_ovis,domestic
+Ovine epididymitis (Brucella ovis)(Domestic and Wild),ovine_epididymitis_brucella_ovis,domestic and wild
+Ovine epididymitis (Brucella ovis)(Wild),ovine_epididymitis_brucella_ovis,wild
+Ovine pulmonary adenomatosis,ovine_pulmonary_adenomatosis,not specified
+Paratuberculosis,paratuberculosis,not specified
+Paratuberculosis (Domestic),paratuberculosis,domestic
+Paratuberculosis (Domestic and Wild),paratuberculosis,domestic and wild
+Paratuberculosis (Wild),paratuberculosis,wild
+Peste des petits ruminants,peste_des_petits_ruminants,not specified
+Peste des petits ruminants (Domestic),peste_des_petits_ruminants,domestic
+Peste des petits ruminants (Domestic andWild),peste_des_petits_ruminants,domestic and wild
+Peste des petits ruminants (Domestic and Wild),peste_des_petits_ruminants,domestic and wild
+Peste des petits ruminants (Wild),peste_des_petits_ruminants,wild
+Piscirickettsiosis (Piscirickettsia salmonis),piscirickettsiosis_piscirickettsia_salmonis,not specified
+Piscirickettsiosis (Piscirickettsiasalmonis),piscirickettsiosis_piscirickettsiasalmonis,not specified
+Porcine brucellosis,porcine_brucellosis,not specified
+Porcine cysticercosis,porcine_cysticercosis,not specified
+Porcine cysticercosis (Domestic),porcine_cysticercosis,domestic
+Porcine cysticercosis (Domestic andWild),porcine_cysticercosis,domestic and wild
+Porcine cysticercosis (Domestic and Wild),porcine_cysticercosis,domestic and wild
+Porcine cysticercosis (Wild),porcine_cysticercosis,wild
+Porcine reproductive and respiratorysyndrome,porcine_reproductive_and_respiratorysyndrome,not specified
+Porcine reproductive and respiratorysyndrome (Domestic),porcine_reproductive_and_respiratorysyndrome,domestic
+Porcine reproductive and respiratorysyndrome (Domestic and Wild),porcine_reproductive_and_respiratorysyndrome,domestic and wild
+Porcine reproductive and respiratorysyndrome (Wild),porcine_reproductive_and_respiratorysyndrome,wild
+Porcine reproductive/respiratory syndr.,porcine_reproductive_respiratory_syndr,not specified
+Porcine reproductive/respiratory syndr.(Domestic),porcine_reproductive_respiratory_syndr,domestic
+Porcine reproductive/respiratory syndr. (Domestic),porcine_reproductive_respiratory_syndr,domestic
+Porcine reproductive/respiratory syndr.(Domestic and Wild),porcine_reproductive_respiratory_syndr,domestic and wild
+Porcine reproductive/respiratory syndr. (Domestic and Wild),porcine_reproductive_respiratory_syndr,domestic and wild
+Porcine reproductive/respiratory syndr.(Wild),porcine_reproductive_respiratory_syndr,wild
+Porcine reproductive/respiratory syndr. (Wild),porcine_reproductive_respiratory_syndr,wild
+Pullorum disease,pullorum_disease,not specified
+Pullorum disease (Domestic),pullorum_disease,domestic
+Pullorum disease (Domestic and Wild),pullorum_disease,domestic and wild
+Pullorum disease (Wild),pullorum_disease,wild
+Q fever,q_fever,not specified
+Q fever (Domestic),q_fever,domestic
+Q fever (Domestic and Wild),q_fever,domestic and wild
+Q fever (Wild),q_fever,wild
+Rabbit haemorrhagic disease,rabbit_haemorrhagic_disease,not specified
+Rabbit haemorrhagic disease (Domestic),rabbit_haemorrhagic_disease,domestic
+Rabbit haemorrhagic disease (Domestic and Wild),rabbit_haemorrhagic_disease,domestic and wild
+Rabbit haemorrhagic disease (Domesticand Wild),rabbit_haemorrhagic_disease,domestic and wild
+Rabbit haemorrhagic disease (Wild),rabbit_haemorrhagic_disease,wild
+Rabies,rabies,not specified
+Rabies (Domestic),rabies,domestic
+Rabies (Domestic and Wild),rabies,domestic and wild
+Rabies (Wild),rabies,wild
+Red sea bream iridoviral disease,red_sea_bream_iridoviral_disease,not specified
+Red sea bream iridoviral disease(Domestic),red_sea_bream_iridoviral_disease,domestic
+Red sea bream iridoviral disease (Domestic),red_sea_bream_iridoviral_disease,domestic
+Red sea bream iridoviral disease(Domestic and Wild),red_sea_bream_iridoviral_disease,domestic and wild
+Red sea bream iridoviral disease (Wild),red_sea_bream_iridoviral_disease,wild
+Rift Valley fever,rift_valley_fever,not specified
+Rift Valley fever (Domestic),rift_valley_fever,domestic
+Rift Valley fever (Domestic and Wild),rift_valley_fever,domestic and wild
+Rift Valley fever (Wild),rift_valley_fever,wild
+Rinderpest,rinderpest,not specified
+Rinderpest (Domestic),rinderpest,domestic
+Rinderpest (Domestic and Wild),rinderpest,domestic and wild
+Rinderpest (Wild),rinderpest,wild
+Salmonellosis (S. abortusequi)(Domestic),salmonellosis_s_abortusequi,domestic
+Salmonellosis (S. abortusovis),salmonellosis_s_abortusovis,not specified
+Salmonellosis (S. abortusovis)(Domestic),salmonellosis_s_abortusovis,domestic
+Salmonellosis (S. abortusovis) (Domestic),salmonellosis_s_abortusovis,domestic
+Salmonellosis (S. abortusovis) (Domestic and Wild),salmonellosis_s_abortusovis,domestic and wild
+Salmonellosis (S. abortusovis) (Domesticand Wild),salmonellosis_s_abortusovis,domestic and wild
+Salmonellosis (S. abortusovis) (Wild),salmonellosis_s_abortusovis,wild
+Scrapie,scrapie,not specified
+Scrapie (Domestic),scrapie,domestic
+Scrapie (Domestic and Wild),scrapie,domestic and wild
+Scrapie (Wild),scrapie,wild
+Sheep mange (Domestic),sheep_mange,domestic
+Sheep pox and goat pox,sheep_pox_and_goat_pox,not specified
+Sheep pox and goat pox (Domestic),sheep_pox_and_goat_pox,domestic
+Sheep pox and goat pox (Domestic andWild),sheep_pox_and_goat_pox,domestic and wild
+Sheep pox and goat pox (Domestic and Wild),sheep_pox_and_goat_pox,domestic and wild
+Sheep pox and goat pox (Wild),sheep_pox_and_goat_pox,wild
+Small hive beetle infestation,small_hive_beetle_infestation,not specified
+Small hive beetle infestation (Aethinatumida),small_hive_beetle_infestation_aethinatumida,not specified
+Small hive beetle infestation (Aethinatumida) (Domestic),small_hive_beetle_infestation_aethinatumida,domestic
+Small hive beetle infestation (Aethinatumida) (Domestic and Wild),small_hive_beetle_infestation_aethinatumida,domestic and wild
+Small hive beetle infestation (Aethinatumida) (Wild),small_hive_beetle_infestation_aethinatumida,wild
+Small hive beetle infestation (Domestic),small_hive_beetle_infestation,domestic
+Small hive beetle infestation (Domesticand Wild),small_hive_beetle_infestation,domestic and wild
+Small hive beetle infestation (Wild),small_hive_beetle_infestation,wild
+Spawner-isolated mortality virus disease,spawner_isolated_mortality_virus_disease,not specified
+Spherical baculovirosis (Penaeus monodon-type baculovirus),spherical_baculovirosis_penaeus_monodon_type_baculovirus,not specified
+Spherical baculovirosis (Penaeus monodon-type baculovirus) (Wild),spherical_baculovirosis_penaeus_monodon_type_baculovirus,wild
+Spherical baculovirosis (Penaeusmonodon-type baculovirus),spherical_baculovirosis_penaeusmonodon_type_baculovirus,not specified
+Spherical baculovirosis (Penaeusmonodon-type baculovirus) (Domestic),spherical_baculovirosis_penaeusmonodon_type_baculovirus,domestic
+Spherical baculovirosis (Penaeusmonodon-type baculovirus) (Domestic andWild),spherical_baculovirosis_penaeusmonodon_type_baculovirus,domestic and wild
+Spherical baculovirosis (Penaeusmonodon-type baculovirus) (Wild),spherical_baculovirosis_penaeusmonodon_type_baculovirus,wild
+Spring viraemia of carp,spring_viraemia_of_carp,not specified
+Spring viraemia of carp (Domestic),spring_viraemia_of_carp,domestic
+Spring viraemia of carp (Domestic andWild),spring_viraemia_of_carp,domestic and wild
+Spring viraemia of carp (Wild),spring_viraemia_of_carp,wild
+Strangles (Domestic),strangles,domestic
+Surra (Trypanosoma evansi),surra_trypanosoma_evansi,not specified
+Surra (Trypanosoma evansi) (Domestic),surra_trypanosoma_evansi,domestic
+Surra (Trypanosoma evansi) (Domestic andWild),surra_trypanosoma_evansi,domestic and wild
+Surra (Trypanosoma evansi) (Domestic and Wild),surra_trypanosoma_evansi,domestic and wild
+Surra (Trypanosoma evansi) (Wild),surra_trypanosoma_evansi,wild
+Swine erysipelas (Domestic),swine_erysipelas,domestic
+Swine vesicular disease,swine_vesicular_disease,not specified
+Swine vesicular disease (Domestic),swine_vesicular_disease,domestic
+Swine vesicular disease (Domestic andWild),swine_vesicular_disease,domestic and wild
+Swine vesicular disease (Wild),swine_vesicular_disease,wild
+Taura syndrome,taura_syndrome,not specified
+Taura syndrome (Domestic),taura_syndrome,domestic
+Taura syndrome (Domestic and Wild),taura_syndrome,domestic and wild
+Taura syndrome (Wild),taura_syndrome,wild
+Tetrahedral baculovirosis (Baculoviruspenaei),tetrahedral_baculovirosis_baculoviruspenaei,not specified
+Tetrahedral baculovirosis (Baculoviruspenaei) (Domestic),tetrahedral_baculovirosis_baculoviruspenaei,domestic
+Tetrahedral baculovirosis (Baculoviruspenaei) (Domestic and Wild),tetrahedral_baculovirosis_baculoviruspenaei,domestic and wild
+Tetrahedral baculovirosis (Baculoviruspenaei) (Wild),tetrahedral_baculovirosis_baculoviruspenaei,wild
+Theileriosis,theileriosis,not specified
+Theileriosis (Domestic),theileriosis,domestic
+Theileriosis (Domestic and Wild),theileriosis,domestic and wild
+Theileriosis (Wild),theileriosis,wild
+Toxoplasmosis (Domestic),toxoplasmosis,domestic
+Toxoplasmosis (Wild),toxoplasmosis,wild
+Transmissible gastroenteritis,transmissible_gastroenteritis,not specified
+Transmissible gastroenteritis (Domestic),transmissible_gastroenteritis,domestic
+Transmissible gastroenteritis (Domesticand Wild),transmissible_gastroenteritis,domestic and wild
+Transmissible gastroenteritis (Wild),transmissible_gastroenteritis,wild
+Trichinellosis,trichinellosis,not specified
+Trichinellosis (Domestic),trichinellosis,domestic
+Trichinellosis (Domestic and Wild),trichinellosis,domestic and wild
+Trichinellosis (Wild),trichinellosis,wild
+Trichomonosis,trichomonosis,not specified
+Trichomonosis (Domestic),trichomonosis,domestic
+Trichomonosis (Domestic and Wild),trichomonosis,domestic and wild
+Trichomonosis (Wild),trichomonosis,wild
+Tropilaelaps infestation of honey bees,tropilaelaps_infestation_of_honey_bees,not specified
+Tropilaelaps infestation of honey bees(Domestic),tropilaelaps_infestation_of_honey_bees,domestic
+Tropilaelaps infestation of honey bees (Domestic),tropilaelaps_infestation_of_honey_bees,domestic
+Tropilaelaps infestation of honey bees(Domestic and Wild),tropilaelaps_infestation_of_honey_bees,domestic and wild
+Tropilaelaps infestation of honey bees(Wild),tropilaelaps_infestation_of_honey_bees,wild
+Trypanosomosis,trypanosomosis,not specified
+Trypanosomosis (Domestic),trypanosomosis,domestic
+Trypanosomosis (Domestic and Wild),trypanosomosis,domestic and wild
+Trypanosomosis (Wild),trypanosomosis,wild
+Tularemia,tularemia,not specified
+Tularemia (Domestic),tularemia,domestic
+Tularemia (Domestic and Wild),tularemia,domestic and wild
+Tularemia (Wild),tularemia,wild
+Turkey rhinotracheitis,turkey_rhinotracheitis,not specified
+Turkey rhinotracheitis (Domestic),turkey_rhinotracheitis,domestic
+Turkey rhinotracheitis (Domestic andWild),turkey_rhinotracheitis,domestic and wild
+Ulcerative lymphangitis (Domestic),ulcerative_lymphangitis,domestic
+Varroosis of honey bees,varroosis_of_honey_bees,not specified
+Varroosis of honey bees (Domestic),varroosis_of_honey_bees,domestic
+Varroosis of honey bees (Domestic andWild),varroosis_of_honey_bees,domestic and wild
+Varroosis of honey bees (Wild),varroosis_of_honey_bees,wild
+Venezuelan equ.encephalomyelitis,venezuelan_equ_encephalomyelitis,not specified
+Venezuelan equ.encephalomyelitis(Domestic),venezuelan_equ_encephalomyelitis,domestic
+Venezuelan equ.encephalomyelitis (Domestic),venezuelan_equ_encephalomyelitis,domestic
+Venezuelan equ.encephalomyelitis(Domestic and Wild),venezuelan_equ_encephalomyelitis,domestic and wild
+Venezuelan equ.encephalomyelitis (Wild),venezuelan_equ_encephalomyelitis,wild
+Venezuelan equine encephalomyelitis,venezuelan_equine_encephalomyelitis,not specified
+Venezuelan equine encephalomyelitis(Domestic),venezuelan_equine_encephalomyelitis,domestic
+Venezuelan equine encephalomyelitis(Domestic and Wild),venezuelan_equine_encephalomyelitis,domestic and wild
+Venezuelan equine encephalomyelitis(Wild),venezuelan_equine_encephalomyelitis,wild
+Vesicular stomatitis,vesicular_stomatitis,not specified
+Vesicular stomatitis (Domestic),vesicular_stomatitis,domestic
+Vesicular stomatitis (Domestic and Wild),vesicular_stomatitis,domestic and wild
+Vesicular stomatitis (Wild),vesicular_stomatitis,wild
+Vibrionic dysentery (Domestic),vibrionic_dysentery,domestic
+Viral encephalopathy and retinopathy,viral_encephalopathy_and_retinopathy,not specified
+Viral haemorrhagic septicaemia,viral_haemorrhagic_septicaemia,not specified
+Viral haemorrhagic septicaemia(Domestic),viral_haemorrhagic_septicaemia,domestic
+Viral haemorrhagic septicaemia (Domestic),viral_haemorrhagic_septicaemia,domestic
+Viral haemorrhagic septicaemia (Domestic and Wild),viral_haemorrhagic_septicaemia,domestic and wild
+Viral haemorrhagic septicaemia (Domesticand Wild),viral_haemorrhagic_septicaemia,domestic and wild
+Viral haemorrhagic septicaemia (Wild),viral_haemorrhagic_septicaemia,wild
+Warble infestation (Domestic),warble_infestation,domestic
+West Nile Fever,west_nile_fever,not specified
+West Nile Fever (Domestic),west_nile_fever,domestic
+West Nile Fever (Domestic and Wild),west_nile_fever,domestic and wild
+West Nile Fever (Wild),west_nile_fever,wild
+White spot disease,white_spot_disease,not specified
+White spot disease (Domestic),white_spot_disease,domestic
+White spot disease (Domestic and Wild),white_spot_disease,domestic and wild
+White spot disease (Wild),white_spot_disease,wild
+White sturgeon iridoviral disease,white_sturgeon_iridoviral_disease,not specified
+White tail disease,white_tail_disease,not specified
+White tail disease (Domestic),white_tail_disease,domestic
+White tail disease (Domestic and Wild),white_tail_disease,domestic and wild
+White tail disease (Wild),white_tail_disease,wild
+Yellow head disease,yellow_head_disease,not specified
+Yellow head disease (Domestic),yellow_head_disease,domestic
+Yellow head disease (Domestic and Wild),yellow_head_disease,domestic and wild
+Yellow head disease (Wild),yellow_head_disease,wild
+yellow head virus genotype 1 (Infectionwith) (Domestic),yellow_head_virus_genotype_1_infectionwith,domestic
+yellow head virus genotype 1 (Infectionwith) (Domestic and Wild),yellow_head_virus_genotype_1_infectionwith,domestic and wild
+yellow head virus genotype 1 (Infectionwith) (Wild),yellow_head_virus_genotype_1_infectionwith,wild
