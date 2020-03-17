@@ -2,7 +2,7 @@
 
 #' Convert a list of scraped annual reports to a list of table
 #' @param annual_reports a list of annual reports produced by [ingest_annual_report]
-#' @import dplyr tidyr stringr purrr
+#' @import dplyr tidyr stringr purrr assertthat
 #' @importFrom janitor make_clean_names
 #' @importFrom readr read_csv
 #' @export
@@ -29,6 +29,23 @@ transform_annual_reports <- function(annual_reports) {
   if(length(tnames_absent)){
     warning(paste("Following tables are empty:", paste(tnames_absent, collapse = ", ")))
   }
+  
+  # Table name assertions ----------------------------------------------------
+  has_name(wahis_joined$metadata, c("country", "country_iso3c", "report_year", "report_months",  "report_semester"))
+  has_name(wahis_joined$submission_info, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', 'submission_info', 'submission_value', 'submission_animal_type'))
+  has_name(wahis_joined$diseases_present, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', 'disease', 'occurrence', 'serotype_s', 'new_outbreaks', 'total_outbreaks', 'species', 'control_measures', 'official_vaccination', 'measuring_units', 'susceptible', 'cases', 'deaths', 'killed_and_disposed_of', 'slaughtered', 'vaccination_in_response_to_the_outbreak_s', 'oie_listed', 'notes'))
+  has_name(wahis_joined$diseases_absent, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', 'taxa', 'disease', 'date_of_last_occurrence', 'species', 'control_measures', 'official_vaccination', 'oie_listed', 'notes'))
+  has_name(wahis_joined$diseases_present_detail, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', 'period', 'adm', 'serotype_s', 'new_outbreaks', 'total_outbreaks', 'species', 'family_name', 'latin_name', 'measuring_units', 'susceptible', 'cases', 'deaths', 'killed_and_disposed_of', 'slaughtered', 'vaccination_in_response_to_the_outbreak_s', 'adm_type', 'temporal_scale', 'disease'))
+  has_name(wahis_joined$diseases_unreported, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', 'taxa', 'disease', 'oie_listed'))
+  has_name(wahis_joined$disease_humans, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', 'disease', 'no_information_available', 'disease_absent', 'disease_present_number_of_cases_unknown', 'disease_present_number_of_cases_known', 'human_cases', 'human_deaths'))
+  has_name(wahis_joined$animal_population, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', 'species', 'production', 'total', 'units', 'number', 'units_2'))
+  has_name(wahis_joined$veterinarians, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', 'veterinarian_field', 'public_sector', 'total', 'private_sector', 'veterinarian_class'))
+  has_name(wahis_joined$national_reference_laboratories, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', 'name', 'contacts', 'latitude', 'longitude'))
+  has_name(wahis_joined$national_reference_laboratories_detail, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', 'laboratory', 'disease', 'test_type'))
+  has_name(wahis_joined$vaccine_manufacturers, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', 'manufacturer', 'contacts', 'year_of_start_of_activity', 'year_of_cessation_of_activity'))
+  has_name(wahis_joined$vaccine_manufacturers_detail, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', 'disease', 'manufacturer', 'vaccine', 'vaccine_type', 'year_of_start_of_production', 'year_of_end_of_production_if_production_ended'))
+  has_name(wahis_joined$vaccine_production, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', 'manufacturer', 'vaccine', 'doses_produced', 'doses_exported'))
+
   # NA handling in all tables -------------------------------------------------------------
   # "empty" = missing/NA/blank in the reports
   # "No information" = "..." or "No" in the reports
@@ -121,7 +138,7 @@ transform_annual_reports <- function(annual_reports) {
       str_split("; ") %>%
       reduce(c) %>%
       unique() 
-    assertthat::assert_that(all(scc %in% c("no information", "disease not present", "empty")))
+    assert_that(all(scc %in% c("no information", "disease not present", "empty")))
     # ^ if this fails: the differnt statuses may be due to differences in serotype, and should not be filtered out
   }
   
@@ -142,7 +159,7 @@ transform_annual_reports <- function(annual_reports) {
     ungroup() %>%
     select(-date_rank)
   
-  assertthat::assert_that(nrow(status_check(animal_diseases)) == 0)
+  assert_that(nrow(status_check(animal_diseases)) == 0)
   
   # Animal diseases detail --------------------------------------------------
   # TABLE 2 - contains disease occurrence and at finer spatial (ADM) and temporal (monthly) resolutions
@@ -192,7 +209,7 @@ transform_annual_reports <- function(annual_reports) {
     group_by(country, report_months, report_year,  disease, oie_listed) %>%
     summarize(n = n(), n_species = n_distinct(species)) %>%
     filter(n != n_species) 
-  assertthat::assert_that(nrow(species_check)==0)
+  assert_that(nrow(species_check)==0)
   
   # Add Absent data to animal host table ----------------------------------------------------
   
@@ -288,13 +305,16 @@ transform_annual_reports <- function(annual_reports) {
     }
     
     diseases <- diseases %>%
-      distinct() %>%
+      distinct() %>% 
       mutate(disease_clean = janitor::make_clean_names(disease)) %>%
+      arrange(disease_clean) %>% 
       mutate(disease_clean = str_replace(disease_clean, "domesticand_wild", "domestic_and_wild")) %>%
       mutate(disease_population = str_extract_all(disease_clean, "domestic|wild")) %>%
       mutate(disease_population = map_chr(disease_population, ~paste(sort(unique(.x)), collapse = " and "))) %>%
       mutate(disease_population = ifelse(disease_population=="", "not specified", disease_population)) %>%
-      mutate(disease_clean = str_remove(disease_clean, "_domestic_and_wild|_domestic|_wild")) 
+      mutate(disease_clean = str_remove(disease_clean, "_domestic_and_wild|_domestic|_wild")) %>% 
+      mutate(disease_clean = str_remove(disease_clean, "_2")) 
+    
   }
   wahis_joined <- modify_at(wahis_joined, .at = c("animal_diseases", "animal_diseases_detail", "animal_hosts", "animal_hosts_detail"), function(x){ 
     # note that if you have animal_diseases, you have animal_hosts because they come from the same parent table
@@ -372,7 +392,7 @@ transform_annual_reports <- function(annual_reports) {
   map(wahis_joined, function(x){
     map_int(x %>% select(-suppressWarnings(one_of("notes"))), ~sum(is.na(.))) %>%
       sum() %>%
-      assertthat::are_equal(., 0)})
+      are_equal(., 0)})
   
   # now replace "empty" and "no information" with NA
   wahis_joined <- map(wahis_joined, function(x){
@@ -388,7 +408,7 @@ transform_annual_reports <- function(annual_reports) {
   # wahis_joined$annual_reports_animal_hosts_detail %>% 
   #   count(measuring_units, species) %>%
   #   View
-
+  
   # remove empty tables
   wahis_joined <- keep(wahis_joined, ~nrow(.)>0)
   

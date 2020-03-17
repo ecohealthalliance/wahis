@@ -16,6 +16,7 @@ RoxygenNote: 7.0.2
 Encoding: UTF-8
 Language: en-US
 Imports:
+    assertthat,
     dplyr,
     httr,
     purrr,
@@ -33,7 +34,6 @@ Imports:
 Suggests:
     spelling, 
     testthat,
-    assertthat,
     tidyverse,
     aws.signature,
     aws.s3,
