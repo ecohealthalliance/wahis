@@ -389,6 +389,8 @@ transform_annual_reports <- function(annual_reports) {
   #   count(measuring_units, species) %>%
   #   View
 
+  # remove empty tables
+  wahis_joined <- keep(wahis_joined, ~nrow(.)>0)
   
   return(wahis_joined)
   
