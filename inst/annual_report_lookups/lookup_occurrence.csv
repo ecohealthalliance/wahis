@@ -6,5 +6,5 @@ Infection/infestation limited to one or more zones,"""+?()""","Confirmed infesta
 Disease absent,-,"The disease was absent in the country during the reporting period (in domestic species or wildlife). Thedate of last occurrenceis the date when the disease, infection or infestation was last declared absent by the Veterinary Authority.",absent
 Suspected,?,The presence of the disease was suspected but not confirmed (in domestic species or wildlife).,suspected
 Disease suspected but not confirmed and limited to one or more zones,?(),The presence of the disease was suspected but not confirmed and limited to one or more zones/compartments (in domestic species or wildlife).,suspected
-No information,...,No information is available regarding the presence or the absence of this disease during the reporting period (in domestic species or wildlife).,absent
+No information,...,No information is available regarding the presence or the absence of this disease during the reporting period (in domestic species or wildlife).,present
 Never reported,"""0000""","The disease has ""never been reported"" (historically absent) for the whole country in domestic species and wildlife. Important: It is not acceptable to notify the disease as “never reported” if it was previously reported in domestic species or in wildlife.",absent

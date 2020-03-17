@@ -15,7 +15,6 @@ transform_annual_reports <- function(annual_reports) {
   
   if(!length(annual_reports2)) return(NULL)
   
-  
   # Extract and rbind tables ----------------------------------------------------
   tnames <- c('metadata', 'submission_info', 'diseases_present', 'diseases_absent', 'diseases_present_detail', 'diseases_unreported', 'disease_humans', 'animal_population', 'veterinarians', 'national_reference_laboratories', 'national_reference_laboratories_detail', 'vaccine_manufacturers', 'vaccine_manufacturers_detail', 'vaccine_production')
   
@@ -30,7 +29,7 @@ transform_annual_reports <- function(annual_reports) {
   if(length(tnames_absent)){
     warning(paste("Following tables are empty:", paste(tnames_absent, collapse = ", ")))
   }
-  # NA handling -------------------------------------------------------------
+  # NA handling in all tables -------------------------------------------------------------
   # "empty" = missing/NA/blank in the reports
   # "No information" = "..." or "No" in the reports
   
@@ -41,6 +40,7 @@ transform_annual_reports <- function(annual_reports) {
   })
   
   # Animal disease table ----------------------------------------------------
+  # TABLE 1 - contains disease occurrence and outbreak counts
   animal_diseases <- wahis_joined$diseases_present
   
   if(nrow(animal_diseases)){
@@ -70,9 +70,9 @@ transform_annual_reports <- function(annual_reports) {
   }
   
   animal_diseases <- bind_rows(animal_diseases %>%
-                                 mutate(date_of_last_occurrence_if_absent = "disease not absent",
+                                 mutate(date_of_last_occurrence_if_absent = "empty",
                                         taxa = "see animal_hosts table for taxa for diseases present"), 
-                               animal_diseases_absent %>% mutate(serotype = "disease not present"))
+                               animal_diseases_absent %>% mutate(serotype = "empty"))
   
   # Add Unreported table to animal disease table ----------------------------------------------------
   animal_diseases_unreported <- wahis_joined$diseases_unreported 
@@ -83,21 +83,21 @@ transform_annual_reports <- function(annual_reports) {
   }
   
   animal_diseases <- bind_rows(animal_diseases, animal_diseases_unreported %>% 
-                                 mutate(date_of_last_occurrence_if_absent = "disease not absent") %>%
-                                 mutate(serotype = "disease not present"))
+                                 mutate(date_of_last_occurrence_if_absent = "empty") %>%
+                                 mutate(serotype = "empty"))
   
   # Look up occurrence codes ----------------------------------------------------
   occurrence <- read_csv(system.file("annual_report_lookups", "lookup_occurrence.csv", package = "wahis")) %>%
-    mutate(code = str_remove_all(code, "\""))
+    mutate(code = str_remove_all(code, "\"")) %>% 
+    select(code, disease_status)
   
   if(nrow(animal_diseases)){
-    animal_diseases <- animal_diseases %>%
-      left_join(occurrence, by = c("occurrence" = "code")) %>%
+    test <- animal_diseases %>%
+      left_join(occurrence, by = c("occurrence" = "code")) %>% 
       select(-occurrence) %>%
-      rename(occurrence = code_value, occurrence_description = code_description) %>%
-      mutate(date_of_last_occurrence_if_absent = recode(date_of_last_occurrence_if_absent, 
-                                                        "-" = "disease absent",
-                                                        "0000" = "never reported")) %>% # same codes as occurrence
+      mutate(date_of_last_occurrence_if_absent = recode(date_of_last_occurrence_if_absent,
+                                                        "-" = "empty",
+                                                        "0000" = "empty"))  %>%  # same codes as occurrence
       distinct() # Remove dupes
   }
   
@@ -111,14 +111,18 @@ transform_annual_reports <- function(annual_reports) {
       ungroup()  
   }
   
-  sc <- status_check(animal_diseases) %>% 
-    pull(serotype) %>% 
-    unique() %>%
-    str_split( "; ") %>%
-    reduce(c) %>%
-    unique() 
-  assertthat::assert_that(all(sc %in% c("no information", "disease not present", "empty")))
-  # ^ if this fails: the differnt statuses may be due to differences in serotype, and should not be filtered out
+  sc <- status_check(animal_diseases) 
+  
+  if(nrow(sc)){
+    scc <- sc %>% 
+      pull(serotype) %>% 
+      unique() %>%
+      str_split("; ") %>%
+      reduce(c) %>%
+      unique() 
+    assertthat::assert_that(all(scc %in% c("no information", "disease not present", "empty")))
+    # ^ if this fails: the differnt statuses may be due to differences in serotype, and should not be filtered out
+  }
   
   animal_diseases <- animal_diseases %>%
     mutate(status_rank = recode(status, "present" = 1, "absent" = 2, "unreported" = 3)) %>% 
@@ -141,7 +145,11 @@ transform_annual_reports <- function(annual_reports) {
     ungroup() %>%
     select(-date_rank)
   
+  assertthat::assert_that(nrow(status_check(animal_diseases)) == 0)
+  
   # Animal diseases detail --------------------------------------------------
+  # TABLE 2 - contains disease occurrence and at finer spatial (ADM) and temporal (monthly) resolutions
+  
   animal_diseases_detail <- wahis_joined$diseases_present_detail 
   
   if(nrow(animal_diseases_detail)){
@@ -153,6 +161,8 @@ transform_annual_reports <- function(annual_reports) {
   }
   
   # Animal host table ----------------------------------------------------
+  # TABLE 3 - contains case data by taxa 
+  
   animal_hosts <- wahis_joined$diseases_present 
   
   if(nrow(animal_hosts)){
@@ -235,6 +245,8 @@ transform_annual_reports <- function(annual_reports) {
   }
   
   # Animal hosts detail --------------------------------------------------
+  # TABLE 4 - contains case data by taxa at finer spatial (ADM) and temporal (monthly) resolutions
+  
   animal_hosts_detail <- wahis_joined$diseases_present_detail 
   if(nrow(animal_hosts_detail)){
     # fix seemingly incorrect measurement units (hives for non-bees)
@@ -264,7 +276,7 @@ transform_annual_reports <- function(annual_reports) {
   
   # Clean disease names -----------------------------------------------------
   
-  # List of al diseases cleaned, with domestic/wild separated out
+  # List of all diseases cleaned, with domestic/wild separated out
   if(nrow(animal_diseases)){
     diseases <- animal_diseases %>% 
       dplyr::select(disease)
@@ -283,7 +295,7 @@ transform_annual_reports <- function(annual_reports) {
       mutate(disease_population = ifelse(disease_population=="", "not specified", disease_population)) %>%
       mutate(disease_clean = str_remove(disease_clean, "_domestic_and_wild|_domestic|_wild")) 
   }
-  wahis_joined <- modify_at(wahis_joined, .at = c("animal_diseases", "animal_diseases_detail", "animal_hosts", "animal_hosts_detail"), function(x){ #TODO add in animal_diseases_detail and animal_hosts_detail after fixing disease names
+  wahis_joined <- modify_at(wahis_joined, .at = c("animal_diseases", "animal_diseases_detail", "animal_hosts", "animal_hosts_detail"), function(x){ 
     # note that if you have animal_diseases, you have animal_hosts because they come from the same parent table
     if(nrow(x)==0){return(x)} 
     x %>% left_join(diseases) %>%
@@ -292,11 +304,9 @@ transform_annual_reports <- function(annual_reports) {
   })
   
   # Do the same for humans
-  
   diseases_human <- wahis_joined$disease_humans 
   
   if(nrow(diseases_human)){
-    
     diseases_human <- diseases_human %>%
       dplyr::select(disease) %>%
       distinct() %>%
@@ -309,8 +319,16 @@ transform_annual_reports <- function(annual_reports) {
       gather(key = "occurrence", value = "value", no_information_available:disease_present_number_of_cases_known) %>%
       filter(value != "empty") %>%
       select(-value)
-    
   }
+  
+  
+  # Combine occurrence and status fields ------------------------------------
+  
+  wahis_joined <- modify_at(wahis_joined, .at = c("animal_diseases", "animal_diseases_detail", "animal_hosts", "animal_hosts_detail"), function(x){ 
+    
+    
+    
+  })
   
   # Misc other cleaning items -----------------------------------------------
   if (nrow(wahis_joined$animal_population)) {
@@ -378,6 +396,8 @@ transform_annual_reports <- function(annual_reports) {
   # wahis_joined$annual_reports_animal_hosts_detail %>% 
   #   count(measuring_units, species) %>%
   #   View
+  
+  
   
   return(wahis_joined)
   
