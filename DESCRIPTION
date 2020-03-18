@@ -30,7 +30,8 @@ Imports:
     rvest,
     xml2,
     scrapetools,
-    janitor
+    janitor,
+    lubridate
 Suggests:
     spelling, 
     testthat,
