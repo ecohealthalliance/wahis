@@ -299,7 +299,7 @@ transform_annual_reports <- function(annual_reports) {
   # List of all diseases cleaned, with domestic/wild separated out
   if(nrow(animal_diseases)){
     diseases <- animal_diseases %>% 
-      dplyr::select(disease)
+      dplyr::select(disease, oie_listed) 
     
     if(nrow(animal_diseases_detail)){
       diseases <- diseases %>%
@@ -308,16 +308,29 @@ transform_annual_reports <- function(annual_reports) {
     
     diseases <- diseases %>%
       distinct() %>% 
-      mutate(disease_clean = janitor::make_clean_names(disease)) %>%
+      mutate(disease_clean = tolower(disease)) %>%
       arrange(disease_clean) %>% 
-      mutate(disease_clean = str_replace(disease_clean, "domesticand_wild", "domestic_and_wild")) %>%
+      mutate(disease_clean = str_replace(disease_clean, "domestic andwild", "domestic and wild")) %>%
+      mutate(disease_clean = str_replace(disease_clean, "domesticand wild", "domestic and wild")) %>%
       mutate(disease_population = str_extract_all(disease_clean, "domestic|wild")) %>%
       mutate(disease_population = map_chr(disease_population, ~paste(sort(unique(.x)), collapse = " and "))) %>%
       mutate(disease_population = ifelse(disease_population=="", "not specified", disease_population)) %>%
-      mutate(disease_clean = str_remove(disease_clean, "_domestic_and_wild|_domestic|_wild")) %>% 
-      mutate(disease_clean = str_remove(disease_clean, "_2")) 
-    
+      mutate(disease_clean = str_remove(disease_clean, "\\(domestic and wild\\)|\\(domestic\\)|\\(wild\\)"))  %>% 
+      #mutate(disease_clean = str_remove_all(disease_clean, "mortality|viral|infectious|infect.|\\(infection with\\)|\\(infectionwith\\)|disease|infestation")) %>% 
+      mutate(disease_clean = trimws(disease_clean))  
   }
+
+    # disease_export <- diseases %>%
+  #   dplyr::select(-disease, -disease_population) %>%
+  #   distinct() %>%
+  #   mutate(oie_rank = if_else(oie_listed == TRUE, true = 1, false = 2, missing = 3)) %>%
+  #   group_by(disease_clean) %>%
+  #   filter(oie_rank == min(oie_rank)) %>%
+  #   ungroup() %>%
+  #   select(-oie_rank) %>%
+  #   distinct()
+  # write_csv(disease_export, here::here("inst/annual_report_lookups/lookup_disease.csv"))
+  
   wahis_joined <- modify_at(wahis_joined, .at = c("animal_diseases", "animal_diseases_detail", "animal_hosts", "animal_hosts_detail"), function(x){ 
     # note that if you have animal_diseases, you have animal_hosts because they come from the same parent table
     if(nrow(x)==0){return(x)} 
