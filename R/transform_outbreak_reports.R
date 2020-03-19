@@ -35,7 +35,9 @@ transform_outbreak_reports <- function(outbreak_reports) {
   outbreak_reports_events <- outbreak_reports_events %>%
     mutate(immediate_report = ifelse(str_detect(report_type, "Immediate notification"), id, immediate_report)) %>%
     mutate(follow_up = ifelse(str_detect(report_type, "Immediate notification"), 0, str_extract(report_type, "[[:digit:]]+"))) %>%
-    mutate(final_report = str_detect(report_type, "Final report"))
+    mutate(final_report = str_detect(report_type, "Final report")) %>% 
+    mutate(endemic = str_detect(future_reporting, "The event cannot be considered resolved"))
+  
   
   # New outbreak?
   outbreak_reports_events <- outbreak_reports_events %>%
@@ -82,7 +84,12 @@ transform_outbreak_reports <- function(outbreak_reports) {
   outbreak_reports_events <- outbreak_reports_events %>% 
     mutate(date_event_resolved = ifelse(id %in% check_final_resolved$id, report_date, date_event_resolved))
     
-  #TODO - handling unresolved cases - currently workflow leaves them as marked final
+  #TODO - handling unresolved cases - currently workflow leaves them as marked final (so far - there are no cases like this 2020-03-19)
+  
+  # disease_export <- outbreak_reports_events %>% 
+  #   distinct(disease, causal_agent) %>% 
+  #   mutate_all(~tolower(trimws(.)))
+  # write_csv(disease_export, here::here("inst/diseases/outbreak_diseases.csv"))
   
   # Outbreaks ---------------------------------------------------
   
@@ -126,6 +133,10 @@ transform_outbreak_reports <- function(outbreak_reports) {
                        "outbreak_reports_outbreaks" = outbreak_reports_detail, 
                        "outbreak_reports_outbreaks_summary" = outbreak_reports_summary,
                        "outbreak_reports_laboratories" = outbreak_reports_laboratories)
+  
+  # remove empty tables
+  wahis_joined <- keep(wahis_joined, ~nrow(.)>0)
+  
   return(wahis_joined)
   
 }
