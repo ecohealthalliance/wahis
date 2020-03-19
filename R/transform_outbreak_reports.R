@@ -89,7 +89,7 @@ transform_outbreak_reports <- function(outbreak_reports) {
   # disease_export <- outbreak_reports_events %>% 
   #   distinct(disease, causal_agent) %>% 
   #   mutate_all(~tolower(trimws(.)))
-  # write_csv(disease_export, here::here("inst/diseases/outbreak_diseases.csv"))
+  # write_csv(disease_export, here::here("inst/diseases/outbreak_report_diseases.csv"))
   
   # Outbreaks ---------------------------------------------------
   

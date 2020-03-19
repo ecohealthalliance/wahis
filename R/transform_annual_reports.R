@@ -45,7 +45,7 @@ transform_annual_reports <- function(annual_reports) {
   has_name(wahis_joined$vaccine_manufacturers, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', 'manufacturer', 'contacts', 'year_of_start_of_activity', 'year_of_cessation_of_activity'))
   has_name(wahis_joined$vaccine_manufacturers_detail, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', 'disease', 'manufacturer', 'vaccine', 'vaccine_type', 'year_of_start_of_production', 'year_of_end_of_production_if_production_ended'))
   has_name(wahis_joined$vaccine_production, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', 'manufacturer', 'vaccine', 'doses_produced', 'doses_exported'))
-
+  
   # NA handling in all tables -------------------------------------------------------------
   # "empty" = missing/NA/blank in the reports
   # "No information" = "..." or "No" in the reports
@@ -319,8 +319,8 @@ transform_annual_reports <- function(annual_reports) {
       #mutate(disease_clean = str_remove_all(disease_clean, "mortality|viral|infectious|infect.|\\(infection with\\)|\\(infectionwith\\)|disease|infestation")) %>% 
       mutate(disease_clean = trimws(disease_clean))  
   }
-
-    # disease_export <- diseases %>%
+  
+  # disease_export <- diseases %>%
   #   dplyr::select(-disease, -disease_population) %>%
   #   distinct() %>%
   #   mutate(oie_rank = if_else(oie_listed == TRUE, true = 1, false = 2, missing = 3)) %>%
@@ -329,7 +329,7 @@ transform_annual_reports <- function(annual_reports) {
   #   ungroup() %>%
   #   select(-oie_rank) %>%
   #   distinct()
-  # write_csv(disease_export, here::here("inst/annual_report_lookups/lookup_disease.csv"))
+  # write_csv(disease_export, here::here("inst/diseases/annual_report_diseases_animals.csv"))
   
   wahis_joined <- modify_at(wahis_joined, .at = c("animal_diseases", "animal_diseases_detail", "animal_hosts", "animal_hosts_detail"), function(x){ 
     # note that if you have animal_diseases, you have animal_hosts because they come from the same parent table
@@ -346,7 +346,8 @@ transform_annual_reports <- function(annual_reports) {
     diseases_human <- diseases_human %>%
       dplyr::select(disease) %>%
       distinct() %>%
-      mutate(disease_clean = janitor::make_clean_names(disease))  
+      mutate(disease_clean = tolower(disease))  
+    # write_csv(diseases_human %>% select(disease_clean), here::here("inst/diseases/annual_report_diseases_humans.csv"))
     
     wahis_joined$disease_humans <- wahis_joined$disease_humans %>%
       left_join(diseases_human) %>%
