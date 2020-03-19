@@ -41,7 +41,7 @@ transform_outbreak_reports <- function(outbreak_reports) {
   outbreak_reports_events <- outbreak_reports_events %>%
     mutate(new_outbreak_in_report = map_lgl(outbreak_reports2, ~length(.$outbreak_summary) > 1))
   
-  # Dates handling
+  # Dates handling - convert to  ISO-8601 
   outbreak_reports_events <- outbreak_reports_events %>%
     mutate_at(vars(starts_with("date"), "report_date", -"date_of_previous_occurrence"), ~dmy(.)) %>% 
     mutate(date_of_previous_occurrence_nchar = as.character(nchar(date_of_previous_occurrence))) %>% 
@@ -57,8 +57,33 @@ transform_outbreak_reports <- function(outbreak_reports) {
     mutate(`yyyy` = ymd(`yyyy`, truncated = 2)) %>% 
     mutate(date_of_previous_occurrence = coalesce(`yyyy-mm-dd`,`yyyy-mm`, `yyyy`)) %>% 
     select(-`NA`, -date_of_previous_occurrence_nchar, -`yyyy-mm-dd`,-`yyyy-mm`, -`yyyy`) 
+  
+  # Check for missing date_event_resolved
+  missing_resolved <- outbreak_reports_events %>% 
+    filter(is.na(date_event_resolved)) %>% 
+    filter(final_report)
+  
+  # Check threads to confirm these are final. If they are, then assume last report is the end date.
+  check_final <- outbreak_reports_events %>% 
+    select(id, immediate_report, report_date) %>% 
+    filter(immediate_report %in% missing_resolved$immediate_report) %>% 
+    left_join(missing_resolved %>% select(id, final_report)) %>% 
+    mutate(final_report = coalesce(final_report, FALSE)) %>% 
+    group_by(immediate_report) %>% 
+    mutate(check = report_date == max(report_date)) %>% 
+    ungroup() %>% 
+    mutate(confirm_final = final_report == check)
+  
+  check_final_resolved <- check_final %>% 
+    filter(final_report, check)
+  check_final_unresolved <- check_final %>% 
+    filter(final_report, !check)
+  
+  outbreak_reports_events <- outbreak_reports_events %>% 
+    mutate(date_event_resolved = ifelse(id %in% check_final_resolved$id, report_date, date_event_resolved))
     
-
+  #TODO - handling unresolved cases - currently workflow leaves them as marked final
+  
   # Outbreaks ---------------------------------------------------
   
   outbreak_reports_detail <- map_df(outbreak_reports2, function(x){
