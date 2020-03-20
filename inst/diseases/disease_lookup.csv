@@ -1,0 +1,330 @@
+disease_clean,id
+2009 pandemic a/h1n1  influenza virus,NA
+2009 pandemic a/h1n1 influenza,NA
+2009 pandemic h1n1 influenza,NA
+a/h1n1 influenza,NA
+abalone viral ganglioneuritis,NA
+abalone viral mortality,NA
+acarapisosis of honey bees,NA
+actinomycosis,ma2
+acute hepatopancreatic necrosis disease,NA
+african horse sickness,NA
+african swine fever,ma263
+american foulbrood of honey bees,NA
+anthrax,ma30
+atrophic rhinitis of swine,NA
+aujeszkys disease,NA
+avian chlamydiosis,ma13
+avian encephalomyelitis,NA
+avian infect. laryngotracheitis,NA
+avian infectious bronchitis,ma399
+avian infectious laryngotracheitis,ma420
+avian leukosis,mh550
+avian mycoplasmosis (m. gallisepticum),NA
+avian mycoplasmosis (m.synoviae),NA
+avian salmonellosis (excluding fowltyphoid and pullorum disease),NA
+avian spirochaetosis,NA
+avian tuberculosis,ma446
+babesiosis,ma151
+bacterial kidney disease (r. salmoninarum),NA
+bacterial kidney disease (r.salmoninarum),NA
+bacterial kidney disease (renibacteriumsalmoninarum),NA
+blackleg,ma12
+bluetongue,mh165
+botulism,ma8
+bov. genital campylobacteriosis,NA
+bovine anaplasmosis,ma4
+bovine babesiosis,ma6
+bovine brucellosis,NA
+bovine cysticercosis,NA
+bovine genital campylobacteriosis,ma11
+bovine spongiform encephalopathy,ma24
+bovine tuberculosis,mh465
+bovine viral diarrhoea,mh107
+brucellosis,mh48
+brucellosis,mh45
+brucellosis,mh47
+brucellosis,mh46
+brucellosis (brucella abortus),NA
+brucellosis (brucella melitensis),NA
+brucellosis (brucella suis),NA
+camelpox,NA
+campylobacteriosis,ma253
+campylobacteriosis,ma152
+cap/ovi brucel. (not b. ovis),NA
+caprine and ovine brucellosis (excluding b. ovis),NA
+caprine and ovine brucellosis (excludingb. ovis),NA
+caprine arthritis/encephalitis,NA
+caseous lymphadenitis,mh253
+channel catfish virus disease,ma282
+channel catfish virus disease(herpesvirus of ictaluridae type 1),NA
+classical swine fever,ma264
+coccidiosis,ma14
+contagious agalactia,ma147
+contagious bov. pleuropneumonia,NA
+contagious bovine pleuropneumonia,ma61
+contagious cap. pleuropneumonia,NA
+contagious caprine pleuropneumonia,NA
+contagious equine metritis,NA
+contagious ophthalmia,NA
+contagious pustular dermatitis,NA
+crayfish plague (aphanomyces astaci),NA
+crimean congo haemorrhagic fever,NA
+cysticercosis,ma154
+dermatophilosis,ma20
+detection of herpesvirus oshv-1,NA
+distomatosis (liver fluke),NA
+dourine,ma86
+duck virus enteritis,NA
+duck virus hepatitis,NA
+ebola virus disease,NA
+echinococcosis/hydatidosis,NA
+echinococcus granulosus (infection with),NA
+echinococcus multilocularis (infection with),NA
+echinococcus multilocularis (infectionwith),NA
+encephalomyelitis (east. and w.),NA
+encephalomyelitis (east.),NA
+encephalomyelitis (west.),NA
+enteric septicaemia of catfish (e.ictaluri),NA
+enteric septicaemia of catfish(edwardsiella ictaluri),NA
+enterotoxaemia,NA
+enterovirus encephalomyelitis,NA
+enzootic abortion (chlamydiosis),NA
+enzootic abortion of ewes (ovine chlamydiosis),NA
+enzootic abortion of ewes (ovinechlamydiosis),NA
+enzootic bovine leukosis,NA
+epizoot. haematopoietic necrosis,NA
+epizootic haematopoietic necrosis,ma289
+epizootic haemorrhagic disease,NA
+epizootic lymphangitis,NA
+epizootic ulcerative syndrome,ma370
+equid herpesvirus-1 (ehv-1) (infection with),NA
+equid herpesvirus-1 (ehv-1) (infectionwith),NA
+equine coital exanthema,NA
+equine encephalomyelitis (eastern and western),NA
+equine encephalomyelitis (eastern andwestern),NA
+equine encephalomyelitis (eastern),NA
+equine encephalomyelitis (western),NA
+equine encephalosis,NA
+equine infectious anaemia,NA
+equine influenza,ma96
+equine piroplasmosis,ma105
+equine rhinopneumonitis,NA
+equine viral arteritis,NA
+european foulbrood of honey bees,NA
+fiebre del nilo occidental,NA
+filariosis,NA
+foot and mouth disease,mh162
+foot and mouth disease,mh163
+foot-rot,NA
+fowl cholera,ma402
+fowl pox,NA
+fowl typhoid,ma447
+glanders,ma102
+gyrodactylosis (gyrodactylus salaris),NA
+haemorrhagic septicaemia,NA
+haemorrhagic septicaemia (ulcer disease or red sore disease),NA
+hantavirus pulmonary syndrome,NA
+heartwater,ma16
+hendra,NA
+hepatopancreatitis in prawns,NA
+herpesvirus oshv-1,NA
+highly path. avian influenza,NA
+highly pathogenic avian influenza,NA
+highly pathogenic influenza a viruses (infection with) (non-poultry including wild birds),NA
+highly pathogenic influenza a viruses(infection with) (non-poultry includingwild birds),NA
+horse mange,NA
+horse pox,NA
+inf.bov.rhinotracheit. (ibr/ipv),NA
+infec bursal disease (gumboro),NA
+infect. haematopoietic necrosis,NA
+infection with abalone herpes-like virus,NA
+infection with abalone herpesvirus,NA
+infection with batrachochytrium dendrobatidis,NA
+infection with batrachochytrium salamandrivorans,NA
+infection with batrachochytriumdendrobatidis,NA
+infection with batrachochytriumsalamandrivorans,NA
+infection with bonamia exitiosa,NA
+infection with bonamia ostreae,NA
+infection with candidatus xenohaliotiscaliforniensis,NA
+infection with coronavirus in camels,NA
+infection with gyrodactylus salaris,NA
+infection with haplosporidium costale,NA
+infection with haplosporidium nelsoni,NA
+infection with marteilia refringens,NA
+infection with marteilia sydneyi,NA
+infection with mikrocytos mackini,NA
+infection with mikrocytos roughleyi,NA
+infection with ostreid herpesvirus-1 microvariant,NA
+infection with ostreid herpesvirus-1microvariant,NA
+infection with perkinsus marinus,NA
+infection with perkinsus olseni,NA
+infection with perkinsus olseni/atlanticus,NA
+infection with perkinsusolseni/atlanticus,NA
+infection with ranavirus,NA
+infection with salmonid alphavirus,NA
+infection with schmallenbergvirus,NA
+infection with xenohaliotis californiensis,NA
+infection with xenohaliotiscaliforniensis,NA
+infectious bovine rhinotracheitis/infectious pustular vulvovaginitis,NA
+infectious bovinerhinotracheitis/infectious pustularvulvovaginitis,NA
+infectious bursal disease (gumborodisease),NA
+infectious coryza,ma405
+infectious haematopoietic necrosis,ma290
+infectious hypodermal and haematopoietic necrosis,NA
+infectious hypodermal and haematopoieticnecrosis,NA
+infectious myonecrosis,NA
+infectious pancreatic necrosis,ma291
+infectious salmon anaemia,ma279
+infectious salmon anaemia virus (hpr-deleted or hpr0 genotypes) (infection with),NA
+infectious salmon anaemia virus(hpr-deleted or hpr0 genotypes)(infection with),NA
+influenza a (h3n2),NA
+influenza a h1n1,NA
+influenza a h1n1 in pigs,NA
+influenza a subtype h1,NA
+influenza a subtype h1n1,NA
+influenza a virus,NA
+intestinal salmonella infections,NA
+japanese encephalitis,ma88
+koi herpesvirus disease,ma281
+leishmaniosis,NA
+leptospirosis,ma42
+listeriosis,ma44
+low pathogenic avian influenza (poultry),NA
+lumpy skin disease,ma22
+maedi-visna,NA
+malignant catarrhal fever,ma15
+malignant catarrhal fever (wildebeest only),NA
+malignant catarrhal fever (wildebeestonly),NA
+marburg virus disease,NA
+marek's disease,ma425
+melioidosis,ma100
+mers-cov,NA
+mikrocytos mimicus n. sp.,NA
+monkey pox,NA
+mucosal disease/bovine virus diarrhoea,NA
+mucosal disease/dvb,NA
+mycobacterium tuberculosis,ag97
+mycobacterium tuberculosis,ag121
+mycobacterium tuberculosis complex (infection with),NA
+mycobacterium tuberculosis complex(infection with),NA
+mycoplasmosis (m. gallisepticum),NA
+myxomatosis,NA
+n. w. screwworm (c. hominivorax),NA
+nairobi sheep disease,NA
+necrotising hepatopancreatitis,NA
+new disease in rainbow trout,NA
+new world screwworm (cochliomyia hominivorax),NA
+new world screwworm (cochliomyiahominivorax),NA
+newcastle disease,ma426
+nipah virus encephalitis,NA
+nosemosis of bees,NA
+o. w. screwworm (c. bezziana),NA
+old world screwworm (chrysomya bezziana),NA
+oncorhynchus masou virus disease,ma283
+ostreid herpesvirus 1,NA
+ostreid herpesvirus-1,NA
+ostreid herpesvirus-1 µ variant,NA
+other avian salmonellosis,NA
+other clostridial infections,NA
+other pasteurelloses,NA
+ovine epididymitis (b. ovis),NA
+ovine epididymitis (brucella ovis),NA
+ovine pulmonary adenomatosis,NA
+"oyster herpesvirus (oshv-1, µvar)",NA
+pandemic a/h1n1 2009 virus,NA
+pandemic a/h1n1 virus,NA
+pandemic a/h1n1 virus (2009),NA
+pandemic h1n1 2009,NA
+pandemic influenza a h1n1,NA
+pandemic influenza a h1n1 (2009),NA
+pandemic influenza a/h1n1,NA
+pandemic influenza a/h1n1 (2009),NA
+pandemic influenza a/h1n1 2009,NA
+pandemic influenza a/h1n1 virus,NA
+pandemic influenza h1n1,NA
+pandemic influenza h1n1 (2009),NA
+pandemic influenza h1n1 2009,NA
+paratuberculosis,ma26
+peste des petits ruminants,ma193
+pigeon rotavirus,NA
+piscirickettsiosis (piscirickettsia salmonis),NA
+piscirickettsiosis (piscirickettsiasalmonis),NA
+porcine brucellosis,NA
+porcine cysticercosis,NA
+porcine epidemic diarrhea,ma242
+porcine epidemic diarrhea virus,ag756
+porcine reproductive and respiratory syndrome,ma451
+porcine reproductive and respiratorysyndrome,NA
+porcine reproductive/respiratory syndr.,NA
+postweaning multisystemic wasting syndrome (pmws),NA
+pullorum disease,ma433
+q fever,ma32
+rabbit haemorrhagic disease,NA
+rabies,ma66
+reassortment of swine h1n1 virus with pandemic h1n1 virus,NA
+red sea bream iridoviral disease,NA
+rift valley fever,ma31
+rinderpest,ma62
+salmonellosis (s. abortusequi),NA
+salmonellosis (s. abortusovis),NA
+"salmonellosis (s. enteritidis, s.typhimurium)",NA
+schmallenberg disease,NA
+schmallenberg virus,NA
+schmallenberg-virus,NA
+scrapie,ma202
+sheep mange,NA
+sheep pox and goat pox,NA
+small hive beetle infestation,ma211
+small hive beetle infestation (aethina tumida),NA
+small hive beetle infestation (aethinatumida),NA
+spawner-isolated mortality virus disease,ma390
+spherical baculovirosis (penaeus monodon-type baculovirus),NA
+spherical baculovirosis (penaeusmonodon-type baculovirus),NA
+spring viraemia of carp,NA
+strangles,ma95
+streptococcus suis,ag231
+surra (trypanosoma evansi),NA
+suspected ostreid herpes virus 1 (oshv1),NA
+suspected variant ostreid herpes virus 1 (oshv1),NA
+suspected: herpesvirus oshv-1 frequently associated with vibrio splendidus,NA
+swine enteric coronavirus,NA
+swine erysipelas,ma271
+swine novel enteric corona virus disease,NA
+swine vesicular disease,ma258
+taura syndrome,ma389
+tetrahedral baculovirosis (baculoviruspenaei),NA
+theileriosis,mh443
+theileriosis,mh357
+tilapia lake virus (tilv),NA
+tilapia lake virus disease,NA
+tilapia syncitial hepatitis,NA
+tilapia syncytial hepatitis,NA
+toxoplasmosis,ma78
+transmissible gastroenteritis,NA
+trichinellosis,ma112
+trichomonosis,NA
+tropilaelaps infestation of honey bees,NA
+trypanosomosis,mh463
+trypanosomosis (t. evansi),NA
+"trypanosomosis, human african (sleepingsickness)",NA
+tularemia,ma142
+turkey rhinotracheitis,ma435
+ulcerative lymphangitis,NA
+variant creutzfeldt-jakob disease,NA
+varroosis of honey bees,NA
+venezuelan equ.encephalomyelitis,NA
+venezuelan equine encephalomyelitis,NA
+vesicular stomatitis,ma109
+vibrionic dysentery,NA
+viral encephalopathy and retinopathy,ma280
+viral haemorrhagic septicaemia,NA
+virus de la diarrea epidémica porcina,NA
+virus de schmallenberg,NA
+warble infestation,NA
+west nile fever,mh129
+white spot disease,mh83
+white sturgeon iridoviral disease,ma286
+white tail disease,NA
+yellow head disease,NA
+yellow head virus genotype 1 (infectionwith),NA
