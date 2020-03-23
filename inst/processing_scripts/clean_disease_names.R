@@ -46,3 +46,11 @@ diseases_for_lookup <- diseases_for_lookup %>%
 
 write_csv(diseases_for_lookup, here::here("inst", "diseases", "disease_lookup.csv"))
 
+
+# diseases <- readxl::read_excel(here::here("inst", "diseases", "disease_lookup.xlsx"))
+#    
+# diseases <- diseases %>% 
+#     left_join(ando %>% distinct(id, preferred_label,class_desc), by = c("ando_id" = "id"))
+    
+    
+
