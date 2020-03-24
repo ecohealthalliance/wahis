@@ -29,11 +29,6 @@ transform_annual_reports <- function(annual_reports) {
     warning(paste("Following tables are empty:", paste(tnames_absent, collapse = ", ")))
   }
   
-  #TODO - delete - this is temporary until ingest is rerun
-  wahis_joined <- map(wahis_joined, function(x){
-    mutate(x, report = paste(country_iso3c, report_year, report_semester, sep = "_")) 
-  })
-  
   # Table name assertions ----------------------------------------------------
   has_name(wahis_joined$metadata, c("country", "country_iso3c", "report_year", "report_months",  "report_semester", "report"))
   has_name(wahis_joined$submission_info, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'submission_info', 'submission_value', 'submission_animal_type'))
