@@ -1,10 +1,9 @@
-# TODO better scoped imports
-
 #' Convert a list of scraped annual reports to a list of table
 #' @param annual_reports a list of annual reports produced by [ingest_annual_report]
 #' @import dplyr tidyr stringr purrr assertthat
 #' @importFrom janitor make_clean_names
 #' @importFrom readr read_csv
+#' @importFrom readxl read_xlsx
 #' @export
 transform_annual_reports <- function(annual_reports) {
   
@@ -30,21 +29,26 @@ transform_annual_reports <- function(annual_reports) {
     warning(paste("Following tables are empty:", paste(tnames_absent, collapse = ", ")))
   }
   
+  #TODO - delete - this is temporary until ingest is rerun
+  wahis_joined <- map(wahis_joined, function(x){
+    mutate(x, report = paste(country_iso3c, report_year, report_semester, sep = "_")) 
+  })
+  
   # Table name assertions ----------------------------------------------------
-  has_name(wahis_joined$metadata, c("country", "country_iso3c", "report_year", "report_months",  "report_semester"))
-  has_name(wahis_joined$submission_info, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', 'submission_info', 'submission_value', 'submission_animal_type'))
-  has_name(wahis_joined$diseases_present, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', 'disease', 'occurrence', 'serotype_s', 'new_outbreaks', 'total_outbreaks', 'species', 'control_measures', 'official_vaccination', 'measuring_units', 'susceptible', 'cases', 'deaths', 'killed_and_disposed_of', 'slaughtered', 'vaccination_in_response_to_the_outbreak_s', 'oie_listed', 'notes'))
-  has_name(wahis_joined$diseases_absent, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', 'taxa', 'disease', 'date_of_last_occurrence', 'species', 'control_measures', 'official_vaccination', 'oie_listed', 'notes'))
-  has_name(wahis_joined$diseases_present_detail, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', 'period', 'adm', 'serotype_s', 'new_outbreaks', 'total_outbreaks', 'species', 'family_name', 'latin_name', 'measuring_units', 'susceptible', 'cases', 'deaths', 'killed_and_disposed_of', 'slaughtered', 'vaccination_in_response_to_the_outbreak_s', 'adm_type', 'temporal_scale', 'disease'))
-  has_name(wahis_joined$diseases_unreported, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', 'taxa', 'disease', 'oie_listed'))
-  has_name(wahis_joined$disease_humans, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', 'disease', 'no_information_available', 'disease_absent', 'disease_present_number_of_cases_unknown', 'disease_present_number_of_cases_known', 'human_cases', 'human_deaths'))
-  has_name(wahis_joined$animal_population, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', 'species', 'production', 'total', 'units', 'number', 'units_2'))
-  has_name(wahis_joined$veterinarians, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', 'veterinarian_field', 'public_sector', 'total', 'private_sector', 'veterinarian_class'))
-  has_name(wahis_joined$national_reference_laboratories, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', 'name', 'contacts', 'latitude', 'longitude'))
-  has_name(wahis_joined$national_reference_laboratories_detail, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', 'laboratory', 'disease', 'test_type'))
-  has_name(wahis_joined$vaccine_manufacturers, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', 'manufacturer', 'contacts', 'year_of_start_of_activity', 'year_of_cessation_of_activity'))
-  has_name(wahis_joined$vaccine_manufacturers_detail, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', 'disease', 'manufacturer', 'vaccine', 'vaccine_type', 'year_of_start_of_production', 'year_of_end_of_production_if_production_ended'))
-  has_name(wahis_joined$vaccine_production, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', 'manufacturer', 'vaccine', 'doses_produced', 'doses_exported'))
+  has_name(wahis_joined$metadata, c("country", "country_iso3c", "report_year", "report_months",  "report_semester", "report"))
+  has_name(wahis_joined$submission_info, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'submission_info', 'submission_value', 'submission_animal_type'))
+  has_name(wahis_joined$diseases_present, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'disease', 'occurrence', 'serotype_s', 'new_outbreaks', 'total_outbreaks', 'species', 'control_measures', 'official_vaccination', 'measuring_units', 'susceptible', 'cases', 'deaths', 'killed_and_disposed_of', 'slaughtered', 'vaccination_in_response_to_the_outbreak_s', 'oie_listed', 'notes'))
+  has_name(wahis_joined$diseases_absent, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'taxa', 'disease', 'date_of_last_occurrence', 'species', 'control_measures', 'official_vaccination', 'oie_listed', 'notes'))
+  has_name(wahis_joined$diseases_present_detail, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'period', 'adm', 'serotype_s', 'new_outbreaks', 'total_outbreaks', 'species', 'family_name', 'latin_name', 'measuring_units', 'susceptible', 'cases', 'deaths', 'killed_and_disposed_of', 'slaughtered', 'vaccination_in_response_to_the_outbreak_s', 'adm_type', 'temporal_scale', 'disease'))
+  has_name(wahis_joined$diseases_unreported, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'taxa', 'disease', 'oie_listed'))
+  has_name(wahis_joined$disease_humans, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'disease', 'no_information_available', 'disease_absent', 'disease_present_number_of_cases_unknown', 'disease_present_number_of_cases_known', 'human_cases', 'human_deaths'))
+  has_name(wahis_joined$animal_population, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'species', 'production', 'total', 'units', 'number', 'units_2'))
+  has_name(wahis_joined$veterinarians, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'veterinarian_field', 'public_sector', 'total', 'private_sector', 'veterinarian_class'))
+  has_name(wahis_joined$national_reference_laboratories, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'name', 'contacts', 'latitude', 'longitude'))
+  has_name(wahis_joined$national_reference_laboratories_detail, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'laboratory', 'disease', 'test_type'))
+  has_name(wahis_joined$vaccine_manufacturers, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'manufacturer', 'contacts', 'year_of_start_of_activity', 'year_of_cessation_of_activity'))
+  has_name(wahis_joined$vaccine_manufacturers_detail, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'disease', 'manufacturer', 'vaccine', 'vaccine_type', 'year_of_start_of_production', 'year_of_end_of_production_if_production_ended'))
+  has_name(wahis_joined$vaccine_production, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'manufacturer', 'vaccine', 'doses_produced', 'doses_exported'))
   
   # NA handling in all tables -------------------------------------------------------------
   # "empty" = missing/NA/blank in the reports
@@ -65,7 +69,7 @@ transform_annual_reports <- function(annual_reports) {
       rename(serotype = serotype_s) %>%
       filter(occurrence != "empty") %>% # NAs are from nested species data - this is preserved in animal_hosts table
       mutate(disease_status = "present") %>%
-      select(country, country_iso3c, report_year, report_months, report_semester,
+      select(country, country_iso3c, report, report_year, report_months, report_semester,
              disease, oie_listed, disease_status,
              occurrence, serotype, new_outbreaks, total_outbreaks, notes)
   }
@@ -75,7 +79,7 @@ transform_annual_reports <- function(annual_reports) {
   
   if(nrow(animal_diseases_absent)){
     animal_diseases_absent <- animal_diseases_absent %>%
-      select(country, country_iso3c, report_year, report_months, report_semester,
+      select(country, country_iso3c, report, report_year, report_months, report_semester,
              disease, oie_listed, taxa, date_of_last_occurrence_if_absent = date_of_last_occurrence) %>% 
       mutate(date_of_last_occurrence_if_absent = na_if(date_of_last_occurrence_if_absent, "empty")) %>% # filling and then taking distinct, rather than just dropping NAs, because there can be some cases where there is empty date of last occurrence and we do not want to filter out
       group_by(country, report_year, report_months, disease) %>%
@@ -122,7 +126,7 @@ transform_annual_reports <- function(annual_reports) {
   # Handling animal diseases listed with more than once disease_status ----------------------------------------------------
   status_check <- function(x){
     x %>%
-      group_by(country, country_iso3c, report_year, report_months, report_semester, oie_listed, disease) %>% 
+      group_by(country, country_iso3c, report, report_year, report_months, report_semester, oie_listed, disease) %>% 
       filter(n() > 1) %>%
       mutate(disease_status = paste(disease_status, collapse = "; ")) %>%
       mutate(serotype = paste(serotype, collapse = "; ")) %>%
@@ -144,7 +148,7 @@ transform_annual_reports <- function(annual_reports) {
   
   animal_diseases <- animal_diseases %>%
     mutate(disease_status_rank = recode(disease_status, "present" = 1, "suspected" = 2, "absent" = 3)) %>% 
-    group_by(country, country_iso3c, report_year, report_months, report_semester, oie_listed, disease) %>% 
+    group_by(country, country_iso3c, report, report_year, report_months, report_semester, oie_listed, disease) %>% 
     filter(disease_status_rank == min(disease_status_rank)) %>% 
     ungroup() %>%
     select(-disease_status_rank)
@@ -154,7 +158,7 @@ transform_annual_reports <- function(annual_reports) {
   
   animal_diseases <- animal_diseases %>%
     mutate(date_rank =  ifelse(date_of_last_occurrence_if_absent == "empty", 2, 1)) %>% 
-    group_by(country, country_iso3c, report_year, report_months, report_semester, oie_listed, disease) %>% 
+    group_by(country, country_iso3c, report, report_year, report_months, report_semester, oie_listed, disease) %>% 
     filter(date_rank == min(date_rank)) %>% 
     ungroup() %>%
     select(-date_rank)
@@ -170,7 +174,7 @@ transform_annual_reports <- function(annual_reports) {
   
   if(nrow(animal_diseases_detail)){
     animal_diseases_detail <- animal_diseases_detail %>%
-      select(country, country_iso3c, report_year, report_months, report_semester,
+      select(country, country_iso3c, report, report_year, report_months, report_semester,
              disease, serotype = serotype_s, period,temporal_scale, adm, adm_type, new_outbreaks, total_outbreaks) %>%
       filter(new_outbreaks != "empty") %>%
       mutate(disease_status = "present")
@@ -183,7 +187,7 @@ transform_annual_reports <- function(annual_reports) {
   
   if(nrow(animal_hosts)){
     animal_hosts <- animal_hosts %>%
-      select(country, country_iso3c, report_year, report_months, report_semester,
+      select(country, country_iso3c, report, report_year, report_months, report_semester,
              disease, oie_listed, 
              species:vaccination_in_response_to_the_outbreak_s) %>%
       rename(vaccination_in_response_to_the_outbreak = vaccination_in_response_to_the_outbreak_s) %>%
@@ -219,7 +223,7 @@ transform_annual_reports <- function(annual_reports) {
   
   if(nrow(animal_hosts_absent)){
     animal_hosts_absent <- animal_hosts_absent %>%
-      select(country, country_iso3c, report_year, report_months, report_semester,
+      select(country, country_iso3c, report, report_year, report_months, report_semester,
              disease, oie_listed, 
              species:official_vaccination) %>%
       group_by(country, report_year, report_months, disease, oie_listed) %>%
@@ -274,7 +278,7 @@ transform_annual_reports <- function(annual_reports) {
       mutate(measuring_units = ifelse(measuring_units == "Hives" & species != "api" & species != "***",  "Animals",  measuring_units))
     
     animal_hosts_detail <- animal_hosts_detail %>%
-      select(country, country_iso3c, report_year, report_months, report_semester,
+      select(country, country_iso3c, report,report_year, report_months, report_semester,
              disease, period, temporal_scale, adm, adm_type, 
              species, family_name: vaccination_in_response_to_the_outbreak_s) %>%
       rename(vaccination_in_response_to_the_outbreak = vaccination_in_response_to_the_outbreak_s) %>%
@@ -299,15 +303,16 @@ transform_annual_reports <- function(annual_reports) {
   # List of all diseases cleaned, with domestic/wild separated out
   if(nrow(animal_diseases)){
     diseases <- animal_diseases %>% 
-      dplyr::select(disease, oie_listed) 
+      distinct(disease)
+    # group_by(disease) %>% 
+    # summarize(reports = paste(report, collapse = ";")) %>% 
+    # ungroup() %>% 
+    # mutate(table = "animal_diseases")
     
-    if(nrow(animal_diseases_detail)){
-      diseases <- diseases %>%
-        bind_rows(animal_diseases_detail %>% dplyr::select(disease)) 
-    }
+    diseases_in_detail_only <- setdiff(unique(animal_diseases_detail$disease), unique(animal_diseases$disease))
+    diseases <- bind_rows(diseases, tibble(disease = diseases_in_detail_only))
     
     diseases <- diseases %>%
-      distinct() %>% 
       mutate(disease_clean = tolower(disease)) %>%
       arrange(disease_clean) %>% 
       mutate(disease_clean = str_replace(disease_clean, "domestic andwild", "domestic and wild")) %>%
@@ -318,41 +323,77 @@ transform_annual_reports <- function(annual_reports) {
       mutate(disease_clean = str_remove(disease_clean, "\\(domestic and wild\\)|\\(domestic\\)|\\(wild\\)"))  %>% 
       #mutate(disease_clean = str_remove_all(disease_clean, "mortality|viral|infectious|infect.|\\(infection with\\)|\\(infectionwith\\)|disease|infestation")) %>% 
       mutate(disease_clean = trimws(disease_clean))  
+    
+    # Export for manual lookup
+    # disease_export <- diseases %>%
+    #   distinct(disease_clean)
+    # write_csv(disease_export, here::here("inst/diseases/annual_report_diseases_animals.csv"))
+    
+    # Read in manual lookup
+    ando_disease_lookup <- readxl::read_xlsx(system.file("diseases", "disease_lookup.xlsx", package = "wahis")) %>% 
+      rename(disease_class = class_desc) %>% 
+      filter(report == "animal") %>% 
+      select(-report) %>% 
+      separate_rows(ando_id, sep = ";") %>% 
+      mutate_at(.vars = c("ando_id", "preferred_label", "disease_class"), ~na_if(., "NA"))
+    
+    diseases <- diseases %>% 
+      left_join(ando_disease_lookup, by = c("disease_clean" = "disease")) %>% 
+      distinct()
+    
+    #janitor::get_dupes(diseases, disease)
+    
+    wahis_joined$diseases_unmatched <- diseases %>% 
+      filter(is.na(ando_id)) %>% 
+      distinct(disease_clean) %>% 
+      mutate(table = "annual_animal")
+
+    wahis_joined <- modify_at(wahis_joined, .at = c("animal_diseases", "animal_diseases_detail", "animal_hosts", "animal_hosts_detail"), function(x){ 
+      # note that if you have animal_diseases, you have animal_hosts because they come from the same parent table
+      if(nrow(x)==0){return(x)} 
+      disease_joined <- x %>% 
+        left_join(diseases) %>% 
+        mutate(disease = coalesce(preferred_label, disease_clean)) %>% 
+        select(-preferred_label, -disease_clean) 
+      assertthat::assert_that(!any(is.na(disease_joined$disease)))
+      return(disease_joined)
+    })
+    
   }
-  
-  # disease_export <- diseases %>%
-  #   dplyr::select(-disease, -disease_population) %>%
-  #   distinct() %>%
-  #   mutate(oie_rank = if_else(oie_listed == TRUE, true = 1, false = 2, missing = 3)) %>%
-  #   group_by(disease_clean) %>%
-  #   filter(oie_rank == min(oie_rank)) %>%
-  #   ungroup() %>%
-  #   select(-oie_rank) %>%
-  #   distinct()
-  # write_csv(disease_export, here::here("inst/diseases/annual_report_diseases_animals.csv"))
-  
-  wahis_joined <- modify_at(wahis_joined, .at = c("animal_diseases", "animal_diseases_detail", "animal_hosts", "animal_hosts_detail"), function(x){ 
-    # note that if you have animal_diseases, you have animal_hosts because they come from the same parent table
-    if(nrow(x)==0){return(x)} 
-    x %>% left_join(diseases) %>%
-      select(-disease) %>%
-      rename(disease = disease_clean)
-  })
   
   # Do the same for humans
   diseases_human <- wahis_joined$disease_humans 
   
   if(nrow(diseases_human)){
     diseases_human <- diseases_human %>%
-      dplyr::select(disease) %>%
-      distinct() %>%
+      distinct(disease) %>%
       mutate(disease_clean = tolower(disease))  
     # write_csv(diseases_human %>% select(disease_clean), here::here("inst/diseases/annual_report_diseases_humans.csv"))
     
+    # Read in manual lookup
+    ando_disease_lookup <- readxl::read_xlsx(system.file("diseases", "disease_lookup.xlsx", package = "wahis")) %>% 
+      rename(disease_class = class_desc) %>% 
+      filter(report == "annual human") %>% 
+      select(-report) %>% 
+      separate_rows(ando_id, sep = ";") %>% 
+      mutate_at(.vars = c("ando_id", "preferred_label", "disease_class"), ~na_if(., "NA"))
+    
+    diseases_human <- diseases_human %>% 
+      left_join(ando_disease_lookup, by = c("disease_clean" = "disease")) %>% 
+      distinct()
+    
+    #janitor::get_dupes(diseases_human, disease)
+    
+    wahis_joined$diseases_unmatched <- bind_rows(wahis_joined$diseases_unmatched, 
+                                                 diseases_human %>% 
+                                                   filter(is.na(ando_id)) %>% 
+                                                   distinct(disease_clean) %>% 
+                                                   mutate(table = "annual_human"))
+    
     wahis_joined$disease_humans <- wahis_joined$disease_humans %>%
-      left_join(diseases_human) %>%
-      select(-disease) %>%
-      rename(disease = disease_clean) %>%
+      left_join(diseases_human) %>% 
+      mutate(disease = coalesce(preferred_label, disease_clean)) %>% 
+      select(-preferred_label, -disease_clean) %>% 
       gather(key = "occurrence", value = "value", no_information_available:disease_present_number_of_cases_known) %>%
       filter(value != "empty") %>%
       select(-value)
@@ -427,6 +468,8 @@ transform_annual_reports <- function(annual_reports) {
   
   # remove empty tables
   wahis_joined <- keep(wahis_joined, ~nrow(.)>0)
+  
+  if(nrow(wahis_joined$annual_reports_diseases_unmatched)){warning("Unmatched diseases. Check diseases_unmatched table.")}
   
   return(wahis_joined)
   

@@ -519,7 +519,8 @@ ingest_annual_report <- function(web_page, encoding = "ISO-8859-1") {
                      country_iso3c = country_iso3c,
                      report_year = report_year,
                      report_months = report_months,
-                     report_semester = report_semester) %>%
+                     report_semester = report_semester,
+                     report = paste(country_iso3c, report_year, report_semester, sep = "_")) %>%
             select(country, country_iso3c, report_year, report_months, report_semester, everything())
     })
     
