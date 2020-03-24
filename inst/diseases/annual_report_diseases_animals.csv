@@ -1,243 +1,243 @@
-oie_listed,disease_clean
-TRUE,abalone viral mortality
-TRUE,acarapisosis of honey bees
-FALSE,actinomycosis
-TRUE,acute hepatopancreatic necrosis disease
-TRUE,african horse sickness
-TRUE,african swine fever
-TRUE,american foulbrood of honey bees
-TRUE,anthrax
-TRUE,atrophic rhinitis of swine
-TRUE,aujeszkys disease
-TRUE,avian chlamydiosis
-FALSE,avian encephalomyelitis
-TRUE,avian infect. laryngotracheitis
-TRUE,avian infectious bronchitis
-TRUE,avian infectious laryngotracheitis
-FALSE,avian leukosis
-TRUE,avian mycoplasmosis (m. gallisepticum)
-TRUE,avian mycoplasmosis (m.synoviae)
-FALSE,avian salmonellosis (excluding fowltyphoid and pullorum disease)
-FALSE,avian spirochaetosis
-TRUE,avian tuberculosis
-NA,bacterial kidney disease (r. salmoninarum)
-TRUE,bacterial kidney disease (r.salmoninarum)
-TRUE,bacterial kidney disease (renibacteriumsalmoninarum)
-FALSE,blackleg
-TRUE,bluetongue
-FALSE,botulism
-TRUE,bov. genital campylobacteriosis
-TRUE,bovine anaplasmosis
-TRUE,bovine babesiosis
-TRUE,bovine brucellosis
-TRUE,bovine cysticercosis
-TRUE,bovine genital campylobacteriosis
-TRUE,bovine spongiform encephalopathy
-TRUE,bovine tuberculosis
-TRUE,bovine viral diarrhoea
-TRUE,brucellosis (brucella abortus)
-TRUE,brucellosis (brucella melitensis)
-TRUE,brucellosis (brucella suis)
-TRUE,camelpox
-TRUE,cap/ovi brucel. (not b. ovis)
-TRUE,caprine and ovine brucellosis (excludingb. ovis)
-TRUE,caprine arthritis/encephalitis
-FALSE,caseous lymphadenitis
-TRUE,channel catfish virus disease
-TRUE,channel catfish virus disease(herpesvirus of ictaluridae type 1)
-TRUE,classical swine fever
-FALSE,coccidiosis
-TRUE,contagious agalactia
-TRUE,contagious bov. pleuropneumonia
-TRUE,contagious bovine pleuropneumonia
-TRUE,contagious cap. pleuropneumonia
-TRUE,contagious caprine pleuropneumonia
-TRUE,contagious equine metritis
-FALSE,contagious ophthalmia
-FALSE,contagious pustular dermatitis
-TRUE,crayfish plague (aphanomyces astaci)
-TRUE,crimean congo haemorrhagic fever
-TRUE,dermatophilosis
-FALSE,distomatosis (liver fluke)
-TRUE,dourine
-TRUE,duck virus enteritis
-TRUE,duck virus hepatitis
-TRUE,echinococcosis/hydatidosis
-TRUE,echinococcus granulosus (infection with)
-NA,echinococcus multilocularis (infection with)
-TRUE,echinococcus multilocularis (infectionwith)
-TRUE,encephalomyelitis (east. and w.)
-TRUE,encephalomyelitis (east.)
-TRUE,encephalomyelitis (west.)
-TRUE,enteric septicaemia of catfish (e.ictaluri)
-TRUE,enteric septicaemia of catfish(edwardsiella ictaluri)
-FALSE,enterotoxaemia
-TRUE,enterovirus encephalomyelitis
-TRUE,enzootic abortion (chlamydiosis)
-TRUE,enzootic abortion of ewes (ovinechlamydiosis)
-TRUE,enzootic bovine leukosis
-TRUE,epizoot. haematopoietic necrosis
-TRUE,epizootic haematopoietic necrosis
-TRUE,epizootic haemorrhagic disease
-TRUE,epizootic lymphangitis
-TRUE,epizootic ulcerative syndrome
-NA,equid herpesvirus-1 (ehv-1) (infection with)
-TRUE,equid herpesvirus-1 (ehv-1) (infectionwith)
-FALSE,equine coital exanthema
-TRUE,equine encephalomyelitis (eastern andwestern)
-TRUE,equine encephalomyelitis (eastern)
-TRUE,equine encephalomyelitis (western)
-TRUE,equine infectious anaemia
-TRUE,equine influenza
-TRUE,equine piroplasmosis
-TRUE,equine rhinopneumonitis
-TRUE,equine viral arteritis
-TRUE,european foulbrood of honey bees
-FALSE,filariosis
-TRUE,foot and mouth disease
-FALSE,foot-rot
-TRUE,fowl cholera
-TRUE,fowl pox
-TRUE,fowl typhoid
-TRUE,glanders
-TRUE,gyrodactylosis (gyrodactylus salaris)
-TRUE,haemorrhagic septicaemia
-TRUE,heartwater
-TRUE,highly path. avian influenza
-TRUE,highly pathogenic avian influenza
-NA,highly pathogenic influenza a viruses (infection with) (non-poultry including wild birds)
-TRUE,highly pathogenic influenza a viruses(infection with) (non-poultry includingwild birds)
-TRUE,horse mange
-TRUE,horse pox
-TRUE,inf.bov.rhinotracheit. (ibr/ipv)
-TRUE,infec bursal disease (gumboro)
-TRUE,infect. haematopoietic necrosis
-TRUE,infection with abalone herpes-like virus
-TRUE,infection with abalone herpesvirus
-NA,infection with batrachochytrium dendrobatidis
-NA,infection with batrachochytrium salamandrivorans
-TRUE,infection with batrachochytriumdendrobatidis
-TRUE,infection with batrachochytriumsalamandrivorans
-TRUE,infection with bonamia exitiosa
-TRUE,infection with bonamia ostreae
-TRUE,infection with candidatus xenohaliotiscaliforniensis
-TRUE,infection with gyrodactylus salaris
-TRUE,infection with haplosporidium costale
-TRUE,infection with haplosporidium nelsoni
-TRUE,infection with marteilia refringens
-TRUE,infection with marteilia sydneyi
-TRUE,infection with mikrocytos mackini
-TRUE,infection with mikrocytos roughleyi
-NA,infection with ostreid herpesvirus-1 microvariant
-TRUE,infection with ostreid herpesvirus-1microvariant
-TRUE,infection with perkinsus marinus
-TRUE,infection with perkinsus olseni
-NA,infection with perkinsus olseni/atlanticus
-TRUE,infection with perkinsusolseni/atlanticus
-TRUE,infection with ranavirus
-TRUE,infection with salmonid alphavirus
-NA,infection with xenohaliotis californiensis
-TRUE,infection with xenohaliotiscaliforniensis
-TRUE,infectious bovinerhinotracheitis/infectious pustularvulvovaginitis
-TRUE,infectious bursal disease (gumborodisease)
-FALSE,infectious coryza
-TRUE,infectious haematopoietic necrosis
-NA,infectious hypodermal and haematopoietic necrosis
-TRUE,infectious hypodermal and haematopoieticnecrosis
-TRUE,infectious myonecrosis
-TRUE,infectious pancreatic necrosis
-TRUE,infectious salmon anaemia
-NA,infectious salmon anaemia virus (hpr-deleted or hpr0 genotypes) (infection with)
-TRUE,infectious salmon anaemia virus(hpr-deleted or hpr0 genotypes)(infection with)
-FALSE,intestinal salmonella infections
-TRUE,japanese encephalitis
-TRUE,koi herpesvirus disease
-TRUE,leishmaniosis
-TRUE,leptospirosis
-FALSE,listeriosis
-TRUE,low pathogenic avian influenza (poultry)
-TRUE,lumpy skin disease
-TRUE,maedi-visna
-TRUE,malignant catarrhal fever
-NA,malignant catarrhal fever (wildebeest only)
-TRUE,malignant catarrhal fever (wildebeestonly)
-TRUE,marek's disease
-FALSE,melioidosis
-FALSE,mucosal disease/bovine virus diarrhoea
-FALSE,mucosal disease/dvb
-NA,mycobacterium tuberculosis complex (infection with)
-TRUE,mycobacterium tuberculosis complex(infection with)
-TRUE,mycoplasmosis (m. gallisepticum)
-TRUE,myxomatosis
-TRUE,n. w. screwworm (c. hominivorax)
-TRUE,nairobi sheep disease
-TRUE,necrotising hepatopancreatitis
-TRUE,new world screwworm (cochliomyiahominivorax)
-TRUE,newcastle disease
-TRUE,nipah virus encephalitis
-FALSE,nosemosis of bees
-TRUE,o. w. screwworm (c. bezziana)
-TRUE,old world screwworm (chrysomya bezziana)
-TRUE,oncorhynchus masou virus disease
-FALSE,other avian salmonellosis
-FALSE,other clostridial infections
-FALSE,other pasteurelloses
-TRUE,ovine epididymitis (b. ovis)
-TRUE,ovine epididymitis (brucella ovis)
-TRUE,ovine pulmonary adenomatosis
-TRUE,paratuberculosis
-TRUE,peste des petits ruminants
-NA,piscirickettsiosis (piscirickettsia salmonis)
-TRUE,piscirickettsiosis (piscirickettsiasalmonis)
-TRUE,porcine brucellosis
-TRUE,porcine cysticercosis
-TRUE,porcine reproductive and respiratorysyndrome
-TRUE,porcine reproductive/respiratory syndr.
-TRUE,pullorum disease
-TRUE,q fever
-TRUE,rabbit haemorrhagic disease
-TRUE,rabies
-TRUE,red sea bream iridoviral disease
-TRUE,rift valley fever
-TRUE,rinderpest
-FALSE,salmonellosis (s. abortusequi)
-TRUE,salmonellosis (s. abortusovis)
-TRUE,scrapie
-FALSE,sheep mange
-TRUE,sheep pox and goat pox
-TRUE,small hive beetle infestation
-TRUE,small hive beetle infestation (aethinatumida)
-TRUE,spawner-isolated mortality virus disease
-NA,spherical baculovirosis (penaeus monodon-type baculovirus)
-TRUE,spherical baculovirosis (penaeusmonodon-type baculovirus)
-TRUE,spring viraemia of carp
-FALSE,strangles
-TRUE,surra (trypanosoma evansi)
-FALSE,swine erysipelas
-TRUE,swine vesicular disease
-TRUE,taura syndrome
-TRUE,tetrahedral baculovirosis (baculoviruspenaei)
-TRUE,theileriosis
-FALSE,toxoplasmosis
-TRUE,transmissible gastroenteritis
-TRUE,trichinellosis
-TRUE,trichomonosis
-TRUE,tropilaelaps infestation of honey bees
-TRUE,trypanosomosis
-TRUE,tularemia
-TRUE,turkey rhinotracheitis
-FALSE,ulcerative lymphangitis
-TRUE,varroosis of honey bees
-TRUE,venezuelan equ.encephalomyelitis
-TRUE,venezuelan equine encephalomyelitis
-TRUE,vesicular stomatitis
-FALSE,vibrionic dysentery
-TRUE,viral encephalopathy and retinopathy
-TRUE,viral haemorrhagic septicaemia
-FALSE,warble infestation
-TRUE,west nile fever
-TRUE,white spot disease
-TRUE,white sturgeon iridoviral disease
-TRUE,white tail disease
-TRUE,yellow head disease
-TRUE,yellow head virus genotype 1 (infectionwith)
+disease_clean
+abalone viral mortality
+acarapisosis of honey bees
+actinomycosis
+acute hepatopancreatic necrosis disease
+african horse sickness
+african swine fever
+american foulbrood of honey bees
+anthrax
+atrophic rhinitis of swine
+aujeszkys disease
+avian chlamydiosis
+avian encephalomyelitis
+avian infect. laryngotracheitis
+avian infectious bronchitis
+avian infectious laryngotracheitis
+avian leukosis
+avian mycoplasmosis (m. gallisepticum)
+avian mycoplasmosis (m.synoviae)
+avian salmonellosis (excluding fowltyphoid and pullorum disease)
+avian spirochaetosis
+avian tuberculosis
+bacterial kidney disease (r. salmoninarum)
+bacterial kidney disease (r.salmoninarum)
+bacterial kidney disease (renibacteriumsalmoninarum)
+blackleg
+bluetongue
+botulism
+bov. genital campylobacteriosis
+bovine anaplasmosis
+bovine babesiosis
+bovine brucellosis
+bovine cysticercosis
+bovine genital campylobacteriosis
+bovine spongiform encephalopathy
+bovine tuberculosis
+bovine viral diarrhoea
+brucellosis (brucella abortus)
+brucellosis (brucella melitensis)
+brucellosis (brucella suis)
+camelpox
+cap/ovi brucel. (not b. ovis)
+caprine and ovine brucellosis (excludingb. ovis)
+caprine arthritis/encephalitis
+caseous lymphadenitis
+channel catfish virus disease
+channel catfish virus disease(herpesvirus of ictaluridae type 1)
+classical swine fever
+coccidiosis
+contagious agalactia
+contagious bov. pleuropneumonia
+contagious bovine pleuropneumonia
+contagious cap. pleuropneumonia
+contagious caprine pleuropneumonia
+contagious equine metritis
+contagious ophthalmia
+contagious pustular dermatitis
+crayfish plague (aphanomyces astaci)
+crimean congo haemorrhagic fever
+dermatophilosis
+distomatosis (liver fluke)
+dourine
+duck virus enteritis
+duck virus hepatitis
+echinococcosis/hydatidosis
+echinococcus granulosus (infection with)
+echinococcus multilocularis (infection with)
+echinococcus multilocularis (infectionwith)
+encephalomyelitis (east. and w.)
+encephalomyelitis (east.)
+encephalomyelitis (west.)
+enteric septicaemia of catfish (e.ictaluri)
+enteric septicaemia of catfish(edwardsiella ictaluri)
+enterotoxaemia
+enterovirus encephalomyelitis
+enzootic abortion (chlamydiosis)
+enzootic abortion of ewes (ovinechlamydiosis)
+enzootic bovine leukosis
+epizoot. haematopoietic necrosis
+epizootic haematopoietic necrosis
+epizootic haemorrhagic disease
+epizootic lymphangitis
+epizootic ulcerative syndrome
+equid herpesvirus-1 (ehv-1) (infection with)
+equid herpesvirus-1 (ehv-1) (infectionwith)
+equine coital exanthema
+equine encephalomyelitis (eastern andwestern)
+equine encephalomyelitis (eastern)
+equine encephalomyelitis (western)
+equine infectious anaemia
+equine influenza
+equine piroplasmosis
+equine rhinopneumonitis
+equine viral arteritis
+european foulbrood of honey bees
+filariosis
+foot and mouth disease
+foot-rot
+fowl cholera
+fowl pox
+fowl typhoid
+glanders
+gyrodactylosis (gyrodactylus salaris)
+haemorrhagic septicaemia
+heartwater
+highly path. avian influenza
+highly pathogenic avian influenza
+highly pathogenic influenza a viruses (infection with) (non-poultry including wild birds)
+highly pathogenic influenza a viruses(infection with) (non-poultry includingwild birds)
+horse mange
+horse pox
+inf.bov.rhinotracheit. (ibr/ipv)
+infec bursal disease (gumboro)
+infect. haematopoietic necrosis
+infection with abalone herpes-like virus
+infection with abalone herpesvirus
+infection with batrachochytrium dendrobatidis
+infection with batrachochytrium salamandrivorans
+infection with batrachochytriumdendrobatidis
+infection with batrachochytriumsalamandrivorans
+infection with bonamia exitiosa
+infection with bonamia ostreae
+infection with candidatus xenohaliotiscaliforniensis
+infection with gyrodactylus salaris
+infection with haplosporidium costale
+infection with haplosporidium nelsoni
+infection with marteilia refringens
+infection with marteilia sydneyi
+infection with mikrocytos mackini
+infection with mikrocytos roughleyi
+infection with ostreid herpesvirus-1 microvariant
+infection with ostreid herpesvirus-1microvariant
+infection with perkinsus marinus
+infection with perkinsus olseni
+infection with perkinsus olseni/atlanticus
+infection with perkinsusolseni/atlanticus
+infection with ranavirus
+infection with salmonid alphavirus
+infection with xenohaliotis californiensis
+infection with xenohaliotiscaliforniensis
+infectious bovinerhinotracheitis/infectious pustularvulvovaginitis
+infectious bursal disease (gumborodisease)
+infectious coryza
+infectious haematopoietic necrosis
+infectious hypodermal and haematopoietic necrosis
+infectious hypodermal and haematopoieticnecrosis
+infectious myonecrosis
+infectious pancreatic necrosis
+infectious salmon anaemia
+infectious salmon anaemia virus (hpr-deleted or hpr0 genotypes) (infection with)
+infectious salmon anaemia virus(hpr-deleted or hpr0 genotypes)(infection with)
+intestinal salmonella infections
+japanese encephalitis
+koi herpesvirus disease
+leishmaniosis
+leptospirosis
+listeriosis
+low pathogenic avian influenza (poultry)
+lumpy skin disease
+maedi-visna
+malignant catarrhal fever
+malignant catarrhal fever (wildebeest only)
+malignant catarrhal fever (wildebeestonly)
+marek's disease
+melioidosis
+mucosal disease/bovine virus diarrhoea
+mucosal disease/dvb
+mycobacterium tuberculosis complex (infection with)
+mycobacterium tuberculosis complex(infection with)
+mycoplasmosis (m. gallisepticum)
+myxomatosis
+n. w. screwworm (c. hominivorax)
+nairobi sheep disease
+necrotising hepatopancreatitis
+new world screwworm (cochliomyiahominivorax)
+newcastle disease
+nipah virus encephalitis
+nosemosis of bees
+o. w. screwworm (c. bezziana)
+old world screwworm (chrysomya bezziana)
+oncorhynchus masou virus disease
+other avian salmonellosis
+other clostridial infections
+other pasteurelloses
+ovine epididymitis (b. ovis)
+ovine epididymitis (brucella ovis)
+ovine pulmonary adenomatosis
+paratuberculosis
+peste des petits ruminants
+piscirickettsiosis (piscirickettsia salmonis)
+piscirickettsiosis (piscirickettsiasalmonis)
+porcine brucellosis
+porcine cysticercosis
+porcine reproductive and respiratorysyndrome
+porcine reproductive/respiratory syndr.
+pullorum disease
+q fever
+rabbit haemorrhagic disease
+rabies
+red sea bream iridoviral disease
+rift valley fever
+rinderpest
+salmonellosis (s. abortusequi)
+salmonellosis (s. abortusovis)
+scrapie
+sheep mange
+sheep pox and goat pox
+small hive beetle infestation
+small hive beetle infestation (aethinatumida)
+spawner-isolated mortality virus disease
+spherical baculovirosis (penaeus monodon-type baculovirus)
+spherical baculovirosis (penaeusmonodon-type baculovirus)
+spring viraemia of carp
+strangles
+surra (trypanosoma evansi)
+swine erysipelas
+swine vesicular disease
+taura syndrome
+tetrahedral baculovirosis (baculoviruspenaei)
+theileriosis
+toxoplasmosis
+transmissible gastroenteritis
+trichinellosis
+trichomonosis
+tropilaelaps infestation of honey bees
+trypanosomosis
+tularemia
+turkey rhinotracheitis
+ulcerative lymphangitis
+varroosis of honey bees
+venezuelan equ.encephalomyelitis
+venezuelan equine encephalomyelitis
+vesicular stomatitis
+vibrionic dysentery
+viral encephalopathy and retinopathy
+viral haemorrhagic septicaemia
+warble infestation
+west nile fever
+white spot disease
+white sturgeon iridoviral disease
+white tail disease
+yellow head disease
+yellow head virus genotype 1 (infectionwith)
