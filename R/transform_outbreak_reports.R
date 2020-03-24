@@ -3,7 +3,7 @@
 #' @import dplyr tidyr purrr
 #' @importFrom janitor clean_names
 #' @importFrom stringr str_detect str_extract
-#' @importFrom lubridate dmy
+#' @importFrom lubridate dmy myd
 #' @export
 
 transform_outbreak_reports <- function(outbreak_reports) {
@@ -82,14 +82,35 @@ transform_outbreak_reports <- function(outbreak_reports) {
     filter(final_report, !check)
   
   outbreak_reports_events <- outbreak_reports_events %>% 
-    mutate(date_event_resolved = ifelse(id %in% check_final_resolved$id, report_date, date_event_resolved))
-    
-  #TODO - handling unresolved cases - currently workflow leaves them as marked final (so far - there are no cases like this 2020-03-19)
+    mutate(date_event_resolved = ifelse(id %in% check_final_resolved$id, report_date, date_event_resolved)) %>% 
+    mutate(disease = trimws(tolower(disease)))
   
   # disease_export <- outbreak_reports_events %>% 
   #   distinct(disease, causal_agent) %>% 
   #   mutate_all(~tolower(trimws(.)))
   # write_csv(disease_export, here::here("inst/diseases/outbreak_report_diseases.csv"))
+  
+  # Read in manual lookup
+  ando_disease_lookup <- readxl::read_xlsx(system.file("diseases", "disease_lookup.xlsx", package = "wahis")) %>% 
+    rename(disease_class = class_desc) %>% 
+    filter(report == "animal") %>% 
+    select(-report) %>% 
+    separate_rows(preferred_label, sep = ";") %>% 
+    mutate_at(.vars = c("ando_id", "preferred_label", "disease_class"), ~na_if(., "NA"))
+  
+  outbreak_reports_events <- outbreak_reports_events %>% 
+    left_join(ando_disease_lookup, by = "disease") %>% 
+    mutate(disease = coalesce(preferred_label, disease)) %>% 
+    select(-preferred_label) %>% 
+    distinct() 
+  
+  diseases_unmatched <- outbreak_reports_events %>% 
+    filter(is.na(ando_id)) %>% 
+    distinct(disease) %>% 
+    mutate(table = "outbreak_animal")
+  
+  
+  #TODO - handling unresolved cases - currently workflow leaves them as marked final (so far - there are no cases like this 2020-03-19)
   
   # Outbreaks ---------------------------------------------------
   
@@ -132,10 +153,13 @@ transform_outbreak_reports <- function(outbreak_reports) {
   wahis_joined <- list("outbreak_reports_events" = outbreak_reports_events, 
                        "outbreak_reports_outbreaks" = outbreak_reports_detail, 
                        "outbreak_reports_outbreaks_summary" = outbreak_reports_summary,
-                       "outbreak_reports_laboratories" = outbreak_reports_laboratories)
+                       "outbreak_reports_laboratories" = outbreak_reports_laboratories,
+                       "outbreak_reports_diseases_unmatched" = diseases_unmatched)
   
   # remove empty tables
   wahis_joined <- keep(wahis_joined, ~nrow(.)>0)
+  
+  if(nrow(wahis_joined$outbreak_reports_diseases_unmatched)){warning("Unmatched diseases. Check outbreak_reports_diseases_unmatched table.")
   
   return(wahis_joined)
   

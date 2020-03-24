@@ -334,7 +334,7 @@ transform_annual_reports <- function(annual_reports) {
       rename(disease_class = class_desc) %>% 
       filter(report == "animal") %>% 
       select(-report) %>% 
-      separate_rows(ando_id, sep = ";") %>% 
+      separate_rows(preferred_label, sep = ";") %>% 
       mutate_at(.vars = c("ando_id", "preferred_label", "disease_class"), ~na_if(., "NA"))
     
     diseases <- diseases %>% 
@@ -375,7 +375,7 @@ transform_annual_reports <- function(annual_reports) {
       rename(disease_class = class_desc) %>% 
       filter(report == "annual human") %>% 
       select(-report) %>% 
-      separate_rows(ando_id, sep = ";") %>% 
+      separate_rows(preferred_label, sep = ";") %>% 
       mutate_at(.vars = c("ando_id", "preferred_label", "disease_class"), ~na_if(., "NA"))
     
     diseases_human <- diseases_human %>% 
@@ -469,7 +469,7 @@ transform_annual_reports <- function(annual_reports) {
   # remove empty tables
   wahis_joined <- keep(wahis_joined, ~nrow(.)>0)
   
-  if(nrow(wahis_joined$annual_reports_diseases_unmatched)){warning("Unmatched diseases. Check diseases_unmatched table.")}
+  if(nrow(wahis_joined$annual_reports_diseases_unmatched)){warning("Unmatched diseases. Check annual_reports_diseases_unmatched table.")}
   
   return(wahis_joined)
   
