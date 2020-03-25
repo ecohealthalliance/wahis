@@ -1,351 +1,356 @@
-disease,report,ando_id,preferred_label,class_desc
-brucellosis (brucella abortus),animal,ag12,brucella abortus,pathogen
-equid herpesvirus-1 (ehv-1) (infection with),animal,ag123,equine herpes virus,pathogen
-equid herpesvirus-1 (ehv-1) (infectionwith),animal,ag123,equine herpes virus,pathogen
-brucellosis (brucella suis),animal,ag13,brucella suis,pathogen
-brucellosis (brucella melitensis),animal,ag14,brucella melitensis,pathogen
-myxomatosis,animal,ag157,myxoma virus,pathogen
-streptococcus suis,animal,ma320,streptococcosis,disease group
-enteric septicaemia of catfish (e.ictaluri),animal,ag358,edwardsiella ictaluri,pathogen
-enteric septicaemia of catfish(edwardsiella ictaluri),animal,ag358,edwardsiella ictaluri,pathogen
-infection with gyrodactylus salaris,animal,ag430,gyrodactylus salaris,pathogen
-infection with bonamia ostreae,animal,ag485,bonamia ostreae,pathogen
-infection with bonamia exitiosa,animal,ag486,bonamia exitiosa,pathogen
-infection with mikrocytos mackini,animal,ag489,mikrocytos mackini,pathogen
-infection with candidatus xenohaliotiscaliforniensis,animal,ag493,candidatus xenohaliotis californiensis,pathogen
-infection with xenohaliotis californiensis,animal,ag493,candidatus xenohaliotis californiensis,pathogen
-infection with xenohaliotiscaliforniensis,animal,ag493,candidatus xenohaliotis californiensis,pathogen
-porcine epidemic diarrhea virus,animal,ag756,porcine epidemic diarrhea virus,pathogen
-infection with coronavirus in camels,animal,ag761,coronavirus,pathogen
-mers-cov,animal,ag761,coronavirus,pathogen
-swine enteric coronavirus,animal,ag761,coronavirus,pathogen
-swine novel enteric corona virus disease,animal,ag761,coronavirus,pathogen
-mycobacterium tuberculosis,animal,ag97,mycobacterium tuberculosis,pathogen
-mycobacterium tuberculosis complex (infection with),animal,ag97,mycobacterium tuberculosis,pathogen
-mycobacterium tuberculosis complex(infection with),animal,ag97,mycobacterium tuberculosis,pathogen
-infection with ostreid herpesvirus-1 microvariant,animal,herpesvirus,herpesvirus,NA
-infection with ostreid herpesvirus-1microvariant,animal,herpesvirus,herpesvirus,NA
-ostreid herpesvirus 1,animal,herpesvirus,herpesvirus,NA
-ostreid herpesvirus-1,animal,herpesvirus,herpesvirus,NA
-ostreid herpesvirus-1 ¬µ variant,animal,herpesvirus,herpesvirus,NA
-"oyster herpesvirus (oshv-1, ¬µvar)",animal,herpesvirus,herpesvirus,NA
-suspected ostreid herpes virus 1 (oshv1),animal,herpesvirus,herpesvirus,NA
-suspected variant ostreid herpes virus 1 (oshv1),animal,herpesvirus,herpesvirus,NA
-suspected: herpesvirus oshv-1 frequently associated with vibrio splendidus,animal,herpesvirus,herpesvirus,NA
-porcine brucellosis,animal,ma10,swine brucellosis,disease group
-melioidosis,animal,ma100,melioidosis,disease group
-glanders,animal,ma102,glanders,disease group
-glanders,annual human,ma102,glanders,disease group
-equine piroplasmosis,animal,ma105,equine piroplasmosis,disease group
-hendra,animal,ma106,hendra virus pneumonia,disease group
-equine rhinopneumonitis,animal,ma107,equine viral rhinopneumonitis,disease group
-vesicular stomatitis,animal,ma109,vesicular stomatitis,disease group
-bov. genital campylobacteriosis,animal,ma11,bovine genital campylobacteriosis,disease group
-bovine genital campylobacteriosis,animal,ma11,bovine genital campylobacteriosis,disease group
-surra (trypanosoma evansi),animal,ma110,surra,disease group
-trichinellosis,animal,ma112,trichinellosis,disease group
-trichinellosis,annual human,ma112,trichinellosis,disease group
-horse pox,animal,ma113,equine smallpox,disease group
-blackleg,animal,ma12,blackleg,disease group
-echinococcosis/hydatidosis,animal,ma122,echinococcosis,disease group
-echinococcosis/hydatidosis,annual human,ma122,echinococcosis,disease group
-echinococcus granulosus (infection with),animal,ma122,echinococcosis,disease group
-echinococcus multilocularis (infection with),animal,ma122,echinococcosis,disease group
-echinococcus multilocularis (infectionwith),animal,ma122,echinococcosis,disease group
-avian chlamydiosis,animal,ma13,avian chlamydiosis,disease group
-avian chlamydiosis,annual human,ma13,avian chlamydiosis,disease group
-rabbit haemorrhagic disease,animal,ma130,viral haemorrhagic disease,disease group
-coccidiosis,animal,ma14,coccidiosis,disease group
-tularemia,animal,ma142,tularemia,disease group
-tularemia,annual human,ma142,tularemia,disease group
-ovine pulmonary adenomatosis,animal,ma145,pulmonary adenomatosis,disease group
-contagious agalactia,animal,ma147,contagious agalactia,disease group
-caprine arthritis/encephalitis,animal,ma148,caprine arthritis and encephalitis,disease group
-malignant catarrhal fever,animal,ma15,malignant catarrhal fever,disease group
-malignant catarrhal fever (wildebeest only),animal,ma15,malignant catarrhal fever,disease group
-malignant catarrhal fever (wildebeestonly),animal,ma15,malignant catarrhal fever,disease group
-enzootic abortion (chlamydiosis),animal,ma150,abortion in ewes,disease group
-enzootic abortion of ewes (ovine chlamydiosis),animal,ma150,abortion in ewes,disease group
-enzootic abortion of ewes (ovinechlamydiosis),animal,ma150,abortion in ewes,disease group
-babesiosis,annual human,ma151,babesiosis,disease group
-campylobacteriosis,annual human,ma152,campylobacteriosis,disease group
-bovine cysticercosis,animal,ma154,cysticercosis,disease group
-cysticercosis,annual human,ma154,cysticercosis,disease group
-porcine cysticercosis,animal,ma154,cysticercosis,disease group
-sheep pox and goat pox,animal,ma156,ovine pox disease,disease group
-foot-rot,animal,ma158,footrot,disease group
-heartwater,animal,ma16,heartwater,disease group
-ovine epididymitis (b. ovis),animal,ma170,ovine contagious epididymitis,disease group
-ovine epididymitis (brucella ovis),animal,ma170,ovine contagious epididymitis,disease group
-sheep mange,animal,ma174,sarcoptic mange,disease group
-maedi-visna,animal,ma181,maedi visna,disease group
-nairobi sheep disease,animal,ma184,nairobi disease,disease group
-n. w. screwworm (c. hominivorax),animal,ma188,"primary screwworm, new world screwworm",disease group
-new world screwworm (cochliomyia hominivorax),animal,ma188,"primary screwworm, new world screwworm",disease group
-new world screwworm (cochliomyiahominivorax),animal,ma188,"primary screwworm, new world screwworm",disease group
-new world screwworm (cochliomyiahominivorax),annual human,ma188,"primary screwworm, new world screwworm",disease group
-o. w. screwworm (c. bezziana),animal,ma188,"primary screwworm, new world screwworm",disease group
-old world screwworm (chrysomya bezziana),animal,ma188,"primary screwworm, new world screwworm",disease group
-old world screwworm (chrysomya bezziana),annual human,ma188,"primary screwworm, new world screwworm",disease group
-peste des petits ruminants,animal,ma193,peste des petits ruminants,disease group
-actinomycosis,animal,ma2,actinomycosis,disease group
-dermatophilosis,animal,ma20,dermatophilosis,disease group
-scrapie,animal,ma202,scrapie,disease group
-transmissible gastroenteritis,animal,ma204,parasitic gastroenteritis,disease group
-acarapisosis of honey bees,animal,ma205,acarapisosis,disease group
-nosemosis of bees,animal,ma208,nosema,disease group
-varroosis of honey bees,animal,ma209,varroosis,disease group
-tropilaelaps infestation of honey bees,animal,ma210,tropilaelaps,disease group
-small hive beetle infestation,animal,ma211,small hive beetle infestation,disease group
-small hive beetle infestation (aethina tumida),animal,ma211,small hive beetle infestation,disease group
-small hive beetle infestation (aethinatumida),animal,ma211,small hive beetle infestation,disease group
-american foulbrood of honey bees,animal,ma217,american fool brood,disease group
-european foulbrood of honey bees,animal,ma217,american fool brood,disease group
-lumpy skin disease,animal,ma22,lumpy skin disease,disease group
-mucosal disease/bovine virus diarrhoea,animal,ma23,bovine viral diarrhea,disease group
-mucosal disease/dvb,animal,ma23,bovine viral diarrhea,disease group
-contagious bov. pleuropneumonia,animal,ma236,pleuropneumonia,disease group
-contagious bovine pleuropneumonia,animal,ma236,pleuropneumonia,disease group
-contagious cap. pleuropneumonia,animal,ma236,pleuropneumonia,disease group
-contagious caprine pleuropneumonia,animal,ma236,pleuropneumonia,disease group
-bovine spongiform encephalopathy,animal,ma24,bovine spongiform encephalopathy,disease group
-avian spirochaetosis,animal,ma240,intestinal spirochetosis,disease group
-porcine epidemic diarrhea,animal,ma242,porcine epidemic diarrhea,disease group
-virus de la diarrea epid√©mica porcina,animal,ma242,porcine epidemic diarrhea,disease group
-vibrionic dysentery,animal,ma243,swine dysentery,disease group
-nipah virus encephalitis,animal,ma244,nipah virus disease,disease group
-nipah virus encephalitis,annual human,ma244,nipah virus disease,disease group
-campylobacteriosis,annual human,ma253,campylobacteriosis,disease group
-postweaning multisystemic wasting syndrome (pmws),animal,ma255,porcine circovirus diseases,disease group
-swine vesicular disease,animal,ma258,swine vesicular disease,disease group
-paratuberculosis,animal,ma26,paratuberculosis,disease group
-african swine fever,animal,ma263,african swine fever,disease group
-classical swine fever,animal,ma264,classical swine fever,disease group
-atrophic rhinitis of swine,animal,ma269,atrophic rhinitis,disease group
-enterotoxaemia,animal,ma27,enterotoxemias,disease group
-swine erysipelas,animal,ma271,swine erysipelas,disease group
-swine erysipelas,annual human,ma271,swine erysipelas,disease group
-infectious salmon anaemia,animal,ma279,infectious salmon anaemia,disease group
-infectious salmon anaemia virus (hpr-deleted or hpr0 genotypes) (infection with),animal,ma279,infectious salmon anaemia,disease group
-infectious salmon anaemia virus(hpr-deleted or hpr0 genotypes)(infection with),animal,ma279,infectious salmon anaemia,disease group
-foot and mouth disease,animal,ma28,foot-and-mouth disease,disease group
-viral encephalopathy and retinopathy,animal,ma280,viral encephalopathy and retinopathy,disease group
-koi herpesvirus disease,animal,ma281,koi herpesvirus disease,disease group
-channel catfish virus disease,animal,ma282,channel catfish virus disease,disease group
-channel catfish virus disease(herpesvirus of ictaluridae type 1),animal,ma282,channel catfish virus disease,disease group
-oncorhynchus masou virus disease,animal,ma283,oncorhynchus masou virus disease,disease group
-red sea bream iridoviral disease,animal,ma285,red sea bream iridoviral disease rsivd,disease group
-white sturgeon iridoviral disease,animal,ma286,white sturgeon iridoviral disease,disease group
-ulcerative lymphangitis,animal,ma287,lymphocystis,disease group
-epizoot. haematopoietic necrosis,animal,ma289,epizootic haematopoietic necrosis,disease group
-epizootic haematopoietic necrosis,animal,ma289,epizootic haematopoietic necrosis,disease group
-infect. haematopoietic necrosis,animal,ma290,infectious haematopoietic necrosis,disease group
-infectious haematopoietic necrosis,animal,ma290,infectious haematopoietic necrosis,disease group
-acute hepatopancreatic necrosis disease,animal,ma291,infectious pancreatic necrosis,disease group
-infectious pancreatic necrosis,animal,ma291,infectious pancreatic necrosis,disease group
-necrotising hepatopancreatitis,animal,ma291,infectious pancreatic necrosis,disease group
-viral haemorrhagic septicaemia,animal,ma296,viral hemorrhagic septicemia,disease group
-spring viraemia of carp,animal,ma297,spring viremia of carp,disease group
-anthrax,animal,ma30,anthrax,disease group
-anthrax,annual human,ma30,anthrax,disease group
-rift valley fever,animal,ma31,rift valley fever,disease group
-rift valley fever,annual human,ma31,rift valley fever,disease group
-other pasteurelloses,animal,ma314,pasteurellosis,disease group
-piscirickettsiosis (piscirickettsia salmonis),animal,ma316,salmon rickettsial syndrome,disease group
-piscirickettsiosis (piscirickettsiasalmonis),animal,ma316,salmon rickettsial syndrome,disease group
-q fever,animal,ma32,q fever,disease group
-q fever,annual human,ma32,q fever,disease group
-horse mange,animal,ma33,chorioptic mange,disease group
-gyrodactylosis (gyrodactylus salaris),animal,ma345,gyrodactylosis,disease group
-epizootic ulcerative syndrome,animal,ma370,epizootic ulcerative syndrome,disease group
-infection with haplosporidium costale,animal,ma378,haplosporidiosis,disease group
-infection with haplosporidium nelsoni,animal,ma378,haplosporidiosis,disease group
-infection with marteilia refringens,animal,ma379,marteiliosis,disease group
-infection with marteilia sydneyi,animal,ma379,marteiliosis,disease group
-infection with perkinsus marinus,animal,ma381,perkinsosis,disease group
-infection with perkinsus olseni,animal,ma381,perkinsosis,disease group
-infection with perkinsus olseni/atlanticus,animal,ma381,perkinsosis,disease group
-infection with perkinsusolseni/atlanticus,animal,ma381,perkinsosis,disease group
-crayfish plague (aphanomyces astaci),animal,ma382,crayfish plague,disease group
-spherical baculovirosis (penaeus monodon-type baculovirus),animal,ma384,spherical baculovirosis,disease group
-spherical baculovirosis (penaeusmonodon-type baculovirus),animal,ma384,spherical baculovirosis,disease group
-tetrahedral baculovirosis (baculoviruspenaei),animal,ma385,tetrahedral baculovirosis,disease group
-yellow head disease,animal,ma386,yellowhead disease,disease group
-yellow head virus genotype 1 (infectionwith),animal,ma386,yellowhead disease,disease group
-infectious hypodermal and haematopoietic necrosis,animal,ma388,infectious hypodermal and hematopoietic necrosis ihhn,disease group
-infectious hypodermal and haematopoieticnecrosis,animal,ma388,infectious hypodermal and hematopoietic necrosis ihhn,disease group
-taura syndrome,animal,ma389,taura syndrome,disease group
-spawner-isolated mortality virus disease,animal,ma390,spawner-isolated mortality virus disease,disease group
-abalone viral ganglioneuritis,animal,ma391,abalone icosahedral virus disease,disease group
-abalone viral mortality,animal,ma391,abalone icosahedral virus disease,disease group
-infection with abalone herpes-like virus,animal,ma391,abalone icosahedral virus disease,disease group
-infection with abalone herpesvirus,animal,ma391,abalone icosahedral virus disease,disease group
-avian infectious bronchitis,animal,ma399,avian infectious bronchitis,disease group
-bovine anaplasmosis,animal,ma4,bovine anaplasmosis,disease group
-infec bursal disease (gumboro),animal,ma400,infectious bursal disease,disease group
-infectious bursal disease (gumborodisease),animal,ma400,infectious bursal disease,disease group
-fowl cholera,animal,ma402,fowl cholera,disease group
-other clostridial infections,animal,ma403,clostridial disease,disease group
-infectious coryza,animal,ma405,infectious coryza,disease group
-avian encephalomyelitis,animal,ma408,avian encephalomyelitis avian encephalomyelitis,disease group
-contagious ophthalmia,animal,ma41,infectious keratoconjunctivitis,disease group
-duck virus hepatitis,animal,ma414,duck viral hepatitis,disease group
-highly path. avian influenza,animal,ma418,avian influenza,disease group
-highly pathogenic avian influenza,animal,ma418,avian influenza,disease group
-highly pathogenic avian influenza,annual human,ma418,avian influenza,disease group
-highly pathogenic influenza a viruses (infection with) (non-poultry including wild birds),animal,ma418,avian influenza,disease group
-highly pathogenic influenza a viruses(infection with) (non-poultry includingwild birds),animal,ma418,avian influenza,disease group
-low pathogenic avian influenza (poultry),animal,ma418,avian influenza,disease group
-leptospirosis,animal,ma42,leptospirosis,disease group
-leptospirosis,annual human,ma42,leptospirosis,disease group
-avian infect. laryngotracheitis,animal,ma420,avian infectious laryngotracheitis,disease group
-avian infectious laryngotracheitis,animal,ma420,avian infectious laryngotracheitis,disease group
-marek's disease,animal,ma425,marek's disease,disease group
-newcastle disease,animal,ma426,newcastle disease,disease group
-avian mycoplasmosis (m. gallisepticum),animal,ma429,mycoplasma infection,disease group
-avian mycoplasmosis (m.synoviae),animal,ma429,mycoplasma infection,disease group
-mycoplasmosis (m. gallisepticum),animal,ma429,mycoplasma infection,disease group
-enzootic bovine leukosis,animal,ma43,bovine leukosis,disease group
-duck virus enteritis,animal,ma432,duck viral enteritis,disease group
-pullorum disease,animal,ma433,pullorum disease,disease group
-turkey rhinotracheitis,animal,ma435,turkey rhinotracheitis,disease group
-listeriosis,animal,ma44,listeriosis,disease group
-avian tuberculosis,animal,ma446,avian tuberculosis,disease group
-fowl typhoid,animal,ma447,fowl typhoid,disease group
-fowl pox,animal,ma448,fowlpox,disease group
-aujeszky¬ís disease,animal,ma45,aujeszky's disease,disease group
-porcine reproductive and respiratory syndrome,animal,ma451,porcine reproductive and respiratory syndrome,disease group
-porcine reproductive and respiratorysyndrome,animal,ma451,porcine reproductive and respiratory syndrome,disease group
-porcine reproductive/respiratory syndr.,animal,ma451,porcine reproductive and respiratory syndrome,disease group
-bovine babesiosis,animal,ma6,bovine babesiosis,disease group
-rinderpest,animal,ma62,rinderpest,disease group
-rabies,animal,ma66,rabies,disease group
-rabies,annual human,ma66,rabies,disease group
-inf.bov.rhinotracheit. (ibr/ipv),animal,ma67,infectious bovine rhinotracheitis,disease group
-infectious bovine rhinotracheitis/infectious pustular vulvovaginitis,animal,ma67,infectious bovine rhinotracheitis,disease group
-infectious bovinerhinotracheitis/infectious pustularvulvovaginitis,animal,ma67,infectious bovine rhinotracheitis,disease group
-avian salmonellosis (excluding fowltyphoid and pullorum disease),animal,ma68,salmonellosis,disease group
-other avian salmonellosis,animal,ma68,salmonellosis,disease group
-salmonellosis (s. abortusequi),animal,ma68,salmonellosis,disease group
-salmonellosis (s. abortusovis),animal,ma68,salmonellosis,disease group
-"salmonellosis (s. enteritidis, s.typhimurium)",annual human,ma68,salmonellosis,disease group
-haemorrhagic septicaemia,animal,ma69,hemorrhagic septicemia,disease group
-haemorrhagic septicaemia (ulcer disease or red sore disease),animal,ma69,hemorrhagic septicemia,disease group
-toxoplasmosis,animal,ma78,toxoplasmosis,disease group
-toxoplasmosis,annual human,ma78,toxoplasmosis,disease group
-trichomonosis,animal,ma79,trichomoniasis,disease group
-botulism,animal,ma8,botulism,disease group
-trypanosomosis,animal,ma81,trypanosomiasis,disease group
-trypanosomosis (t. evansi),annual human,ma81,trypanosomiasis,disease group
-"trypanosomosis, human african (sleepingsickness)",annual human,ma81,trypanosomiasis,disease group
-equine viral arteritis,animal,ma85,equine viral arthritis,disease group
-dourine,animal,ma86,dourine,disease group
-japanese encephalitis,animal,ma88,japanese encephalitis,disease group
-japanese encephalitis,annual human,ma88,japanese encephalitis,disease group
-fiebre del nilo occidental,animal,ma89,west nile encephalitis,disease group
-venezuelan equ.encephalomyelitis,animal,ma90,venezuelan equine encephalitis,disease group
-venezuelan equine encephalomyelitis,animal,ma90,venezuelan equine encephalitis,disease group
-venezuelan equine encephalomyelitis,annual human,ma90,venezuelan equine encephalitis,disease group
-equine encephalomyelitis (eastern),animal,ma91,eastern equine encephalitis,disease group
-equine encephalomyelitis (eastern),annual human,ma91,eastern equine encephalitis,disease group
-equine encephalomyelitis (eastern and western),animal,ma91;ma92,NA,NA
-equine encephalomyelitis (eastern andwestern),animal,ma91;ma92,NA,NA
-equine encephalosis,animal,ma91;ma92,NA,NA
-equine encephalomyelitis (western),animal,ma92,western equine encephalitis,disease group
-equine encephalomyelitis (western),annual human,ma92,western equine encephalitis,disease group
-strangles,animal,ma95,strangles,disease group
-equine influenza,animal,ma96,equine influenza,disease group
-epizootic lymphangitis,animal,ma99,epizootic lymphangite,disease group
-bovine viral diarrhoea,animal,mh107,bovine viral diarrhea (cattle),disease specific
-west nile fever,animal,mh129,west nile encephalitis (equidae),disease specific
-west nile fever,annual human,mh129,west nile encephalitis (equidae),disease specific
-bluetongue,animal,mh165,"ovine bluetongue disease (sheep, goat)",disease specific
-caseous lymphadenitis,animal,mh253,"caseous lymphadenitis of sheep and goats (sheep, goat)",disease specific
-theileriosis,animal,mh357,equine piroplasmosis (equidae),disease specific
-bacterial kidney disease (r. salmoninarum),animal,ag381,renibacterium salmoninarum,pathogen
-bacterial kidney disease (r.salmoninarum),animal,ag381,renibacterium salmoninarum,pathogen
-bacterial kidney disease (renibacteriumsalmoninarum),animal,ag381,renibacterium salmoninarum,pathogen
-theileriosis,animal,"NA",NA,NA
-bovine brucellosis,animal,ag12,brucella abortus,pathogen
-brucellosis,annual human,"NA",NA,NA
-bovine tuberculosis,animal,ag97,mycobacterium tuberculosis,pathogen
-bovine tuberculosis,annual human,ag97,mycobacterium tuberculosis,pathogen
-cap/ovi brucel. (not b. ovis),animal,mh48,"brucellosis (sheep, goat)",disease specific
-caprine and ovine brucellosis (excluding b. ovis),animal,mh48,"brucellosis (sheep, goat)",disease specific
-caprine and ovine brucellosis (excludingb. ovis),animal,mh48,"brucellosis (sheep, goat)",disease specific
-avian leukosis,animal,ag732,avian leukosis virus,pathogen
-white spot disease,animal,ag497,white spot syndrome virus 1,pathogen
-2009 pandemic a/h1n1  influenza virus,animal,"NA",NA,NA
-2009 pandemic a/h1n1 influenza,animal,"NA",NA,NA
-2009 pandemic h1n1 influenza,animal,"NA",NA,NA
-a/h1n1 influenza,animal,"NA",NA,NA
-african horse sickness,animal,"NA",NA,NA
-contagious equine metritis,animal,"NA",NA,NA
-contagious pustular dermatitis,animal,"NA",NA,NA
-crimean congo haemorrhagic fever,animal,"NA",NA,NA
-crimean congo haemorrhagic fever,annual human,"NA",NA,NA
-detection of herpesvirus oshv-1,animal,"NA",NA,NA
-distomatosis (liver fluke),animal,"NA",NA,NA
-ebola virus disease,annual human,"NA",NA,NA
-encephalomyelitis (east. and w.),animal,"NA",NA,NA
-encephalomyelitis (east.),animal,"NA",NA,NA
-encephalomyelitis (west.),animal,"NA",NA,NA
-enterovirus encephalomyelitis,animal,"NA",NA,NA
-epizootic haemorrhagic disease,animal,"NA",NA,NA
-equine coital exanthema,animal,"NA",NA,NA
-equine infectious anaemia,animal,"NA",NA,NA
-filariosis,animal,"NA",NA,NA
-hantavirus pulmonary syndrome,annual human,"NA",NA,NA
-hepatopancreatitis in prawns,animal,"NA",NA,NA
-herpesvirus oshv-1,animal,"NA",NA,NA
-infection with batrachochytrium dendrobatidis,animal,"NA",NA,NA
-infection with batrachochytrium salamandrivorans,animal,"NA",NA,NA
-infection with batrachochytriumdendrobatidis,animal,"NA",NA,NA
-infection with batrachochytriumsalamandrivorans,animal,"NA",NA,NA
-infection with mikrocytos roughleyi,animal,"NA",NA,NA
-infection with ranavirus,animal,"NA",NA,NA
-infection with salmonid alphavirus,animal,"NA",NA,NA
-infection with schmallenbergvirus,animal,"NA",NA,NA
-infectious myonecrosis,animal,"NA",NA,NA
-influenza a (h3n2),animal,"NA",NA,NA
-influenza a h1n1,animal,"NA",NA,NA
-influenza a h1n1 in pigs,animal,"NA",NA,NA
-influenza a subtype h1,animal,"NA",NA,NA
-influenza a subtype h1n1,animal,"NA",NA,NA
-influenza a virus,animal,"NA",NA,NA
-intestinal salmonella infections,animal,"NA",NA,NA
-leishmaniosis,animal,"NA",NA,NA
-leishmaniosis,annual human,"NA",NA,NA
-marburg virus disease,annual human,"NA",NA,NA
-mikrocytos mimicus n. sp.,animal,"NA",NA,NA
-new disease in rainbow trout,animal,"NA",NA,NA
-pandemic a/h1n1 2009 virus,animal,"NA",NA,NA
-pandemic a/h1n1 virus,animal,"NA",NA,NA
-pandemic a/h1n1 virus (2009),animal,"NA",NA,NA
-pandemic h1n1 2009,animal,"NA",NA,NA
-pandemic influenza a h1n1,animal,"NA",NA,NA
-pandemic influenza a h1n1 (2009),animal,"NA",NA,NA
-pandemic influenza a/h1n1,animal,"NA",NA,NA
-pandemic influenza a/h1n1 (2009),animal,"NA",NA,NA
-pandemic influenza a/h1n1 2009,animal,"NA",NA,NA
-pandemic influenza a/h1n1 virus,animal,"NA",NA,NA
-pandemic influenza h1n1,animal,"NA",NA,NA
-pandemic influenza h1n1 (2009),animal,"NA",NA,NA
-pandemic influenza h1n1 2009,animal,"NA",NA,NA
-pigeon rotavirus,animal,"NA",NA,NA
-reassortment of swine h1n1 virus with pandemic h1n1 virus,animal,"NA",NA,NA
-schmallenberg disease,animal,"NA",NA,NA
-schmallenberg virus,animal,"NA",NA,NA
-schmallenberg-virus,animal,"NA",NA,NA
-tilapia lake virus (tilv),animal,"NA",NA,NA
-tilapia lake virus disease,animal,"NA",NA,NA
-tilapia syncitial hepatitis,animal,"NA",NA,NA
-tilapia syncytial hepatitis,animal,"NA",NA,NA
-variant creutzfeldt-jakob disease,annual human,"NA",NA,NA
-virus de schmallenberg,animal,"NA",NA,NA
-warble infestation,animal,"NA",NA,NA
-white tail disease,animal,"NA",NA,NA
-camelpox,animal,poxvirus,poxvirus,NA
-camelpox,annual human,poxvirus,poxvirus,NA
-monkey pox,annual human,poxvirus,poxvirus,NA
-monkey pox,animal,poxvirus,poxvirus,NA
+disease,report,ando_id
+2009 pandemic a/h1n1  influenza virus,animal,NA
+2009 pandemic a/h1n1 influenza,animal,NA
+2009 pandemic h1n1 influenza,animal,NA
+a/h1n1 influenza,animal,NA
+abalone viral ganglioneuritis,animal,NA
+abalone viral mortality,animal,NA
+acarapisosis of honey bees,animal,NA
+actinomycosis,animal,ma2
+acute hepatopancreatic necrosis disease,animal,NA
+african horse sickness,animal,NA
+african swine fever,animal,ma263
+american foulbrood of honey bees,animal,NA
+anthrax,animal,ma30
+anthrax,annual human,ma30
+atrophic rhinitis of swine,animal,NA
+aujeszkys disease,animal,NA
+avian chlamydiosis,animal,ma13
+avian chlamydiosis,annual human,ma13
+avian encephalomyelitis,animal,NA
+avian infect. laryngotracheitis,animal,NA
+avian infectious bronchitis,animal,ma399
+avian infectious laryngotracheitis,animal,ma420
+avian leukosis,animal,mh550
+avian mycoplasmosis (m. gallisepticum),animal,NA
+avian mycoplasmosis (m.synoviae),animal,NA
+avian salmonellosis (excluding fowltyphoid and pullorum disease),animal,NA
+avian spirochaetosis,animal,NA
+avian tuberculosis,animal,ma446
+babesiosis,annual human,ma151
+bacterial kidney disease (r. salmoninarum),animal,NA
+bacterial kidney disease (r.salmoninarum),animal,NA
+bacterial kidney disease (renibacteriumsalmoninarum),animal,NA
+blackleg,animal,ma12
+bluetongue,animal,mh165
+botulism,animal,ma8
+bov. genital campylobacteriosis,animal,NA
+bovine anaplasmosis,animal,ma4
+bovine babesiosis,animal,ma6
+bovine brucellosis,animal,NA
+bovine cysticercosis,animal,NA
+bovine genital campylobacteriosis,animal,ma11
+bovine spongiform encephalopathy,animal,ma24
+bovine tuberculosis,animal,mh465
+bovine tuberculosis,annual human,mh465
+bovine viral diarrhoea,animal,mh107
+brucellosis,annual human,mh48
+brucellosis,annual human,mh45
+brucellosis,annual human,mh47
+brucellosis,annual human,mh46
+brucellosis (brucella abortus),animal,NA
+brucellosis (brucella melitensis),animal,NA
+brucellosis (brucella suis),animal,NA
+camelpox,animal,NA
+camelpox,annual human,NA
+campylobacteriosis,annual human,ma253
+campylobacteriosis,annual human,ma152
+cap/ovi brucel. (not b. ovis),animal,NA
+caprine and ovine brucellosis (excluding b. ovis),animal,NA
+caprine and ovine brucellosis (excludingb. ovis),animal,NA
+caprine arthritis/encephalitis,animal,NA
+caseous lymphadenitis,animal,mh253
+channel catfish virus disease,animal,ma282
+channel catfish virus disease(herpesvirus of ictaluridae type 1),animal,NA
+classical swine fever,animal,ma264
+coccidiosis,animal,ma14
+contagious agalactia,animal,ma147
+contagious bov. pleuropneumonia,animal,NA
+contagious bovine pleuropneumonia,animal,ma61
+contagious cap. pleuropneumonia,animal,NA
+contagious caprine pleuropneumonia,animal,NA
+contagious equine metritis,animal,NA
+contagious ophthalmia,animal,NA
+contagious pustular dermatitis,animal,NA
+crayfish plague (aphanomyces astaci),animal,NA
+crimean congo haemorrhagic fever,animal,NA
+crimean congo haemorrhagic fever,annual human,NA
+cysticercosis,annual human,ma154
+dermatophilosis,animal,ma20
+detection of herpesvirus oshv-1,animal,NA
+distomatosis (liver fluke),animal,NA
+dourine,animal,ma86
+duck virus enteritis,animal,NA
+duck virus hepatitis,animal,NA
+ebola virus disease,annual human,NA
+echinococcosis/hydatidosis,animal,NA
+echinococcosis/hydatidosis,annual human,NA
+echinococcus granulosus (infection with),animal,NA
+echinococcus multilocularis (infection with),animal,NA
+echinococcus multilocularis (infectionwith),animal,NA
+encephalomyelitis (east. and w.),animal,NA
+encephalomyelitis (east.),animal,NA
+encephalomyelitis (west.),animal,NA
+enteric septicaemia of catfish (e.ictaluri),animal,NA
+enteric septicaemia of catfish(edwardsiella ictaluri),animal,NA
+enterotoxaemia,animal,NA
+enterovirus encephalomyelitis,animal,NA
+enzootic abortion (chlamydiosis),animal,NA
+enzootic abortion of ewes (ovine chlamydiosis),animal,NA
+enzootic abortion of ewes (ovinechlamydiosis),animal,NA
+enzootic bovine leukosis,animal,NA
+epizoot. haematopoietic necrosis,animal,NA
+epizootic haematopoietic necrosis,animal,ma289
+epizootic haemorrhagic disease,animal,NA
+epizootic lymphangitis,animal,NA
+epizootic ulcerative syndrome,animal,ma370
+equid herpesvirus-1 (ehv-1) (infection with),animal,NA
+equid herpesvirus-1 (ehv-1) (infectionwith),animal,NA
+equine coital exanthema,animal,NA
+equine encephalomyelitis (eastern and western),animal,NA
+equine encephalomyelitis (eastern andwestern),animal,NA
+equine encephalomyelitis (eastern),animal,NA
+equine encephalomyelitis (eastern),annual human,NA
+equine encephalomyelitis (western),animal,NA
+equine encephalomyelitis (western),annual human,NA
+equine encephalosis,animal,NA
+equine infectious anaemia,animal,NA
+equine influenza,animal,ma96
+equine piroplasmosis,animal,ma105
+equine rhinopneumonitis,animal,NA
+equine viral arteritis,animal,NA
+european foulbrood of honey bees,animal,NA
+fiebre del nilo occidental,animal,NA
+filariosis,animal,NA
+foot and mouth disease,animal,mh162
+foot and mouth disease,animal,mh163
+foot-rot,animal,NA
+fowl cholera,animal,ma402
+fowl pox,animal,NA
+fowl typhoid,animal,ma447
+glanders,animal,ma102
+glanders,annual human,ma102
+gyrodactylosis (gyrodactylus salaris),animal,NA
+haemorrhagic septicaemia,animal,NA
+haemorrhagic septicaemia (ulcer disease or red sore disease),animal,NA
+hantavirus pulmonary syndrome,annual human,NA
+heartwater,animal,ma16
+hendra,animal,NA
+hepatopancreatitis in prawns,animal,NA
+herpesvirus oshv-1,animal,NA
+highly path. avian influenza,animal,NA
+highly pathogenic avian influenza,animal,NA
+highly pathogenic avian influenza,annual human,NA
+highly pathogenic influenza a viruses (infection with) (non-poultry including wild birds),animal,NA
+highly pathogenic influenza a viruses(infection with) (non-poultry includingwild birds),animal,NA
+horse mange,animal,NA
+horse pox,animal,NA
+inf.bov.rhinotracheit. (ibr/ipv),animal,NA
+infec bursal disease (gumboro),animal,NA
+infect. haematopoietic necrosis,animal,NA
+infection with abalone herpes-like virus,animal,NA
+infection with abalone herpesvirus,animal,NA
+infection with batrachochytrium dendrobatidis,animal,NA
+infection with batrachochytrium salamandrivorans,animal,NA
+infection with batrachochytriumdendrobatidis,animal,NA
+infection with batrachochytriumsalamandrivorans,animal,NA
+infection with bonamia exitiosa,animal,NA
+infection with bonamia ostreae,animal,NA
+infection with candidatus xenohaliotiscaliforniensis,animal,NA
+infection with coronavirus in camels,animal,NA
+infection with gyrodactylus salaris,animal,NA
+infection with haplosporidium costale,animal,NA
+infection with haplosporidium nelsoni,animal,NA
+infection with marteilia refringens,animal,NA
+infection with marteilia sydneyi,animal,NA
+infection with mikrocytos mackini,animal,NA
+infection with mikrocytos roughleyi,animal,NA
+infection with ostreid herpesvirus-1 microvariant,animal,NA
+infection with ostreid herpesvirus-1microvariant,animal,NA
+infection with perkinsus marinus,animal,NA
+infection with perkinsus olseni,animal,NA
+infection with perkinsus olseni/atlanticus,animal,NA
+infection with perkinsusolseni/atlanticus,animal,NA
+infection with ranavirus,animal,NA
+infection with salmonid alphavirus,animal,NA
+infection with schmallenbergvirus,animal,NA
+infection with xenohaliotis californiensis,animal,NA
+infection with xenohaliotiscaliforniensis,animal,NA
+infectious bovine rhinotracheitis/infectious pustular vulvovaginitis,animal,NA
+infectious bovinerhinotracheitis/infectious pustularvulvovaginitis,animal,NA
+infectious bursal disease (gumborodisease),animal,NA
+infectious coryza,animal,ma405
+infectious haematopoietic necrosis,animal,ma290
+infectious hypodermal and haematopoietic necrosis,animal,NA
+infectious hypodermal and haematopoieticnecrosis,animal,NA
+infectious myonecrosis,animal,NA
+infectious pancreatic necrosis,animal,ma291
+infectious salmon anaemia,animal,ma279
+infectious salmon anaemia virus (hpr-deleted or hpr0 genotypes) (infection with),animal,NA
+infectious salmon anaemia virus(hpr-deleted or hpr0 genotypes)(infection with),animal,NA
+influenza a (h3n2),animal,NA
+influenza a h1n1,animal,NA
+influenza a h1n1 in pigs,animal,NA
+influenza a subtype h1,animal,NA
+influenza a subtype h1n1,animal,NA
+influenza a virus,animal,NA
+intestinal salmonella infections,animal,NA
+japanese encephalitis,animal,ma88
+japanese encephalitis,annual human,ma88
+koi herpesvirus disease,animal,ma281
+leishmaniosis,animal,NA
+leishmaniosis,annual human,NA
+leptospirosis,animal,ma42
+leptospirosis,annual human,ma42
+listeriosis,animal,ma44
+low pathogenic avian influenza (poultry),animal,NA
+lumpy skin disease,animal,ma22
+maedi-visna,animal,NA
+malignant catarrhal fever,animal,ma15
+malignant catarrhal fever (wildebeest only),animal,NA
+malignant catarrhal fever (wildebeestonly),animal,NA
+marburg virus disease,annual human,NA
+marek's disease,animal,ma425
+melioidosis,animal,ma100
+mers-cov,animal,NA
+mikrocytos mimicus n. sp.,animal,NA
+monkey pox,annual human,NA
+monkey pox,animal,NA
+mucosal disease/bovine virus diarrhoea,animal,NA
+mucosal disease/dvb,animal,NA
+mycobacterium tuberculosis,animal,ag97
+mycobacterium tuberculosis,animal,ag121
+mycobacterium tuberculosis complex (infection with),animal,NA
+mycobacterium tuberculosis complex(infection with),animal,NA
+mycoplasmosis (m. gallisepticum),animal,NA
+myxomatosis,animal,NA
+n. w. screwworm (c. hominivorax),animal,NA
+nairobi sheep disease,animal,NA
+necrotising hepatopancreatitis,animal,NA
+new disease in rainbow trout,animal,NA
+new world screwworm (cochliomyia hominivorax),animal,NA
+new world screwworm (cochliomyiahominivorax),animal,NA
+new world screwworm (cochliomyiahominivorax),annual human,NA
+newcastle disease,animal,ma426
+nipah virus encephalitis,animal,NA
+nipah virus encephalitis,annual human,NA
+nosemosis of bees,animal,NA
+o. w. screwworm (c. bezziana),animal,NA
+old world screwworm (chrysomya bezziana),animal,NA
+old world screwworm (chrysomya bezziana),annual human,NA
+oncorhynchus masou virus disease,animal,ma283
+ostreid herpesvirus 1,animal,NA
+ostreid herpesvirus-1,animal,NA
+ostreid herpesvirus-1 µ variant,animal,NA
+other avian salmonellosis,animal,NA
+other clostridial infections,animal,NA
+other pasteurelloses,animal,NA
+ovine epididymitis (b. ovis),animal,NA
+ovine epididymitis (brucella ovis),animal,NA
+ovine pulmonary adenomatosis,animal,NA
+"oyster herpesvirus (oshv-1, µvar)",animal,NA
+pandemic a/h1n1 2009 virus,animal,NA
+pandemic a/h1n1 virus,animal,NA
+pandemic a/h1n1 virus (2009),animal,NA
+pandemic h1n1 2009,animal,NA
+pandemic influenza a h1n1,animal,NA
+pandemic influenza a h1n1 (2009),animal,NA
+pandemic influenza a/h1n1,animal,NA
+pandemic influenza a/h1n1 (2009),animal,NA
+pandemic influenza a/h1n1 2009,animal,NA
+pandemic influenza a/h1n1 virus,animal,NA
+pandemic influenza h1n1,animal,NA
+pandemic influenza h1n1 (2009),animal,NA
+pandemic influenza h1n1 2009,animal,NA
+paratuberculosis,animal,ma26
+peste des petits ruminants,animal,ma193
+pigeon rotavirus,animal,NA
+piscirickettsiosis (piscirickettsia salmonis),animal,NA
+piscirickettsiosis (piscirickettsiasalmonis),animal,NA
+porcine brucellosis,animal,NA
+porcine cysticercosis,animal,NA
+porcine epidemic diarrhea,animal,ma242
+porcine epidemic diarrhea virus,animal,ag756
+porcine reproductive and respiratory syndrome,animal,ma451
+porcine reproductive and respiratorysyndrome,animal,NA
+porcine reproductive/respiratory syndr.,animal,NA
+postweaning multisystemic wasting syndrome (pmws),animal,NA
+pullorum disease,animal,ma433
+q fever,animal,ma32
+q fever,annual human,ma32
+rabbit haemorrhagic disease,animal,NA
+rabies,animal,ma66
+rabies,annual human,ma66
+reassortment of swine h1n1 virus with pandemic h1n1 virus,animal,NA
+red sea bream iridoviral disease,animal,NA
+rift valley fever,animal,ma31
+rift valley fever,annual human,ma31
+rinderpest,animal,ma62
+salmonellosis (s. abortusequi),animal,NA
+salmonellosis (s. abortusovis),animal,NA
+"salmonellosis (s. enteritidis, s.typhimurium)",annual human,NA
+schmallenberg disease,animal,NA
+schmallenberg virus,animal,NA
+schmallenberg-virus,animal,NA
+scrapie,animal,ma202
+sheep mange,animal,NA
+sheep pox and goat pox,animal,NA
+small hive beetle infestation,animal,ma211
+small hive beetle infestation (aethina tumida),animal,NA
+small hive beetle infestation (aethinatumida),animal,NA
+spawner-isolated mortality virus disease,animal,ma390
+spherical baculovirosis (penaeus monodon-type baculovirus),animal,NA
+spherical baculovirosis (penaeusmonodon-type baculovirus),animal,NA
+spring viraemia of carp,animal,NA
+strangles,animal,ma95
+streptococcus suis,animal,ag231
+surra (trypanosoma evansi),animal,NA
+suspected ostreid herpes virus 1 (oshv1),animal,NA
+suspected variant ostreid herpes virus 1 (oshv1),animal,NA
+suspected: herpesvirus oshv-1 frequently associated with vibrio splendidus,animal,NA
+swine enteric coronavirus,animal,NA
+swine erysipelas,animal,ma271
+swine erysipelas,annual human,ma271
+swine novel enteric corona virus disease,animal,NA
+swine vesicular disease,animal,ma258
+taura syndrome,animal,ma389
+tetrahedral baculovirosis (baculoviruspenaei),animal,NA
+theileriosis,animal,mh443
+theileriosis,animal,mh357
+tilapia lake virus (tilv),animal,NA
+tilapia lake virus disease,animal,NA
+tilapia syncitial hepatitis,animal,NA
+tilapia syncytial hepatitis,animal,NA
+toxoplasmosis,animal,ma78
+toxoplasmosis,annual human,ma78
+transmissible gastroenteritis,animal,NA
+trichinellosis,animal,ma112
+trichinellosis,annual human,ma112
+trichomonosis,animal,NA
+tropilaelaps infestation of honey bees,animal,NA
+trypanosomosis,animal,mh463
+trypanosomosis (t. evansi),annual human,NA
+"trypanosomosis, human african (sleepingsickness)",annual human,NA
+tularemia,animal,ma142
+tularemia,annual human,ma142
+turkey rhinotracheitis,animal,ma435
+ulcerative lymphangitis,animal,NA
+variant creutzfeldt-jakob disease,annual human,NA
+varroosis of honey bees,animal,NA
+venezuelan equ.encephalomyelitis,animal,NA
+venezuelan equine encephalomyelitis,animal,NA
+venezuelan equine encephalomyelitis,annual human,NA
+vesicular stomatitis,animal,ma109
+vibrionic dysentery,animal,NA
+viral encephalopathy and retinopathy,animal,ma280
+viral haemorrhagic septicaemia,animal,NA
+virus de la diarrea epidémica porcina,animal,NA
+virus de schmallenberg,animal,NA
+warble infestation,animal,NA
+west nile fever,animal,mh129
+west nile fever,annual human,mh129
+white spot disease,animal,mh83
+white sturgeon iridoviral disease,animal,ma286
+white tail disease,animal,NA
+yellow head disease,animal,NA
+yellow head virus genotype 1 (infectionwith),animal,NA
