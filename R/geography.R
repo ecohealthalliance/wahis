@@ -44,8 +44,7 @@ get_country_borders <- function(){
 }
 
 #' calculate country centroid distance
-#' @import dplyr tidyr
-#' @importFrom CoordinateCleaner countryref
+#' @import dplyr tidyr CoordinateCleaner
 #' @importFrom janitor clean_names
 #' @importFrom geosphere distm 
 #' @export
