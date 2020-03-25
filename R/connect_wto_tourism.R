@@ -1,9 +1,11 @@
 #' Download wto tourism data
+#' @param username UNWTO email
+#' @param password UNWTO password
 #' @import dplyr here rvest xml2
 #' @importFrom purrr map walk
 #' @importFrom stringr str_extract
 #' @export
-download_tourism <- function(){
+download_tourism <- function(username, password){
   
   suppressWarnings(dir.create(here("data-raw/wto-tourism")))
   
@@ -12,8 +14,8 @@ download_tourism <- function(){
   session <- html_session(start_page)
   form <- html_form(read_html(start_page))[[4]]
   filled_form <- set_values(form,
-                            login = Sys.getenv("UNWTO_USERNAME"),
-                            password =  Sys.getenv("UNWTO_PASSWORD"))
+                            login = username,
+                            password =  password)
   submit_form(session, filled_form)
   
   # Arrivals of non-resident tourists at national borders, by country of residence 
