@@ -17,6 +17,7 @@ Encoding: UTF-8
 Language: en-US
 Imports:
     assertthat,
+    countrycode,
     dplyr,
     httr,
     purrr,
@@ -31,7 +32,14 @@ Imports:
     xml2,
     scrapetools,
     janitor,
-    lubridate
+    lubridate,
+    vroom,
+    CoordinateCleaner,
+    geosphere,
+    readxl,
+    readr,
+    jsonlite,
+    tradestatistics
 Suggests:
     spelling, 
     testthat,
