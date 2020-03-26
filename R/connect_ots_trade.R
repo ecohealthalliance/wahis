@@ -3,7 +3,7 @@
 #' @export
 download_trade <- function(){
   
-  product_ids <- full_join(ots_products, ots_communities) %>%
+  product_ids <- full_join(tradestatistics::ots_products, tradestatistics::ots_communities) %>%
     filter(community_name %in% c("Foodstuffs","Animal and Vegetable Bi-Products", "Vegetable Products", "Animal Hides",  "Animal Products")) %>%
     pull(product_code)
   
