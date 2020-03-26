@@ -17,7 +17,6 @@ Encoding: UTF-8
 Language: en-US
 Imports:
     assertthat,
-    countrycode,
     dplyr,
     httr,
     purrr,
@@ -34,8 +33,6 @@ Imports:
     janitor,
     lubridate,
     vroom,
-    CoordinateCleaner,
-    geosphere,
     readxl,
     readr,
     jsonlite,
@@ -59,7 +56,9 @@ Suggests:
     DT,
     future,
     furrr,
-    fs
+    fs,
+    CoordinateCleaner,
+    geosphere
 Remotes:
   cran/MonetDBLite@0.6.0,
   ropensci/arkdb@comment-char,
