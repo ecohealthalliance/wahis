@@ -46,7 +46,7 @@ get_country_borders <- function(){
 #' calculate country centroid distance
 #' @import dplyr tidyr CoordinateCleaner
 #' @importFrom janitor clean_names
-#' @importFrom geosphere distm 
+#' @importFrom geosphere distm distGeo
 #' @export
 get_country_distance <- function(){
   
@@ -66,7 +66,7 @@ get_country_distance <- function(){
     left_join(country_controids, by=c("iso3c_1" = "iso3c")) %>%
     left_join(country_controids, by=c("iso3c_2" = "iso3c"), suffix = c("_1", "_2")) %>%
     rowwise() %>%
-    mutate(gc_dist = geosphere::distm(c(centroid_lon_1, centroid_lat_1), c(centroid_lon_2, centroid_lat_2), fun = distGeo)) %>%
+    mutate(gc_dist = distm(c(centroid_lon_1, centroid_lat_1), c(centroid_lon_2, centroid_lat_2), fun = distGeo)) %>%
     select(country_origin = iso3c_1, country_destination = iso3c_2, gc_dist)
   
   return(country_controids_bilateral)
