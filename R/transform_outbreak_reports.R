@@ -3,7 +3,7 @@
 #' @import dplyr tidyr purrr
 #' @importFrom janitor clean_names
 #' @importFrom stringr str_detect str_extract
-#' @importFrom lubridate dmy myd
+#' @importFrom lubridate dmy myd ymd
 #' @export
 
 transform_outbreak_reports <- function(outbreak_reports) {
