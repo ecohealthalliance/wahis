@@ -1,5 +1,5 @@
 #' Scrape CIA factbook for country borders
-#' @import here stringr dplyr tidyr
+#' @import here stringr dplyr tidyr countrycode
 #' @importFrom xml2 read_html 
 #' @importFrom rvest html_table
 #' @importFrom janitor clean_names 

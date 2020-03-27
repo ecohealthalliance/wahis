@@ -39,7 +39,8 @@ Imports:
     tradestatistics,
     CoordinateCleaner,
     geosphere,
-    taxadb
+    taxadb,
+    countrycode
 Suggests:
     spelling, 
     testthat,
