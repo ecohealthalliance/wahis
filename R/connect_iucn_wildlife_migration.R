@@ -1,11 +1,11 @@
 #' Download iucn data
+#' @param token IUCN redlist API token
 #' @import dplyr readr here
 #' @importFrom purrr map_df
 #' @importFrom jsonlite fromJSON
 #' @export
 
-download_wildlife <- function(){
-  token <- Sys.getenv("IUCN_REDLIST_KEY")
+download_wildlife <- function(token){
   countries <- fromJSON(paste0("https://apiv3.iucnredlist.org/api/v3/country/list?token=", token))$results
   
   wildlife <- map_df(countries$isocode, function(iso){
