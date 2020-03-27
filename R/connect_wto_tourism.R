@@ -41,6 +41,7 @@ download_tourism <- function(username, password){
 #' @importFrom stringr str_remove
 #' @importFrom janitor clean_names
 #' @importFrom magrittr set_names
+#' @export
 transform_tourism <- function(){
   
   filenames <- list.files(here::here("data-raw/wto-tourism"),
