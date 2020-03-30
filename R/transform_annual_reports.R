@@ -1,6 +1,7 @@
 #' Convert a list of scraped annual reports to a list of table
 #' @param annual_reports a list of annual reports produced by [ingest_annual_report]
-#' @import dplyr tidyr stringr purrr assertthat
+#' @import dplyr tidyr stringr purrr
+#' @import assertthat %has_name%
 #' @importFrom janitor make_clean_names
 #' @importFrom readr read_csv
 #' @importFrom readxl read_xlsx
@@ -30,20 +31,20 @@ transform_annual_reports <- function(annual_reports) {
   }
   
   # Table name assertions ----------------------------------------------------
-  has_name(wahis_joined$metadata, c("country", "country_iso3c", "report_year", "report_months",  "report_semester", "report"))
-  has_name(wahis_joined$submission_info, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'submission_info', 'submission_value', 'submission_animal_type'))
-  has_name(wahis_joined$diseases_present, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'disease', 'occurrence', 'serotype_s', 'new_outbreaks', 'total_outbreaks', 'species', 'control_measures', 'official_vaccination', 'measuring_units', 'susceptible', 'cases', 'deaths', 'killed_and_disposed_of', 'slaughtered', 'vaccination_in_response_to_the_outbreak_s', 'oie_listed', 'notes'))
-  has_name(wahis_joined$diseases_absent, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'taxa', 'disease', 'date_of_last_occurrence', 'species', 'control_measures', 'official_vaccination', 'oie_listed', 'notes'))
-  has_name(wahis_joined$diseases_present_detail, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'period', 'adm', 'serotype_s', 'new_outbreaks', 'total_outbreaks', 'species', 'family_name', 'latin_name', 'measuring_units', 'susceptible', 'cases', 'deaths', 'killed_and_disposed_of', 'slaughtered', 'vaccination_in_response_to_the_outbreak_s', 'adm_type', 'temporal_scale', 'disease'))
-  has_name(wahis_joined$diseases_unreported, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'taxa', 'disease', 'oie_listed'))
-  has_name(wahis_joined$disease_humans, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'disease', 'no_information_available', 'disease_absent', 'disease_present_number_of_cases_unknown', 'disease_present_number_of_cases_known', 'human_cases', 'human_deaths'))
-  has_name(wahis_joined$animal_population, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'species', 'production', 'total', 'units', 'number', 'units_2'))
-  has_name(wahis_joined$veterinarians, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'veterinarian_field', 'public_sector', 'total', 'private_sector', 'veterinarian_class'))
-  has_name(wahis_joined$national_reference_laboratories, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'name', 'contacts', 'latitude', 'longitude'))
-  has_name(wahis_joined$national_reference_laboratories_detail, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'laboratory', 'disease', 'test_type'))
-  has_name(wahis_joined$vaccine_manufacturers, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'manufacturer', 'contacts', 'year_of_start_of_activity', 'year_of_cessation_of_activity'))
-  has_name(wahis_joined$vaccine_manufacturers_detail, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'disease', 'manufacturer', 'vaccine', 'vaccine_type', 'year_of_start_of_production', 'year_of_end_of_production_if_production_ended'))
-  has_name(wahis_joined$vaccine_production, c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'manufacturer', 'vaccine', 'doses_produced', 'doses_exported'))
+  warn_that(wahis_joined$metadata %has_name% c("country", "country_iso3c", "report_year", "report_months",  "report_semester", "report"))
+  warn_that(wahis_joined$submission_info %has_name%  c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'submission_info', 'submission_value', 'submission_animal_type'))
+  warn_that(wahis_joined$diseases_present %has_name% c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'disease', 'occurrence', 'serotype_s', 'new_outbreaks', 'total_outbreaks', 'species', 'control_measures', 'official_vaccination', 'measuring_units', 'susceptible', 'cases', 'deaths', 'killed_and_disposed_of', 'slaughtered', 'vaccination_in_response_to_the_outbreak_s', 'oie_listed', 'notes'))
+  warn_that(wahis_joined$diseases_absent %has_name% c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'taxa', 'disease', 'date_of_last_occurrence', 'species', 'control_measures', 'official_vaccination', 'oie_listed', 'notes'))
+  warn_that(wahis_joined$diseases_present_detail %has_name% c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'period', 'adm', 'serotype_s', 'new_outbreaks', 'total_outbreaks', 'species', 'family_name', 'latin_name', 'measuring_units', 'susceptible', 'cases', 'deaths', 'killed_and_disposed_of', 'slaughtered', 'vaccination_in_response_to_the_outbreak_s', 'adm_type', 'temporal_scale', 'disease'))
+  warn_that(wahis_joined$diseases_unreported %has_name% c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'taxa', 'disease', 'oie_listed'))
+  warn_that(wahis_joined$disease_humans %has_name% c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'disease', 'no_information_available', 'disease_absent', 'disease_present_number_of_cases_unknown', 'disease_present_number_of_cases_known', 'human_cases', 'human_deaths'))
+  warn_that(wahis_joined$animal_population %has_name% c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'species', 'production', 'total', 'units', 'number', 'units_2'))
+  warn_that(wahis_joined$veterinarians %has_name% c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'veterinarian_field', 'public_sector', 'total', 'private_sector', 'veterinarian_class'))
+  warn_that(wahis_joined$national_reference_laboratories %has_name% c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'name', 'contacts', 'latitude', 'longitude'))
+  warn_that(wahis_joined$national_reference_laboratories_detail %has_name% c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'laboratory', 'disease', 'test_type'))
+  warn_that(wahis_joined$vaccine_manufacturers %has_name% c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'manufacturer', 'contacts', 'year_of_start_of_activity', 'year_of_cessation_of_activity'))
+  warn_that(wahis_joined$vaccine_manufacturers_detail %has_name% c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'disease', 'manufacturer', 'vaccine', 'vaccine_type', 'year_of_start_of_production', 'year_of_end_of_production_if_production_ended'))
+  warn_that(wahis_joined$vaccine_production %has_name% c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'manufacturer', 'vaccine', 'doses_produced', 'doses_exported'))
   
   # NA handling in all tables -------------------------------------------------------------
   # "empty" = missing/NA/blank in the reports
@@ -137,7 +138,7 @@ transform_annual_reports <- function(annual_reports) {
       str_split("; ") %>%
       reduce(c) %>%
       unique() 
-    assert_that(all(scc %in% c("no information", "disease not present", "empty")))
+    warn_that(all(scc %in% c("no information", "disease not present", "empty")))
     # ^ if this fails: the differnt statuses may be due to differences in serotype, and should not be filtered out
   }
   
@@ -158,7 +159,7 @@ transform_annual_reports <- function(annual_reports) {
     ungroup() %>%
     select(-date_rank)
   
-  assert_that(nrow(status_check(animal_diseases)) == 0)
+  warn_that(nrow(status_check(animal_diseases)) == 0)
   # animal_diseases %>%  distinct(disease, serotype) %>% filter(!serotype %in% c("empty", "no information")) %>% 
   #   group_by(disease) %>% count(sort = TRUE)
   
@@ -210,7 +211,7 @@ transform_annual_reports <- function(annual_reports) {
     group_by(country, report_months, report_year,  disease, oie_listed) %>%
     summarize(n = n(), n_species = n_distinct(species)) %>%
     filter(n != n_species) 
-  assert_that(nrow(species_check)==0)
+  warn_that(nrow(species_check)==0)
   
   # Add Absent data to animal host table ----------------------------------------------------
   
@@ -350,7 +351,7 @@ transform_annual_reports <- function(annual_reports) {
         left_join(diseases) %>% 
         mutate(disease = coalesce(preferred_label, disease_clean)) %>% 
         select(-preferred_label, -disease_clean) 
-      assertthat::assert_that(!any(is.na(disease_joined$disease)))
+      warn_that(!any(is.na(disease_joined$disease)))
       return(disease_joined)
     })
     
