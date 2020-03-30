@@ -28,11 +28,10 @@ download_wildlife <- function(token){
 
 
 #' Transform iucn data to return counts of overlapping species between pairwise countries
-#' @import dplyr tidyr here purrr 
+#' @import dplyr tidyr here purrr xml2
 #' @importFrom taxadb td_create filter_rank
 #' @importFrom countrycode countrycode
 #' @importFrom readr read_rds
-#' @importFrom xml2 read_html
 #' @importFrom rvest html_table
 #' @export
 

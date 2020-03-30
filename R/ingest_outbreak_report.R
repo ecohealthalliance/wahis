@@ -222,7 +222,7 @@ table_value <- function(xml, extractor, ...) {
 
 #' Function to safely run ingest_outbreak_report
 #' @param web_page Name of the downloaded web page
-#' @importFrom purrr safely
+#' @import purrr
 #' @export
 
 safe_ingest_outbreak <- function(web_page) {

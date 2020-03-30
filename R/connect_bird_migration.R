@@ -1,7 +1,6 @@
 #' Scrape birdlife data for migratory bird species by country
-#' @importFrom purrr walk
+#' @import purrr stringr 
 #' @importFrom httr GET write_disk
-#' @importFrom stringr str_pad
 #' @import here
 #' @export
 download_bird_migration <- function(){

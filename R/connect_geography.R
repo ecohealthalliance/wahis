@@ -1,9 +1,8 @@
 #' Scrape CIA factbook for country borders
-#' @import here stringr dplyr tidyr countrycode
-#' @importFrom xml2 read_html 
+#' @import here stringr dplyr tidyr purrr xml2
 #' @importFrom rvest html_table
 #' @importFrom janitor clean_names 
-#' @importFrom purrr map 
+#' @importFrom countrycode countrycode 
 #' @export
 get_country_borders <- function(){
   page <- read_html("https://www.cia.gov/library/publications/the-world-factbook/fields/281.html")

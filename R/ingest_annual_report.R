@@ -530,7 +530,7 @@ ingest_annual_report <- function(web_page, encoding = "ISO-8859-1") {
 
 #' Function to safely run ingest_annual_report
 #' @param web_page Name of the downloaded web page
-#' @importFrom purrr safely
+#' @import purrr
 #' @export
 
 safe_ingest_annual <- function(web_page) {
