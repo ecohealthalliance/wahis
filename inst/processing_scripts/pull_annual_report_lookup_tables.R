@@ -5,11 +5,7 @@ library(googledrive)
 library(readxl)
 library(fs)
 
-if (Sys.getenv("CI_JOB_ID") != "") {
-    drive_auth(path = Sys.getenv("GDRIVE_TOKEN_PATH"))
-} else {
-    drive_auth()
-}
+drive_auth()
 
 wb <- drive_download("https://docs.google.com/spreadsheets/d/18tgKfu-3oA_xycVO07LGMN7CIEZ1WYnMDz0ZF665zuo",
                      overwrite = TRUE)
