@@ -1,5 +1,6 @@
 #' Download ots data
-#' @import dplyr readr here tradestatistics
+#' @import dplyr here tradestatistics
+#' @importFrom readr write_rds
 #' @export
 download_trade <- function(){
   
@@ -15,7 +16,8 @@ download_trade <- function(){
 }
 
 #' Transform ots data to return pairwise trade values
-#' @import dplyr tidyr here readr
+#' @import dplyr tidyr here
+#' @importFrom readr read_rds
 #' @export
 transform_trade <- function(){
   

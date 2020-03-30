@@ -1,7 +1,7 @@
 #' Download iucn data
 #' @param token IUCN redlist API token
-#' @import dplyr readr here
-#' @importFrom purrr map_df
+#' @import dplyr purrr here
+#' @importFrom readr write_rds
 #' @importFrom jsonlite fromJSON
 #' @export
 
@@ -28,8 +28,12 @@ download_wildlife <- function(token){
 
 
 #' Transform iucn data to return counts of overlapping species between pairwise countries
-#' @import dplyr tidyr here countrycode rvest taxadb
-#' @importFrom purrr map imap_dfr
+#' @import dplyr tidyr here purrr 
+#' @importFrom taxadb td_create filter_rank
+#' @importFrom countrycode countrycode
+#' @importFrom readr read_rds
+#' @importFrom xml2 read_html
+#' @importFrom rvest html_table
 #' @export
 
 transform_wildlife_migration <- function(){

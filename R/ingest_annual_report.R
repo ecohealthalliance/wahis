@@ -30,7 +30,7 @@ clean_oie_report_table <- function(parent, include_header = FALSE){
 #' Support function for ingest_annual_report to find between dividers in report
 #' @param headers search strings
 #' @param siblings xml nodeset to search 
-#' @importFrom purrr map compact  
+#' @import purrr
 #' @noRd
 get_header_index <- function(headers, siblings){
     
@@ -119,9 +119,8 @@ add_notes <- function(tbl){
 #' @examples
 #' ##ingest_annual_report("../data-raw/raw_wahis_reports/BWA_2016_sem0.html")
 #' @export
-#' @import xml2 purrr dplyr tidyr stringr
+#' @import xml2 purrr dplyr tidyr stringr stringi
 #' @importFrom rvest html_table
-#' @importFrom stringi stri_extract_first_regex
 ingest_annual_report <- function(web_page, encoding = "ISO-8859-1") {
     
     # get page

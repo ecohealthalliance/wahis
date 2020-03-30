@@ -1,9 +1,8 @@
 #' Download wto tourism data
 #' @param username UNWTO email
 #' @param password UNWTO password
-#' @import dplyr here rvest xml2
-#' @importFrom purrr map walk
-#' @importFrom stringr str_extract
+#' @import dplyr here xml2 purrr stringr
+#' @importFrom rvest html_session html_form set_values submit_form jump_to
 #' @export
 download_tourism <- function(username, password){
   
@@ -35,12 +34,10 @@ download_tourism <- function(username, password){
 }
 
 #' Transform wto tourism data
-#' @import dplyr here countrycode
+#' @import dplyr here stringr purrr
 #' @importFrom readxl read_xlsx
-#' @importFrom purrr map_df
-#' @importFrom stringr str_remove
+#' @importFrom countrycode countrycode
 #' @importFrom janitor clean_names
-#' @importFrom magrittr set_names
 #' @export
 transform_tourism <- function(){
   
@@ -63,7 +60,7 @@ transform_tourism <- function(){
     
     # transform
     wto %>% 
-      set_names(.[5,]) %>%
+      purrr::set_names(.[5,]) %>%
       janitor::clean_names() %>%
       slice(-c(1:6)) %>%
       select(-2, -starts_with("market"), -starts_with("percent")) %>%

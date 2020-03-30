@@ -16,7 +16,10 @@ download_bird_migration <- function(){
 
 
 #' Transform birdlife data to return counts of overlapping migratory species between pairwise countries
-#' @import dplyr tidyr purrr stringr here countrycode xml2 rvest 
+#' @import dplyr tidyr purrr xml2 stringr
+#' @importFrom rvest html_nodes
+#' @importFrom countrycode countrycode
+#' @importFrom assertthat are_equal
 #' @export
 transform_bird_migration <- function(){
   
@@ -32,7 +35,7 @@ transform_bird_migration <- function(){
   }) %>% compact()
   
   # remove error pages
-  errors <- map_lgl(bird_pages, function(page){
+  errors <- purrr::map_lgl(bird_pages, function(page){
     html_nodes(page, "body") %>% 
       xml_text() %>%
       str_detect("looks like something went wrong")
@@ -40,7 +43,7 @@ transform_bird_migration <- function(){
   bird_pages <- bird_pages[!errors]
   
   # get country names from xml
-  country <- map_chr(bird_pages, function(page){
+  country <- purrr::map_chr(bird_pages, function(page){
     xml_find_all(page, xpath="/html/body/div[2]/div/div/div/div/div[1]/div/div/div[1]") %>%
       xml_text()  %>%
       str_remove(., "\r\n                Search terms\r\n                                    Country/Territory = ") %>%
@@ -56,8 +59,8 @@ transform_bird_migration <- function(){
   # get migratory birds in each country
   birds <- map(bird_pages, function(page){
     xml_find_all(page, xpath="//tr[@class='qpq-table-tr']") %>%
-          xml_text() %>%
-          str_extract(., "[^\r\n]+")
+      xml_text() %>%
+      str_extract(., "[^\r\n]+")
   }) %>%
     set_names(country_iso3c) %>%
     compact()

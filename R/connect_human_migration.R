@@ -10,9 +10,8 @@ download_human_migration <- function(){
 }
 
 #' Transform UN migrant data
-#' @import here dplyr tidyr countrycode
-#' @importFrom purrr map_df
-#' @importFrom stringr str_remove
+#' @import here dplyr tidyr purrr stringr
+#' @importFrom countrycode countrycode
 #' @importFrom readxl read_xlsx
 #' @importFrom janitor clean_names
 #' @export

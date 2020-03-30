@@ -29,7 +29,8 @@
 #' @examples
 #' ##ingest_wahis_record("../inst/raw_wahis_pages/25385.html")
 #' @export
-#' @import rvest stringi xml2 dplyr tidyr
+#' @import stringi xml2 dplyr tidyr
+#' @importFrom rvest html_node html_table
 ingest_outbreak_report <- function(web_page, encoding = "ISO-8859-1") {
     
     page <- suppressWarnings(read_xml(web_page, encoding = encoding, as_html = TRUE, options = c("RECOVER", "NOERROR", 

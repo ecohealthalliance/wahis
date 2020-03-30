@@ -8,7 +8,8 @@ download_livestock <- function(){
 }
 
 #' Transform fao data to return pairwise livestock trade values
-#' @import dplyr tidyr countrycode here
+#' @import dplyr tidyr here
+#' @importFrom countrycode countrycode
 #' @importFrom janitor clean_names
 #' @importFrom vroom vroom
 #' @export
