@@ -1,5 +1,6 @@
 #!/usr/bin/env Rscript
 
+# This script is for testing. Processing for database is done in repel-infrastructure. 
 library(fs)
 library(future)
 library(furrr)
@@ -28,40 +29,13 @@ wahis_annual <- future_map(filenames, wahis:::safe_ingest_annual, .progress = TR
 
 # Save ingested files   ------------------------------------------------------
 dir_create(here::here("data-processed"))
-readr::write_rds(wahis_annual, here::here("data-processed", "processed-annual-reports.rds"), compress = "xz", compression = 9L)
+readr::write_rds(wahis_annual, here::here("data-processed", "wahis_ingested_annual_reports.rds"), compress = "xz", compression = 9L)
 
 # Transform files   ------------------------------------------------------
-annual_reports <-  readr::read_rds(here::here("data-processed", "processed-annual-reports.rds"))
-
-assertthat::are_equal(length(filenames), length(annual_reports))
-ingest_status_log <- tibble(web_page = basename(filenames),
-                            ingest_status = map_chr(annual_reports, ~.x$ingest_status)) %>%
-    mutate(code = substr(web_page, 1, 3),
-           report_year = substr(web_page, 5, 8),
-           semester = substr(web_page, 13, 13)) %>%
-    select(-web_page) %>%
-    mutate(in_database = ingest_status == "available") %>%
-    mutate(ingest_error = ifelse(!in_database, ingest_status, NA)) %>%
-    select(code, report_year, semester, in_database, ingest_error)
-
+annual_reports <-  readr::read_rds(here::here("data-processed", "wahis_ingested_annual_reports.rds"))
 annual_reports_transformed <- wahis::transform_annual_reports(annual_reports)
-# check diseases listed more than once
-# annual_reports_transformed$annual_reports_animal_diseases %>% 
-#     group_by(country, country_iso3c, report_year, report_months, report_semester, oie_listed, disease, disease_population) %>% 
-#     count %>%
-#     filter(n>1)
-# check measuring units
-# annual_reports_transformed$annual_reports_animal_hosts %>% 
-#     count(measuring_units, species) %>%
-#     View
-# annual_reports_transformed$annual_reports_animal_hosts_detail %>%
-#     count(measuring_units, species) %>%
-#     View
 
 # Export transformed files-----------------------------------------------
 dir_create( here::here("data-processed", "db"))
 purrr::iwalk(annual_reports_transformed, ~readr::write_csv(.x, here::here("data-processed", "db", paste0(.y, ".csv.xz"))))
-readr::write_csv(ingest_status_log, here::here("data-processed", "db", "annual_reports_ingest_status_log.csv.xz"))
-
-readr::write_rds(annual_reports_transformed, here::here("data-processed", "annual-reports-data.rds"), compress = "xz", compression = 9L)
-
+readr::write_rds(annual_reports_transformed, here::here("data-processed", "wahis_transformed_annual_reports.rds

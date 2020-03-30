@@ -1,5 +1,6 @@
 #!/usr/bin/env Rscript
 
+# This script is for testing. Processing for database is done in repel-infrastructure. 
 library(fs)
 library(future)
 library(furrr)
@@ -25,26 +26,15 @@ wahis_outbreak <- future_map(filenames, wahis:::safe_ingest_outbreak, .progress 
 # Rprof(NULL)
 # noamtools::proftable("out.prof")
 
-
 # Save ingested files   ------------------------------------------------------
 dir_create(here::here("data-processed"))
-readr::write_rds(wahis_outbreak, here::here("data-processed", "processed-outbreak-reports.rds"), compress = "xz", compression = 9L)
+readr::write_rds(wahis_outbreak, here::here("data-processed", "wahis-ingested-outbreak-reports.rds"), compress = "xz", compression = 9L)
 
 # Transform files   ------------------------------------------------------
-outbreak_reports <-  readr::read_rds(here::here("data-processed", "processed-outbreak-reports.rds"))
-
-assertthat::are_equal(length(filenames), length(outbreak_reports))
-ingest_status_log <- tibble(id = gsub(".html", "", basename(filenames)), 
-                            ingest_status = map_chr(outbreak_reports, ~.x$ingest_status)) %>%
-    mutate(in_database = ingest_status == "available") %>%
-    mutate(ingest_error = ifelse(!in_database, ingest_status, NA)) %>%
-    select(-ingest_status)
-
+outbreak_reports <-  readr::read_rds(here::here("data-processed", "wahis-ingested-outbreak-reports.rds"))
 outbreak_reports_transformed <- transform_outbreak_reports(outbreak_reports)
 
 # Export transformed files-----------------------------------------------
 dir_create( here::here("data-processed", "db"))
 purrr::iwalk(outbreak_reports_transformed, ~readr::write_csv(.x, here::here("data-processed", "db", paste0(.y, ".csv.xz"))))
-readr::write_csv(ingest_status_log, here::here("data-processed", "db", "outbreak_reports_ingest_status_log.csv.xz"))
-
-readr::write_rds(outbreak_reports_transformed, here::here("data-processed", "outbreak-reports-data.rds"), compress = "xz", compression = 9L)
+readr::write_rds(outbreak_reports_transformed, here::here("data-processed", "wahis-transformed-outbreak-reports.rds"), compress = "xz", compression = 9L)
