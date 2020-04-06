@@ -43,13 +43,15 @@ get_country_borders <- function(){
 }
 
 #' calculate country centroid distance
-#' @import dplyr tidyr CoordinateCleaner
+#' @import dplyr tidyr
 #' @importFrom janitor clean_names
 #' @importFrom geosphere distm distGeo
+#' @importFrom readr read_csv
 #' @export
 get_country_distance <- function(){
   
-  country_controids <- CoordinateCleaner::countryref %>%
+  # system file saved from CoordinateCleaner::countryref
+  country_controids <-read_csv(system.file("CoordinateCleaner_export", "countryref.csv", package = "wahis")) %>%
     as_tibble() %>%
     janitor::clean_names() %>%
     filter(type == "country") %>%

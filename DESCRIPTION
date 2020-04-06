@@ -33,7 +33,6 @@ Imports:
     readr,
     jsonlite,
     tradestatistics,
-    CoordinateCleaner,
     geosphere,
     taxadb,
     countrycode
