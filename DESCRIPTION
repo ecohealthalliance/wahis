@@ -23,10 +23,6 @@ Imports:
     stringi,
     stringr, 
     tidyr,
-    fs,
-    magrittr,
-    aws.s3,
-    aws.signature,
     rvest,
     xml2,
     scrapetools,
@@ -62,7 +58,5 @@ Suggests:
     furrr,
     fs
 Remotes:
-  cran/MonetDBLite@0.6.0,
-  ropensci/arkdb@comment-char,
   noamross/scrapetools,
   ropensci/taxadb
