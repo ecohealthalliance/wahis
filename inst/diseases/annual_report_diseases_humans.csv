@@ -1,4 +1,5 @@
-disease_clean
+disease
+anthrax
 avian chlamydiosis
 bovine tuberculosis
 brucellosis
@@ -17,9 +18,11 @@ leishmaniosis
 leptospirosis
 marburg virus disease
 monkey pox
+new world screwworm (cochliomyiahominivorax)
 nipah virus encephalitis
 old world screwworm (chrysomya bezziana)
 q fever
+rabies
 rift valley fever
 "salmonellosis (s. enteritidis, s.typhimurium)"
 swine erysipelas
@@ -29,10 +32,7 @@ tularemia
 variant creutzfeldt-jakob disease
 venezuelan equine encephalomyelitis
 west nile fever
-anthrax
-new world screwworm (cochliomyiahominivorax)
 babesiosis
 cysticercosis
 trypanosomosis (t. evansi)
 "trypanosomosis, human african (sleepingsickness)"
-rabies

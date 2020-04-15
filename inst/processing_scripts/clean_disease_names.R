@@ -22,13 +22,11 @@ outbreak_animal <- read_csv(system.file("diseases", "outbreak_report_diseases.cs
 
 diseases_for_lookup <- annual_animal %>% 
     mutate(report = "animal") %>% 
-    bind_rows(annual_human %>% mutate(report = "annual human")) %>% 
+    bind_rows(annual_human %>% mutate(report = "human")) %>% 
     bind_rows(outbreak_animal %>% 
-                  select(disease_clean = disease) %>% 
                   mutate(report = "animal")) %>% 
     distinct() %>% 
-    arrange(disease_clean) %>% 
-    rename(disease = disease_clean)
+    arrange(disease) 
 
 
 # Pre-process ANDO ontology for manual lookups ----------------------------
@@ -62,3 +60,4 @@ diseases_for_lookup <- diseases_for_lookup %>%
 
 write_csv(diseases_for_lookup, here::here("inst", "diseases", "disease_lookup.csv"))
 # NOTE - manual lookup is done in disease_lookup.xlsx to prevent accidentally overwriting
+# This will need to be manually updated with new diseases
