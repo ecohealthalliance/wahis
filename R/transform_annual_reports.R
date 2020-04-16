@@ -18,7 +18,7 @@ transform_annual_reports <- function(annual_reports) {
   if(!length(annual_reports2)) return(NULL)
   
   #####  Extract and rbind tables
-  tnames <- c('metadata', 'submission_info', 'diseases_present', 'diseases_absent', 'diseases_present_detail', 'diseases_unreported', 'disease_humans', 'animal_population', 'veterinarians', 'national_reference_laboratories', 'national_reference_laboratories_detail', 'vaccine_manufacturers', 'vaccine_manufacturers_detail', 'vaccine_production')
+  tnames <- c('submission_info', 'diseases_present', 'diseases_absent', 'diseases_present_detail', 'diseases_unreported', 'disease_humans', 'animal_population', 'veterinarians', 'national_reference_laboratories', 'national_reference_laboratories_detail', 'vaccine_manufacturers', 'vaccine_manufacturers_detail', 'vaccine_production')
   
   wahis_joined <- map(tnames, function(name){
     map_dfr(annual_reports2, ~`[[`(., name)) %>% 
@@ -33,7 +33,6 @@ transform_annual_reports <- function(annual_reports) {
   }
   
   #####  Table name assertions 
-  warn_that(wahis_joined$metadata %has_name% c("country", "country_iso3c", "report_year", "report_months",  "report_semester", "report"))
   warn_that(wahis_joined$submission_info %has_name%  c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'submission_info', 'submission_value', 'submission_animal_type'))
   warn_that(wahis_joined$diseases_present %has_name% c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'disease', 'occurrence', 'serotype_s', 'new_outbreaks', 'total_outbreaks', 'species', 'control_measures', 'official_vaccination', 'measuring_units', 'susceptible', 'cases', 'deaths', 'killed_and_disposed_of', 'slaughtered', 'vaccination_in_response_to_the_outbreak_s', 'oie_listed', 'notes'))
   warn_that(wahis_joined$diseases_absent %has_name% c('country', 'country_iso3c', 'report_year', 'report_months', 'report_semester', "report", 'taxa', 'disease', 'date_of_last_occurrence', 'species', 'control_measures', 'official_vaccination', 'oie_listed', 'notes'))
@@ -258,10 +257,10 @@ transform_annual_reports <- function(annual_reports) {
       select(country, country_iso3c, report, report_year, report_months, report_semester,
              disease_old,
              disease, disease_population, disease_class, ando_id, disease_status, taxa,
-             serotype, period, temporal_scale, adm, adm_type, new_outbreaks, total_outbreaks) %>% 
+             serotype, period, temporal_scale, adm, adm_type, new_outbreaks_detail = new_outbreaks, total_outbreaks_detail = total_outbreaks) %>% 
       group_by(report, period, disease_old, disease, disease_population) %>%
-      fill(new_outbreaks, .direction = "down") %>% 
-      fill(total_outbreaks, .direction = "down") %>% 
+      fill(new_outbreaks_detail, .direction = "down") %>% 
+      fill(total_outbreaks_detail, .direction = "down") %>% 
       mutate(taxa = paste(unique(taxa), collapse = "; ")) %>%  # note NAs are included here
       ungroup() %>% 
       distinct()
@@ -342,7 +341,9 @@ transform_annual_reports <- function(annual_reports) {
              disease_old,
              disease, disease_population, disease_class, ando_id, disease_status, taxa,
              serotype, period, temporal_scale, adm, adm_type, family_name:vaccination_in_response_to_the_outbreak_s) %>% 
-      rename(vaccination_in_response_to_the_outbreak = vaccination_in_response_to_the_outbreak_s) %>%
+      rename(vaccination_in_response_to_the_outbreak_detail = vaccination_in_response_to_the_outbreak_s,
+             susceptible_detail = susceptible, cases_detail = cases, deaths_detail = deaths, 
+             killed_and_disposed_of_detail =killed_and_disposed_of, slaughtered_detail = slaughtered) %>%
       mutate(measuring_units = ifelse(measuring_units == "Hives" & taxa != "api" & taxa != "***",  "Animals",  measuring_units))
   }
   
@@ -380,10 +381,10 @@ transform_annual_reports <- function(annual_reports) {
       left_join(human_disease_lookup) %>% 
       mutate(disease = coalesce(preferred_label, disease)) %>% 
       select(-preferred_label) %>% 
-      gather(key = "occurrence", value = "value", no_information_available:disease_present_number_of_cases_known) %>%
+      gather(key = "human_disease_status", value = "value", no_information_available:disease_present_number_of_cases_known) %>%
       drop_na(value) %>% 
       select(-value) %>% 
-      mutate(occurrence = str_replace_all(occurrence, "_", " "))
+      mutate(human_disease_status = str_replace_all(human_disease_status, "_", " "))
     
     warn_that(!any(is.na(disease_humans$disease)))
   }
@@ -434,11 +435,10 @@ transform_annual_reports <- function(annual_reports) {
       rename(vaccine_manufacturer = manufacturer)
   }
   
-  #TODO note that vaccine_manufacturers_detail and vaccine_production can potentially be joined by vaccine
+  #TODO note that vaccine_manufacturers_detail and vaccine_production can potentially be joined by vaccine - would need to clean the fields first
   
   wahis_joined$submission_info <- wahis_joined$submission_info %>%
-    mutate(submission_animal_type = recode(submission_animal_type, "Terrestrial and Aquatic" = "Aquatic and terrestrial"))
-  
+    mutate(submission_animal_type = recode(submission_animal_type, "terrestrial and aquatic" = "aquatic and terrestrial"))
   names(wahis_joined) <- paste0("annual_reports_", names(wahis_joined))
   
   
