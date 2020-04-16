@@ -115,12 +115,6 @@ annual_reports_ingest_status_log,report_year,report year,integer,
 annual_reports_ingest_status_log,report_semester,"report semester (0 = year, 1 = Jan - Jun, 2 = Jul - Dec)",character,"0, 1, 2"
 annual_reports_ingest_status_log,in_database,whether or not the report is in the database,boolean,"TRUE, FALSE"
 annual_reports_ingest_status_log,ingest_error,error message if not in database,character,
-annual_reports_metadata,country,full country name,character,
-annual_reports_metadata,country_iso3c,country iso3 code,character,
-annual_reports_metadata,report_year,report year,integer,
-annual_reports_metadata,report_months,report months,character,"Jan-Dec, Jan-Jun, Jul-Dec"
-annual_reports_metadata,report_semester,"report semester (0 = year, 1 = Jan - Jun, 2 = Jul - Dec)",character,"0, 1, 2"
-annual_reports_metadata,report,"unique report identifier with concatenated iso3c, year, semester",character,
 annual_reports_national_reference_laboratories,country,full country name,character,
 annual_reports_national_reference_laboratories,country_iso3c,country iso3 code,character,
 annual_reports_national_reference_laboratories,report_year,report year,integer,
