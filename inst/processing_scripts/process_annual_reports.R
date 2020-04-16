@@ -38,4 +38,4 @@ annual_reports_transformed <- wahis::transform_annual_reports(annual_reports)
 # Export transformed files-----------------------------------------------
 dir_create( here::here("data-processed", "db"))
 purrr::iwalk(annual_reports_transformed, ~readr::write_csv(.x, here::here("data-processed", "db", paste0(.y, ".csv.xz"))))
-readr::write_rds(annual_reports_transformed, here::here("data-processed", "wahis_transformed_annual_reports.rds
+readr::write_rds(annual_reports_transformed, here::here("data-processed", "wahis_transformed_annual_reports.rds))
