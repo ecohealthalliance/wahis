@@ -3,20 +3,21 @@
 #' @import dplyr tidyr purrr stringr
 #' @importFrom janitor clean_names
 #' @importFrom lubridate dmy myd ymd
+#' @importFrom countrycode countrycode
 #' @export
 
 transform_outbreak_reports <- function(outbreak_reports) {
   
-  # Remove report errors ---------------------------------------------------
+  # Proprocessing ---------------------------------------------------
   outbreak_reports2 <- keep(outbreak_reports, function(x){
     !is.null(x) && !is.null(x$ingest_status) && x$ingest_status == "available"
   })
   
   if(!length(outbreak_reports2)) return(NULL)
   
-  # Events table ---------------------------------------------------
   exclude_fields <- c("Related reports", "related_reports", # can be determined from immediatate reports
-                      "outbreak_detail", "outbreak_summary", "diagnostic_tests" # addressed in detail below
+                      "outbreak_detail", "outbreak_summary", "diagnostic_tests", # addressed in detail below
+                      "ingest_status" # all available
   )
   
   outbreak_reports2 <-  modify(outbreak_reports2, function(x){
@@ -24,19 +25,26 @@ transform_outbreak_reports <- function(outbreak_reports) {
     return(x)
   })
   
+  # Events table ---------------------------------------------------
   outbreak_reports_events <- map_dfr(outbreak_reports2, function(x){
     exclude_index <- which(names(x) %in% exclude_fields)
     as_tibble(x[-exclude_index])
   }) %>% 
     janitor::clean_names() 
   
-  # Immediate report threads ---------------------------------------------------
-  outbreak_reports_events <- outbreak_reports_events %>%
-    mutate(immediate_report = ifelse(str_detect(report_type, "Immediate notification"), id, immediate_report)) %>%
-    mutate(follow_up = ifelse(str_detect(report_type, "Immediate notification"), 0, str_extract(report_type, "[[:digit:]]+"))) %>%
-    mutate(final_report = str_detect(report_type, "Final report")) %>% 
-    mutate(endemic = str_detect(future_reporting, "The event cannot be considered resolved"))
+  # Get iso3c codes
+  country_lookup <- tibble(country = unique(outbreak_reports_events$country)) %>% 
+    mutate(country_iso3c = countrycode(sourcevar = country, origin = "country.name", destination = "iso3c"))
   
+  # Cleaning
+  outbreak_reports_events <- outbreak_reports_events %>%
+    mutate_at(vars(-country), ~tolower(.)) %>% 
+    mutate(immediate_report = ifelse(str_detect(report_type, "immediate notification"), id, immediate_report)) %>%
+    mutate(follow_up = ifelse(str_detect(report_type, "immediate notification"), 0, str_extract(report_type, "[[:digit:]]+"))) %>%
+    mutate(final_report = str_detect(report_type, "final report")) %>% 
+    mutate(endemic = str_detect(future_reporting, "the event cannot be considered resolved")) %>% 
+    left_join(country_lookup) %>% 
+    select(id, country, country_iso3c, everything())
   
   # New outbreak?
   outbreak_reports_events <- outbreak_reports_events %>%
@@ -81,15 +89,15 @@ transform_outbreak_reports <- function(outbreak_reports) {
     filter(final_report, !check)
   
   outbreak_reports_events <- outbreak_reports_events %>% 
-    mutate(date_event_resolved = ifelse(id %in% check_final_resolved$id, report_date, date_event_resolved)) %>% 
-    mutate(disease = trimws(tolower(disease)))
+    mutate(date_event_resolved = if_else(id %in% check_final_resolved$id, report_date, date_event_resolved)) 
+  
+  # Disease standardization
   
   # disease_export <- outbreak_reports_events %>% 
   #   distinct(disease, causal_agent) %>% 
   #   mutate_all(~tolower(trimws(.)))
   # write_csv(disease_export, here::here("inst/diseases/outbreak_report_diseases.csv"))
   
-  # Read in manual lookup
   ando_disease_lookup <- readxl::read_xlsx(system.file("diseases", "disease_lookup.xlsx", package = "wahis")) %>% 
     rename(disease_class = class_desc) %>% 
     filter(report == "animal") %>% 
@@ -98,29 +106,41 @@ transform_outbreak_reports <- function(outbreak_reports) {
     mutate_at(.vars = c("ando_id", "preferred_label", "disease_class"), ~na_if(., "NA"))
   
   outbreak_reports_events <- outbreak_reports_events %>% 
+    mutate(disease = trimws(tolower(disease))) %>%
     left_join(ando_disease_lookup, by = "disease") %>% 
     mutate(disease = coalesce(preferred_label, disease)) %>% 
     select(-preferred_label) %>% 
     distinct() 
   
   diseases_unmatched <- outbreak_reports_events %>% 
-    filter(is.na(ando_id)) %>% 
     distinct(disease) %>% 
     mutate(table = "outbreak_animal")
   
-  
-  #TODO - handling unresolved cases - currently workflow leaves them as marked final (so far - there are no cases like this 2020-03-19)
-  
-  # Outbreaks ---------------------------------------------------
+  # Outbreak tables ---------------------------------------------------
   
   outbreak_reports_detail <- map_df(outbreak_reports2, function(x){
     if(length(x$outbreak_detail) == 1){return()}
     x$outbreak_detail })
   
   if(nrow(outbreak_reports_detail)) {
+    
     outbreak_reports_detail <- outbreak_reports_detail %>%
+      mutate_all(~tolower(.)) %>% 
       janitor::clean_names() %>%
       mutate(outbreak_number = trimws(outbreak_number))
+    
+    # clean dates
+    warn_that(unique(str_length(outbreak_reports_detail$date_of_start_of_the_outbreak)) == 10)
+    
+    outbreak_reports_detail <- outbreak_reports_detail %>%
+      mutate(date_of_start_of_the_outbreak = dmy(date_of_start_of_the_outbreak)) %>% 
+      mutate(outbreak_status2 = str_extract(outbreak_status, "resolved|continuing")) %>% 
+      mutate(date_outbreak_resolved = case_when(outbreak_status2 == "resolved" ~
+                                              str_extract(outbreak_status, "(?<=\\().+?(?=\\))"))) %>% 
+      mutate(date_outbreak_resolved = dmy(date_outbreak_resolved)) %>% 
+      select(-outbreak_status) %>% 
+      rename(outbreak_status = outbreak_status2)
+      
   }
   
   outbreak_reports_summary <- map_df(outbreak_reports2, function(x){
@@ -129,6 +149,7 @@ transform_outbreak_reports <- function(outbreak_reports) {
   
   if(nrow(outbreak_reports_summary)) {
     outbreak_reports_summary <- outbreak_reports_summary %>%
+      mutate_all(~tolower(.)) %>% 
       janitor::clean_names() %>%
       mutate_all(~str_remove(., "%")) %>%
       rename(total_morbidity_perc = total_apparent_morbidity_rate,
@@ -137,6 +158,24 @@ transform_outbreak_reports <- function(outbreak_reports) {
              total_susceptible_animals_lost_perc = total_proportion_susceptible_animals_lost)
   }
   
+  # Fixes to mortality and morbidity fields (events and outbreak tables) ---------------------------------
+  for(tbl_name in c("outbreak_reports_events", "outbreak_reports_detail")){
+    tbl <- get(tbl_name)
+    if(nrow(tbl)==0) next()
+    tmp <- tbl %>% 
+      mutate(mortality_val = str_extract(mortality, "scale 0 to 5|%|/")) %>% 
+      mutate(morbidity_val = str_extract(morbidity, "scale 0 to 5|%|/")) %>% 
+      mutate(mortality_rate = case_when(
+        mortality_val == "scale 0 to 5" ~ suppressWarnings(as.numeric(str_remove(mortality, "\\(scale 0 to 5\\)"))) * 0.2,
+        mortality_val == "%" ~  suppressWarnings(as.numeric(str_remove(mortality, "%")) / 100),
+        mortality_val == "/" ~ suppressWarnings(as.numeric(str_remove_all(mortality, ".*/|%")) / 100))) %>% 
+      mutate(morbidity_rate = case_when(
+        morbidity_val == "scale 0 to 5" ~ suppressWarnings(as.numeric(str_remove(morbidity, "\\(scale 0 to 5\\)"))) * 0.2,
+        morbidity_val == "%" ~  suppressWarnings(as.numeric(str_remove(morbidity, "%")) / 100),
+        morbidity_val == "/" ~ suppressWarnings(as.numeric(str_remove_all(morbidity, ".*/|%")) / 100))) %>% 
+      select(-morbidity, -morbidity_val, -mortality, -mortality_val)
+    assign(tbl_name, tmp)
+  }
   
   # Laboratories table ---------------------------------------------------
   outbreak_reports_laboratories <- map_dfr(outbreak_reports2, function(x){
@@ -146,7 +185,9 @@ transform_outbreak_reports <- function(outbreak_reports) {
     }
     return(tests)
   }) %>%
-    janitor::clean_names() 
+    janitor::clean_names() %>% 
+    mutate_all(~tolower(.)) %>% 
+    mutate(test_date = dmy(test_date))
   
   # Export -----------------------------------------------
   wahis_joined <- list("outbreak_reports_events" = outbreak_reports_events, 
