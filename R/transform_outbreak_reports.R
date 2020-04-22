@@ -53,19 +53,7 @@ transform_outbreak_reports <- function(outbreak_reports) {
   # Dates handling - convert to  ISO-8601 
   outbreak_reports_events <- outbreak_reports_events %>%
     mutate_at(vars(starts_with("date"), "report_date", -"date_of_previous_occurrence"), ~dmy(.)) %>% 
-    mutate(date_of_previous_occurrence_nchar = as.character(nchar(date_of_previous_occurrence))) %>% 
-    mutate(date_of_previous_occurrence_resolution = recode(date_of_previous_occurrence_nchar,
-                                                           "4" = "yyyy",
-                                                           "7" = "yyyy-mm",
-                                                           "10" = "yyyy-mm-dd",
-                                                           .default = NA_character_)) %>% 
-    mutate(date_of_previous_occurrence_resolution2 = date_of_previous_occurrence_resolution) %>% 
-    pivot_wider(names_from = date_of_previous_occurrence_resolution2, values_from = date_of_previous_occurrence) %>% 
-    mutate(`yyyy-mm-dd`= dmy(`yyyy-mm-dd`)) %>% 
-    mutate(`yyyy-mm` = myd(`yyyy-mm`, truncated = 1)) %>% 
-    mutate(`yyyy` = ymd(`yyyy`, truncated = 2)) %>% 
-    mutate(date_of_previous_occurrence = coalesce(`yyyy-mm-dd`,`yyyy-mm`, `yyyy`)) %>% 
-    select(-`NA`, -date_of_previous_occurrence_nchar, -`yyyy-mm-dd`,-`yyyy-mm`, -`yyyy`) 
+    mutate(date_of_previous_occurrence = messy_dates(date_of_previous_occurrence))
   
   # Check for missing date_event_resolved
   missing_resolved <- outbreak_reports_events %>% 

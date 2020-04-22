@@ -482,7 +482,6 @@ outbreak_reports_events,follow_up,follow up number (how many reports in outbreak
 outbreak_reports_events,final_report,whether this is final report in outbreak ,boolean,"TRUE, FALSE"
 outbreak_reports_events,endemic,whether this disease has become endemic,boolean,"TRUE, FALSE"
 outbreak_reports_events,new_outbreak_in_report,whether this report contains a new outbreak,boolean,"TRUE, FALSE"
-outbreak_reports_events,date_of_previous_occurrence_resolution,specificity of date of previous occurrence,character,"yyyy, yyyy-mm-dd, yyyy-mm"
 outbreak_reports_events,date_of_previous_occurrence,date of previous occurrence of outbreak,date,
 outbreak_reports_events,ando_id,ID from ANDO disease ontology,character,
 outbreak_reports_events,disease_class,disease class from ANDO ontology,character,"disease group, disease specific, pathogen"
