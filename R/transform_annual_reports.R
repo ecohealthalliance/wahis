@@ -1,3 +1,7 @@
+# For summing counts 
+sum_na <- function(vec) ifelse(all(is.na(vec)), NA_integer_, sum(as.numeric(vec), na.rm = TRUE))
+
+
 #' Convert a list of scraped annual reports to a list of table
 #' @param annual_reports a list of annual reports produced by [ingest_annual_report]
 #' @import dplyr tidyr stringr purrr
@@ -74,17 +78,36 @@ transform_annual_reports <- function(annual_reports) {
   
   # Pre-processing animal disease and host tables ----------------------------------------------------
   
-  diseases_present <- wahis_joined$diseases_present %>% rename(taxa = species)
-  diseases_present_detail <- wahis_joined$diseases_present_detail %>% rename(taxa = species)
-  diseases_absent <- wahis_joined$diseases_absent %>% rename(taxa_parent = taxa,  taxa = species) # parent was extracted from table headers, taxa was from columns
+  diseases_present <- wahis_joined$diseases_present
+  diseases_present_detail <- wahis_joined$diseases_present_detail
+  diseases_absent <- wahis_joined$diseases_absent 
   diseases_unreported <- wahis_joined$diseases_unreported
   
-  ##### misc fix (probably should have been handled in ingest function)
+  ##### misc fixes (probably should have been handled in ingest function)
+  diseases_present <- diseases_present %>% 
+    rename(taxa = species, serotype = serotype_s, vaccination_in_response_to_the_outbreak = vaccination_in_response_to_the_outbreak_s) %>% 
+    group_by(report, disease) %>%
+    fill(occurrence, .direction = "down") %>% 
+    fill(serotype, .direction = "down") %>% 
+    ungroup() %>% 
+    mutate(serotype = na_if(serotype, "not typed")) %>% 
+    mutate_at(.vars = c("new_outbreaks", "total_outbreaks", "official_vaccination", "susceptible", "cases", "deaths", "killed_and_disposed_of", "slaughtered", "vaccination_in_response_to_the_outbreak"), ~as.numeric(.))
+  
   diseases_present_detail <- diseases_present_detail %>% 
-    rename(serotype = serotype_s) %>% 
+    rename(taxa = species, serotype = serotype_s, vaccination_in_response_to_the_outbreak = vaccination_in_response_to_the_outbreak_s,
+           new_outbreaks_detail = new_outbreaks, total_outbreaks_detail = total_outbreaks) %>% 
     group_by(report, period, disease) %>%
     fill(adm, .direction = "down") %>% 
     fill(serotype, .direction = "down") %>% 
+    ungroup() %>% 
+    mutate(serotype = na_if(serotype, "not typed")) %>% 
+    mutate_at(.vars = c("new_outbreaks_detail", "total_outbreaks_detail", "susceptible", "cases", "deaths", "killed_and_disposed_of", "slaughtered", "vaccination_in_response_to_the_outbreak"), ~as.numeric(.))
+  
+  diseases_absent <- diseases_absent %>% 
+    rename(date_of_last_occurrence_if_absent = date_of_last_occurrence,
+           taxa_parent = taxa,  taxa = species) %>%  # parent was extracted from table headers, taxa was from columns) 
+    group_by(report, disease) %>%
+    fill(date_of_last_occurrence_if_absent) %>% 
     ungroup()
   
   ##### Clean taxa codes
@@ -190,80 +213,118 @@ transform_annual_reports <- function(annual_reports) {
       rename(disease_old = disease) %>% 
       left_join(animal_disease_lookup) %>% 
       mutate(disease = coalesce(preferred_label, disease)) %>% 
-      select(-preferred_label) 
+      select(-preferred_label, -disease_old) 
     warn_that(!any(is.na(disease_joined$disease)))
     assign(tbl_name, disease_joined)
   }
   
+  ##### For present table, handle occurrences/statuses  
+  # if disease is listed as both present and suspected, and the counts are all NA for suspected, then remove the suspected
+  if(nrow(diseases_present)){
+    diseases_present <- diseases_present %>% 
+      mutate(disease_status = if_else(occurrence %in% suspected_code, "suspected", "present")) %>% 
+      group_by(report, disease, disease_population, taxa) %>% 
+      mutate(suspected_and_present = all(c("present", "suspected") %in% disease_status)) %>% 
+      ungroup() %>% 
+      mutate(suspected_na = suspected_and_present == TRUE & 
+               disease_status == "suspected" & 
+               is.na(serotype) &
+               is.na(new_outbreaks) & 
+               is.na(total_outbreaks) &
+               is.na(official_vaccination) &
+               is.na(susceptible) &
+               is.na(cases) &
+               is.na(deaths) &
+               is.na(killed_and_disposed_of) &
+               is.na(slaughtered) &
+               is.na(vaccination_in_response_to_the_outbreak)) %>% 
+      filter(!suspected_na) %>% 
+      select(-suspected_na, -suspected_and_present, -occurrence)
+  }
+  
   # Split out disease tables  ------------------------------------------
+  # aggrate over clean disease names
   
   ##### animal_diseases table
   if(nrow(diseases_present)){
-    animal_diseases_present <- diseases_present %>%
-      mutate(disease_status = "present") %>%
-      select(country, country_iso3c, report, report_year, report_months, report_semester,
-             disease_old,
-             disease, disease_population, disease_class, ando_id, oie_listed, disease_status, taxa,
-             occurrence, serotype = serotype_s, new_outbreaks, total_outbreaks, notes) %>% 
-      group_by(report, disease_old, disease, disease_population) %>% 
-      fill(serotype, .direction = "down") %>% 
-      fill(new_outbreaks, .direction = "down") %>% 
-      fill(total_outbreaks, .direction = "down") %>% 
-      fill(occurrence, .direction = "down") %>% 
-      mutate(taxa = paste(taxa, collapse = "; ")) %>% # note NAs are included
-      ungroup() %>% 
-      distinct()
+    
+    animal_diseases_present <- diseases_present %>% 
+      group_by(country, country_iso3c, report, report_year, report_months, report_semester,
+               disease, disease_population, disease_class, ando_id, disease_status, serotype) %>%
+      summarize(new_outbreaks = sum_na(new_outbreaks),
+                total_outbreaks = sum_na(total_outbreaks),
+                taxa = paste(sort(unique(na.omit(taxa))), collapse = "; "),
+                oie_listed = "true" %in% unique(oie_listed),
+                notes = paste(na.omit(notes), collapse = "\n")) %>%
+      ungroup() %>%
+      mutate(taxa = na_if(taxa, ""),
+             notes = na_if(notes, ""))
+    
+    # sc <- get_dupes(animal_diseases_present, report, disease, disease_population, serotype, taxa)
   }
   
   if(nrow(diseases_absent)){
     animal_diseases_absent <- diseases_absent %>%
-      select(country, country_iso3c, report, report_year, report_months, report_semester,
-             disease_old,
-             disease, disease_population,  disease_class, ando_id, oie_listed, taxa,
-             date_of_last_occurrence_if_absent = date_of_last_occurrence) %>% 
-      group_by(report, disease_old, disease, disease_population) %>%
-      mutate(taxa = paste(taxa, collapse = "; ")) %>% 
-      fill(date_of_last_occurrence_if_absent) %>%
+      mutate(disease_status = "absent") %>%
+      mutate(date_of_last_occurrence_if_absent = messy_dates(date_of_last_occurrence_if_absent)) %>% 
+      group_by(country, country_iso3c, report, report_year, report_months, report_semester,
+               disease, disease_population,  disease_class, ando_id, disease_status) %>% 
+      summarize(taxa = paste(sort(unique(na.omit(taxa))), collapse = "; "),
+                oie_listed = "true" %in% unique(oie_listed),
+                date_of_last_occurrence_if_absent = suppressWarnings(max(date_of_last_occurrence_if_absent, na.rm = TRUE))) %>% # take latest date if more than one
       ungroup() %>%
-      distinct() %>% 
-      mutate(occurrence = "-", new_outbreaks = "0", total_outbreaks = "0", disease_status = "absent") 
+      mutate(taxa = na_if(taxa, "")) %>% 
+      mutate(new_outbreaks = 0, total_outbreaks = 0) %>% 
+      distinct()
+    
+    #sc <- get_dupes(animal_diseases_absent, report, disease, disease_population)
   }
   
   if(nrow(diseases_unreported)){
     animal_diseases_unreported <- diseases_unreported %>% 
-      mutate(occurrence = "0000", new_outbreaks = "0", total_outbreaks = "0",  disease_status = "absent")  %>% 
+      mutate(disease_status = "unreported") %>%
+      group_by(country, country_iso3c, report, report_year, report_months, report_semester,
+               disease, disease_population,  disease_class, ando_id, disease_status) %>% 
+      summarize(taxa = paste(sort(unique(na.omit(taxa))), collapse = "; "),
+                oie_listed = "true" %in% unique(oie_listed)) %>% 
+      ungroup() %>%
+      mutate(taxa = na_if(taxa, "")) %>% 
+      mutate(new_outbreaks = 0, total_outbreaks = 0)  %>% 
       distinct()
+    
+    #sc <- get_dupes(animal_diseases_unreported, report, disease, disease_population)
   }
   
   animal_diseases <- bind_rows(animal_diseases_present, animal_diseases_absent) %>% 
     bind_rows(animal_diseases_unreported) 
   
-  # Look up occurrence codes 
+  # remove cases where diseases are listed with more than one status. present or suspected > absent > unreported
   
   if(nrow(animal_diseases)){
-    animal_diseases <- animal_diseases %>%
-      mutate(disease_status = ifelse(occurrence %in% suspected_code, "suspected", disease_status)) %>% 
-      select(-occurrence) %>%
-      mutate(date_of_last_occurrence_if_absent = recode(date_of_last_occurrence_if_absent,
-                                                        "-" = NA_character_,
-                                                        "0000" = NA_character_))  %>%  # same codes as occurrence
-      distinct() 
+    animal_diseases <- animal_diseases %>% 
+      mutate(disease_status_rank = recode(disease_status, "present" = 1, "suspected" = 1, "absent" = 2, "unreported" = 3)) %>%
+      group_by(report, disease, disease_population) %>%
+      filter(disease_status_rank == min(disease_status_rank)) %>%
+      ungroup() %>% 
+      select(-disease_status_rank) %>% 
+      mutate(disease_status  = recode(disease_status, "unreported" = "absent")) # for our purposes, assume unreported = absent
+    #sc <- get_dupes(animal_diseases, report, disease, disease_population, taxa)
   }
   
   ##### animal_diseases_detail table
   if(nrow(diseases_present_detail)){
     animal_diseases_detail <- diseases_present_detail %>%
       mutate(disease_status = "present") %>%
-      select(country, country_iso3c, report, report_year, report_months, report_semester,
-             disease_old,
-             disease, disease_population, disease_class, ando_id, disease_status, taxa,
-             serotype, period, temporal_scale, adm, adm_type, new_outbreaks_detail = new_outbreaks, total_outbreaks_detail = total_outbreaks) %>% 
-      group_by(report, period, disease_old, disease, disease_population) %>%
-      fill(new_outbreaks_detail, .direction = "down") %>% 
-      fill(total_outbreaks_detail, .direction = "down") %>% 
-      mutate(taxa = paste(unique(taxa), collapse = "; ")) %>%  # note NAs are included here
-      ungroup() %>% 
-      distinct()
+      group_by(country, country_iso3c, report, report_year, report_months, report_semester,
+               disease, disease_population, disease_class, ando_id, disease_status,
+               serotype, period, temporal_scale, adm, adm_type) %>% 
+      summarize(new_outbreaks_detail = sum_na(new_outbreaks_detail),
+                total_outbreaks_detail = sum_na(total_outbreaks_detail),
+                taxa = paste(sort(unique(na.omit(taxa))), collapse = "; ")) %>%
+      ungroup() %>%
+      mutate(taxa = na_if(taxa, ""))
+    
+    # sc <- get_dupes(animal_diseases_detail, report, disease, disease_population, serotype, period, adm, taxa)
   }
   
   # Split out hosts tables  ------------------------------------------
@@ -271,23 +332,24 @@ transform_annual_reports <- function(annual_reports) {
   ##### animal_hosts table
   if(nrow(diseases_present)){
     animal_hosts_present <- diseases_present %>%
-      select(country, country_iso3c, report, report_year, report_months, report_semester,
-             disease_old,
-             disease, disease_population, disease_class, ando_id, oie_listed, taxa,
-             control_measures:vaccination_in_response_to_the_outbreak_s) %>%
-      rename(vaccination_in_response_to_the_outbreak = vaccination_in_response_to_the_outbreak_s) %>% 
-      group_by(report, disease_old, disease, disease_population) %>%
-      fill(control_measures, .direction = "down")  %>%
-      ungroup() %>%
-      mutate(disease_status = "present") %>%
-      mutate(control_measures = replace_na(control_measures, "")) %>%
-      mutate(vaccination_in_response_to_the_outbreak_num = suppressWarnings(as.numeric(vaccination_in_response_to_the_outbreak))) %>%
-      mutate(control_measures2 = ifelse(!is.na(vaccination_in_response_to_the_outbreak_num) & vaccination_in_response_to_the_outbreak_num>0,
+      group_by(country, country_iso3c, report, report_year, report_months, report_semester,
+               disease, disease_population, disease_class, ando_id, disease_status, serotype, taxa) %>%
+      summarize(official_vaccination = sum_na(official_vaccination),
+                susceptible = sum_na(susceptible),
+                cases = sum_na(cases),
+                deaths = sum_na(deaths),
+                killed_and_disposed_of = sum_na(killed_and_disposed_of),
+                vaccination_in_response_to_the_outbreak = sum_na(vaccination_in_response_to_the_outbreak),
+                measuring_units = paste(na.omit(unique(measuring_units)), collapse = " "), # this results in a few weird unit combos
+                control_measures = paste(na.omit(unique(control_measures)), collapse = " ") # may result in some dupes, handled below
+      ) %>%
+      ungroup() %>% 
+      mutate(control_measures2 = ifelse(!is.na(vaccination_in_response_to_the_outbreak) & vaccination_in_response_to_the_outbreak > 0,
                                         "Vr", "")) %>% # < there is no code for vaccination_in_response_to_the_outbreak so I am making one up
       unite(control_measures, control_measures, control_measures2, sep = " ") %>% # this is clunky but other approaches with paste and glue were sloooow
       mutate(control_measures = str_trim(control_measures)) %>%
-      select(-vaccination_in_response_to_the_outbreak_num) %>%
-      mutate(control_measures = ifelse(control_measures == "", NA_character_, control_measures))
+      mutate(control_measures = na_if(control_measures, "")) %>% 
+      mutate(measuring_units = na_if(measuring_units, "")) 
     
     # fix seemingly incorrect measurement units (hives for non-bees)
     animal_hosts_present <- animal_hosts_present %>%
@@ -295,7 +357,7 @@ transform_annual_reports <- function(annual_reports) {
     
     # confirming we do not have dupe taxa
     taxa_check <- animal_hosts_present %>%
-      group_by(report, disease_old, disease, disease_population) %>%
+      group_by(report, disease, disease, disease_population, serotype, disease_status) %>%
       mutate(n = n(), n_taxa = n_distinct(taxa)) %>%
       filter(n != n_taxa) 
     warn_that(nrow(taxa_check)==0)
@@ -303,16 +365,13 @@ transform_annual_reports <- function(annual_reports) {
   
   if(nrow(diseases_absent)){
     animal_hosts_absent <- diseases_absent %>%
-      select(country, country_iso3c, report, report_year, report_months, report_semester,
-             disease_old,
-             disease, disease_population,  disease_class, ando_id, oie_listed, taxa,
-             control_measures, official_vaccination) %>%
-      # control measures applied to all species
-      group_by(report, disease_old, disease, disease_population) %>%
-      fill(control_measures, .direction = "down")  %>%
-      ungroup() %>%
-      mutate(disease_status = "absent")
-    
+      mutate(disease_status = "absent") %>% 
+      group_by(country, country_iso3c, report, report_year, report_months, report_semester,
+               disease, disease_population,  disease_class, ando_id, disease_status, taxa) %>% 
+      summarize(official_vaccination = sum_na(official_vaccination),
+                control_measures = paste(na.omit(unique(control_measures)), collapse = " ") # may result in some dupes, handled below
+      ) %>% 
+      ungroup()
     warn_that(!any(is.na(animal_hosts_absent$taxa)))
   }
   
@@ -321,37 +380,34 @@ transform_annual_reports <- function(annual_reports) {
       mutate(disease_status = "absent") 
   }
   
-  animal_hosts <- bind_rows(animal_hosts_present, animal_hosts_absent) %>%
-    bind_rows(animal_hosts_unreported) %>% 
-    distinct()
+  animal_hosts <- bind_rows(animal_hosts_present, animal_hosts_absent) #%>%
+  # bind_rows(animal_hosts_unreported) %>% 
+  # distinct()
   
   # Look up control codes
   if(nrow(animal_hosts)){
     animal_hosts <- animal_hosts %>%
       mutate(control_measures = str_split(control_measures, " ")) %>% # make control_measures into list
       mutate(control_measures = map(control_measures, ~control_lookup[.])) %>% # lookup all items in list
-      mutate(control_measures = map_chr(control_measures, ~str_flatten(., collapse = "; "))) # back to string, now with full code measures
+      mutate(control_measures = map_chr(control_measures, ~str_flatten(sort(unique(.)), collapse = "; "))) # back to string, now with full code measures
   }
   
   ##### animal_hosts_detail table
   if(nrow(diseases_present_detail)){
     animal_hosts_detail <- diseases_present_detail %>%
       mutate(disease_status = "present") %>%
-      select(country, country_iso3c, report, report_year, report_months, report_semester,
-             disease_old,
-             disease, disease_population, disease_class, ando_id, disease_status, taxa,
-             serotype, period, temporal_scale, adm, adm_type, family_name:vaccination_in_response_to_the_outbreak_s) %>% 
-      rename(vaccination_in_response_to_the_outbreak_detail = vaccination_in_response_to_the_outbreak_s,
-             susceptible_detail = susceptible, cases_detail = cases, deaths_detail = deaths, 
-             killed_and_disposed_of_detail =killed_and_disposed_of, slaughtered_detail = slaughtered) %>%
-      mutate(measuring_units = ifelse(measuring_units == "Hives" & taxa != "api" & taxa != "***",  "Animals",  measuring_units))
+      mutate(measuring_units = ifelse(measuring_units == "Hives" & taxa != "api" & taxa != "***",  "Animals",  measuring_units)) %>% 
+      group_by(country, country_iso3c, report, report_year, report_months, report_semester,
+               disease, disease_population, disease_class, ando_id, disease_status, taxa, family_name, latin_name,
+               serotype, period, temporal_scale, adm, adm_type) %>% 
+      summarize(susceptible_detail = sum_na(susceptible),
+                cases_detail = sum_na(cases),
+                deaths_detail = sum_na(deaths),
+                killed_and_disposed_of_detail = sum_na(killed_and_disposed_of),
+                vaccination_in_response_to_the_outbreak_detail = sum_na(vaccination_in_response_to_the_outbreak),
+                measuring_units = paste(na.omit(unique(measuring_units)), collapse = " ")) %>%  # this results in a few weird unit combos
+      ungroup() 
   }
-  
-  ##### Handling diseases listed more 
-  #TODO ranking present > not present
-  #TODO aggregate over identical diseases
-  #TODO test merge hosts and diseases
-  sc <- janitor::get_dupes(diseases_present, report, taxa, disease, disease_population, serotype_s) 
   
   # Human tables  ------------------------------------------
   
