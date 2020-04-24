@@ -339,6 +339,7 @@ transform_annual_reports <- function(annual_reports) {
                 cases = sum_na(cases),
                 deaths = sum_na(deaths),
                 killed_and_disposed_of = sum_na(killed_and_disposed_of),
+                slaughtered = sum_na(slaughtered),
                 vaccination_in_response_to_the_outbreak = sum_na(vaccination_in_response_to_the_outbreak),
                 measuring_units = paste(na.omit(unique(measuring_units)), collapse = " "), # this results in a few weird unit combos
                 control_measures = paste(na.omit(unique(control_measures)), collapse = " ") # may result in some dupes, handled below
@@ -404,6 +405,7 @@ transform_annual_reports <- function(annual_reports) {
                 cases_detail = sum_na(cases),
                 deaths_detail = sum_na(deaths),
                 killed_and_disposed_of_detail = sum_na(killed_and_disposed_of),
+                slaughtered_detail = sum_na(slaughtered),
                 vaccination_in_response_to_the_outbreak_detail = sum_na(vaccination_in_response_to_the_outbreak),
                 measuring_units = paste(na.omit(unique(measuring_units)), collapse = " ")) %>%  # this results in a few weird unit combos
       ungroup() 
@@ -483,7 +485,7 @@ transform_annual_reports <- function(annual_reports) {
   
   if (nrow(wahis_joined$vaccine_manufacturers_detail)) {
     wahis_joined$vaccine_manufacturers_detail <- wahis_joined$vaccine_manufacturers_detail %>%
-      rename(vaccine_manufacturer = manufacturer, year_start_vaccine_production = year_of_start_of_production, year_end_vaccine_production = year_of_end_of_production_if_production_ended)
+      rename(vaccine_manufacturer = manufacturer, year_start_vaccine_production_detail = year_of_start_of_production, year_end_vaccine_production_detail = year_of_end_of_production_if_production_ended)
   }
   
   if (nrow(wahis_joined$vaccine_production)) {

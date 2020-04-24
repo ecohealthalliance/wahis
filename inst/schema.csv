@@ -42,8 +42,8 @@ annual_reports_animal_hosts,report_year,report year,integer,
 annual_reports_animal_hosts,report_months,report months,character,"Jan-Dec, Jan-Jun, Jul-Dec"
 annual_reports_animal_hosts,report_semester,"report semester (0 = year, 1 = Jan - Jun, 2 = Jul - Dec)",character,"0, 1, 2"
 annual_reports_animal_hosts,disease,disease name,character,
-annual_reports_animal_hosts,oie_listed,whether or not the disease is OIE listed,boolean,"TRUE, FALSE"
-annual_reports_animal_hosts,species,more specific than taxa,character,
+annual_reports_animal_hosts,serotype,disease serotype,character,
+annual_reports_animal_hosts,taxa,more specific than taxa,character,
 annual_reports_animal_hosts,control_measures,"measures taken to control outbreak, semicolon separated ",character,
 annual_reports_animal_hosts,official_vaccination,count of vaccinations given as part of standard practice?,integer,
 annual_reports_animal_hosts,measuring_units,measuring units of number of animals affected,character,"Animals, Hives, Tonnes, Killograms, Unknown"
@@ -54,7 +54,6 @@ annual_reports_animal_hosts,killed_and_disposed_of,count of killed/disposed,inte
 annual_reports_animal_hosts,slaughtered,count of slaughtered,integer,
 annual_reports_animal_hosts,vaccination_in_response_to_the_outbreak,count of vaccinations given in respose to outbreak,integer,
 annual_reports_animal_hosts,disease_status,occurrence of disease,character,
-annual_reports_animal_hosts,species_class,aquatic or terrestrial,character,"aquatic, terrestrial, all"
 annual_reports_animal_hosts,disease_population,disease_population,character,"domestic, wild, domestic and wild, not specified"
 annual_reports_animal_hosts,ando_id,ID from ANDO disease ontology,character,
 annual_reports_animal_hosts,disease_class,disease class from ANDO ontology,character,"disease group, disease specific, pathogen"
@@ -65,11 +64,13 @@ annual_reports_animal_hosts_detail,report_year,report year,integer,
 annual_reports_animal_hosts_detail,report_months,report months,character,"Jan-Dec, Jan-Jun, Jul-Dec"
 annual_reports_animal_hosts_detail,report_semester,"report semester (0 = year, 1 = Jan - Jun, 2 = Jul - Dec)",character,"0, 1, 2"
 annual_reports_animal_hosts_detail,disease,disease name,character,
+annual_reports_animal_hosts_detail,disease_status,occurrence of disease,character,
+annual_reports_animal_hosts_detail,serotype,disease serotype,character,
 annual_reports_animal_hosts_detail,period,time period covered by detailed report,character,"Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec, Jan-Jun, Jul-Dec"
 annual_reports_animal_hosts_detail,temporal_scale,description of the temporal scale,character,"month, semester"
 annual_reports_animal_hosts_detail,adm,spatial area covered by detailed report,character,
 annual_reports_animal_hosts_detail,adm_type,description of the temporal scale,character,
-annual_reports_animal_hosts_detail,species,more specific than taxa,character,
+annual_reports_animal_hosts_detail,taxa,more specific than taxa,character,
 annual_reports_animal_hosts_detail,family_name,taxonomic family name,character,
 annual_reports_animal_hosts_detail,latin_name,taxonomic latin name,character,
 annual_reports_animal_hosts_detail,measuring_units,measuring units of number of animals affected,character,"Animals, Hives, Tonnes, Killograms, Unknown"
@@ -79,7 +80,6 @@ annual_reports_animal_hosts_detail,deaths_detail,count of deaths in detailed rep
 annual_reports_animal_hosts_detail,killed_and_disposed_of_detail,count of killed/disposed in detailed report period and adm,integer,
 annual_reports_animal_hosts_detail,slaughtered_detail,count of slaughtered in detailed report period and adm,integer,
 annual_reports_animal_hosts_detail,vaccination_in_response_to_the_outbreak_detail,count of vaccinations given in respose to outbreak in detailed report period and adm,integer,
-annual_reports_animal_hosts_detail,species_class,aquatic or terrestrial,character,"aquatic, terrestrial, all"
 annual_reports_animal_hosts_detail,disease_population,disease_population,character,"domestic, wild, domestic and wild, not specified"
 annual_reports_animal_hosts_detail,ando_id,ID from ANDO disease ontology,character,
 annual_reports_animal_hosts_detail,disease_class,disease class from ANDO ontology,character,"disease group, disease specific, pathogen"
@@ -524,3 +524,29 @@ outbreak_reports_outbreaks_summary,total_morbidity_perc,total morbidity percenta
 outbreak_reports_outbreaks_summary,total_mortality_perc,total mortality percentage across all outbreaks in report,double precision,
 outbreak_reports_outbreaks_summary,total_case_fatality_perc,total case fatality percentage across all outbreaks in report,double precision,
 outbreak_reports_outbreaks_summary,total_susceptible_animals_lost_perc,total susceptible animals lost percentage across all outbreaks in report,double precision,
+raster_columns,r_table_catalog,,,
+raster_columns,r_table_schema,,,
+raster_columns,r_table_name,,,
+raster_columns,r_raster_column,,,
+raster_columns,srid,,,
+raster_columns,scale_x,,,
+raster_columns,scale_y,,,
+raster_columns,blocksize_x,,,
+raster_columns,blocksize_y,,,
+raster_columns,same_alignment,,,
+raster_columns,regular_blocking,,,
+raster_columns,num_bands,,,
+raster_columns,pixel_types,,,
+raster_columns,nodata_values,,,
+raster_columns,out_db,,,
+raster_columns,extent,,,
+raster_columns,spatial_index,,,
+raster_overviews,o_table_catalog,,,
+raster_overviews,o_table_schema,,,
+raster_overviews,o_table_name,,,
+raster_overviews,o_raster_column,,,
+raster_overviews,r_table_catalog,,,
+raster_overviews,r_table_schema,,,
+raster_overviews,r_table_name,,,
+raster_overviews,r_raster_column,,,
+raster_overviews,overview_factor,,,
