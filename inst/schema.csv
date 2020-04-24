@@ -29,6 +29,7 @@ annual_reports_animal_diseases_detail,period,time period covered by detailed rep
 annual_reports_animal_diseases_detail,temporal_scale,description of the temporal scale,character,"month, semester"
 annual_reports_animal_diseases_detail,adm,spatial area covered by detailed report,character,
 annual_reports_animal_diseases_detail,adm_type,description of the temporal scale,character,
+annual_reports_animal_diseases_detail,taxa,taxa affected by disease,character,
 annual_reports_animal_diseases_detail,new_outbreaks_detail,count of new outbreaks in detailed report period and adm,integer,
 annual_reports_animal_diseases_detail,total_outbreaks_detail,count of total ongoing outbreaks in detailed report period and adm,integer,
 annual_reports_animal_diseases_detail,disease_status,occurrence of disease,,
