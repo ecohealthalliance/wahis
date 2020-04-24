@@ -33,6 +33,7 @@ report_rab <- function(resp) {
 #' @export
 #' @import xml2 purrr dplyr tidyr stringr
 #' @importFrom scrapetools map_curl
+#' @importFrom rvest xml_node
 scrape_annual_report_list <- function() {
     
     message("Getting list of countries")
@@ -54,8 +55,8 @@ scrape_annual_report_list <- function() {
     
     message("Fetching list of annual reports for each country asynchronously")
     country_resps <- map_curl(
-        url = country_calls$url,
-        .handle_form = country_calls$form,
+        url = country_calls$url[1:10],
+        .handle_form = country_calls$form[1:10],
         .host_con = 6L,
         .timeout = 20*60L,
         .handle_opts = list(low_speed_limit = 100, low_speed_time = 30),
@@ -91,8 +92,10 @@ scrape_annual_report_list <- function() {
         arrange(country, year) %>%
         mutate(report_year = as.character(year)) %>% 
         select(country, code, report_year, status_code, `1`, `2`, `0`) %>%
-        pivot_longer(cols = matches("(1|2|0)"), names_to = "semester", values_to = "reported") %>%
-        mutate(datettime_checked_reported = Sys.time())
+        pivot_longer(cols = matches("(1|2|0)"), names_to = "report_semester", values_to = "reported") %>%
+        mutate(datettime_checked_reported = Sys.time()) %>% 
+        rename(country_iso3c = code) %>% 
+        mutate(report = paste(country_iso3c, report_year, report_semester, sep = "_"))
     
     return(all_tab)
     
