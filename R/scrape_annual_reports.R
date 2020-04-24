@@ -55,8 +55,8 @@ scrape_annual_report_list <- function() {
     
     message("Fetching list of annual reports for each country asynchronously")
     country_resps <- map_curl(
-        url = country_calls$url[1:10],
-        .handle_form = country_calls$form[1:10],
+        url = country_calls$url,
+        .handle_form = country_calls$form,
         .host_con = 6L,
         .timeout = 20*60L,
         .handle_opts = list(low_speed_limit = 100, low_speed_time = 30),
