@@ -9,6 +9,7 @@ sum_na <- function(vec) ifelse(all(is.na(vec)), NA_integer_, sum(as.numeric(vec)
 #' @importFrom janitor make_clean_names get_dupes
 #' @importFrom readr read_csv
 #' @importFrom readxl read_xlsx
+#' @importFrom textclean replace_non_ascii
 #' @export
 transform_annual_reports <- function(annual_reports) {
   
@@ -183,6 +184,7 @@ transform_annual_reports <- function(annual_reports) {
     mutate(disease_population = ifelse(disease_population=="", "not specified", disease_population)) %>%
     mutate(disease_clean = str_remove(disease_clean, "\\(domestic and wild\\)|\\(domestic\\)|\\(wild\\)"))  %>% 
     mutate(disease_clean = trimws(disease_clean)) %>% 
+    mutate(disease_clean = textclean::replace_non_ascii(disease_clean)) %>% 
     rename(disease_old = disease, disease = disease_clean)
   
   # export for manual lookup (see inst/processing_scripts/clean_disease_names.R)
