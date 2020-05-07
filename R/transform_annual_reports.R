@@ -75,7 +75,8 @@ transform_annual_reports <- function(annual_reports) {
   ando_disease_lookup <- readxl::read_xlsx(system.file("diseases", "disease_lookup.xlsx", package = "wahis")) %>% 
     rename(disease_class = class_desc) %>% 
     separate_rows(preferred_label, sep = ";") %>% 
-    mutate_at(.vars = c("ando_id", "preferred_label", "disease_class"), ~na_if(., "NA"))
+    mutate_at(.vars = c("ando_id", "preferred_label", "disease_class"), ~na_if(., "NA")) %>% 
+    select(-no_match_found)
   
   # Pre-processing animal disease and host tables ----------------------------------------------------
   
