@@ -91,7 +91,6 @@ transform_outbreak_reports <- function(outbreak_reports) {
     rename(disease_class = class_desc) %>% 
     filter(report == "animal") %>% 
     select(-report, -no_match_found) %>% 
-    separate_rows(preferred_label, sep = ";") %>% 
     mutate_at(.vars = c("ando_id", "preferred_label", "disease_class"), ~na_if(., "NA"))
   
   outbreak_reports_events <- outbreak_reports_events %>% 
