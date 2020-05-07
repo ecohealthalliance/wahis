@@ -3,6 +3,7 @@
 #' @import dplyr tidyr purrr stringr
 #' @importFrom janitor clean_names
 #' @importFrom lubridate dmy myd ymd
+#' @importFrom textclean replace_non_ascii
 #' @importFrom countrycode countrycode
 #' @export
 
@@ -86,21 +87,25 @@ transform_outbreak_reports <- function(outbreak_reports) {
   #   mutate_all(~tolower(trimws(.)))
   # write_csv(disease_export, here::here("inst/diseases/outbreak_report_diseases.csv"))
   
-  ando_disease_lookup <- readxl::read_xlsx(system.file("diseases", "disease_lookup.xlsx", package = "wahis")) %>% 
-    rename(disease_class = class_desc) %>% 
+#  ando_disease_lookup <- readxl::read_xlsx(system.file("diseases", "disease_lookup.xlsx", package = "wahis")) %>% 
+  ando_disease_lookup <- readxl::read_xlsx(here::here("inst", "diseases", "disease_lookup.xlsx")) %>% 
+     rename(disease_class = class_desc) %>% 
     filter(report == "animal") %>% 
-    select(-report) %>% 
+    select(-report, -no_match_found) %>% 
     separate_rows(preferred_label, sep = ";") %>% 
     mutate_at(.vars = c("ando_id", "preferred_label", "disease_class"), ~na_if(., "NA"))
   
   outbreak_reports_events <- outbreak_reports_events %>% 
-    mutate(disease = trimws(tolower(disease))) %>%
+    mutate(disease = trimws(disease)) %>% 
+    mutate(disease = textclean::replace_non_ascii(disease)) %>% 
+    mutate(disease = ifelse(disease == "", causal_agent, disease)) %>% 
     left_join(ando_disease_lookup, by = "disease") %>% 
     mutate(disease = coalesce(preferred_label, disease)) %>% 
     select(-preferred_label) %>% 
     distinct() 
   
   diseases_unmatched <- outbreak_reports_events %>% 
+    filter(is.na(ando_id)) %>% 
     distinct(disease) %>% 
     mutate(table = "outbreak_animal")
   
@@ -124,11 +129,11 @@ transform_outbreak_reports <- function(outbreak_reports) {
       mutate(date_of_start_of_the_outbreak = dmy(date_of_start_of_the_outbreak)) %>% 
       mutate(outbreak_status2 = str_extract(outbreak_status, "resolved|continuing")) %>% 
       mutate(date_outbreak_resolved = case_when(outbreak_status2 == "resolved" ~
-                                              str_extract(outbreak_status, "(?<=\\().+?(?=\\))"))) %>% 
+                                                  str_extract(outbreak_status, "(?<=\\().+?(?=\\))"))) %>% 
       mutate(date_outbreak_resolved = dmy(date_outbreak_resolved)) %>% 
       select(-outbreak_status) %>% 
       rename(outbreak_status = outbreak_status2)
-      
+    
   }
   
   outbreak_reports_summary <- map_df(outbreak_reports2, function(x){
