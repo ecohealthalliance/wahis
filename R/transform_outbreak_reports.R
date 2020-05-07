@@ -87,9 +87,8 @@ transform_outbreak_reports <- function(outbreak_reports) {
   #   mutate_all(~tolower(trimws(.)))
   # write_csv(disease_export, here::here("inst/diseases/outbreak_report_diseases.csv"))
   
-#  ando_disease_lookup <- readxl::read_xlsx(system.file("diseases", "disease_lookup.xlsx", package = "wahis")) %>% 
-  ando_disease_lookup <- readxl::read_xlsx(here::here("inst", "diseases", "disease_lookup.xlsx")) %>% 
-     rename(disease_class = class_desc) %>% 
+  ando_disease_lookup <- readxl::read_xlsx(system.file("diseases", "disease_lookup.xlsx", package = "wahis")) %>% 
+    rename(disease_class = class_desc) %>% 
     filter(report == "animal") %>% 
     select(-report, -no_match_found) %>% 
     separate_rows(preferred_label, sep = ";") %>% 
