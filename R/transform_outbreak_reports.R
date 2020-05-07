@@ -88,6 +88,7 @@ transform_outbreak_reports <- function(outbreak_reports) {
   # write_csv(disease_export, here::here("inst/diseases/outbreak_report_diseases.csv"))
   
   ando_disease_lookup <- readxl::read_xlsx(system.file("diseases", "disease_lookup.xlsx", package = "wahis")) %>% 
+    mutate(disease = textclean::replace_non_ascii(disease)) %>% 
     rename(disease_class = class_desc) %>% 
     filter(report == "animal") %>% 
     select(-report, -no_match_found) %>% 
@@ -106,6 +107,14 @@ transform_outbreak_reports <- function(outbreak_reports) {
     filter(is.na(ando_id)) %>% 
     distinct(disease) %>% 
     mutate(table = "outbreak_animal")
+  
+  # Check threads to make sure disease is consistent across thread
+  # outbreak_reports_events %>% 
+  #   group_by(immediate_report) %>% 
+  #   mutate(disease_count = n_distinct(disease)) %>% 
+  #   ungroup() %>% 
+  #   filter(disease_count > 1) %>% 
+  #   View() # these are missing immediate reports
   
   # Outbreak tables ---------------------------------------------------
   

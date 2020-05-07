@@ -73,6 +73,7 @@ transform_annual_reports <- function(annual_reports) {
   control_lookup <- structure(as.vector(tolower(control$code_value)), .Names = tolower(control$code))
   
   ando_disease_lookup <- readxl::read_xlsx(system.file("diseases", "disease_lookup.xlsx", package = "wahis")) %>% 
+    mutate(disease = textclean::replace_non_ascii(disease)) %>% 
     rename(disease_class = class_desc) %>% 
     mutate_at(.vars = c("ando_id", "preferred_label", "disease_class"), ~na_if(., "NA")) %>% 
     select(-no_match_found)
