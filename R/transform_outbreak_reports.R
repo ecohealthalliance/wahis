@@ -5,6 +5,7 @@
 #' @importFrom lubridate dmy myd ymd
 #' @importFrom textclean replace_non_ascii
 #' @importFrom countrycode countrycode
+#' @importFrom assertthat %has_name%
 #' @export
 
 transform_outbreak_reports <- function(outbreak_reports) {
@@ -162,19 +163,27 @@ transform_outbreak_reports <- function(outbreak_reports) {
   for(tbl_name in c("outbreak_reports_events", "outbreak_reports_detail")){
     tbl <- get(tbl_name)
     if(nrow(tbl)==0) next()
-    tmp <- tbl %>% 
-      mutate(mortality_val = str_extract(mortality, "scale 0 to 5|%|/")) %>% 
-      mutate(morbidity_val = str_extract(morbidity, "scale 0 to 5|%|/")) %>% 
-      mutate(mortality_rate = case_when(
-        mortality_val == "scale 0 to 5" ~ suppressWarnings(as.numeric(str_remove(mortality, "\\(scale 0 to 5\\)"))) * 0.2,
-        mortality_val == "%" ~  suppressWarnings(as.numeric(str_remove(mortality, "%")) / 100),
-        mortality_val == "/" ~ suppressWarnings(as.numeric(str_remove_all(mortality, ".*/|%")) / 100))) %>% 
-      mutate(morbidity_rate = case_when(
-        morbidity_val == "scale 0 to 5" ~ suppressWarnings(as.numeric(str_remove(morbidity, "\\(scale 0 to 5\\)"))) * 0.2,
-        morbidity_val == "%" ~  suppressWarnings(as.numeric(str_remove(morbidity, "%")) / 100),
-        morbidity_val == "/" ~ suppressWarnings(as.numeric(str_remove_all(morbidity, ".*/|%")) / 100))) %>% 
-      select(-morbidity, -morbidity_val, -mortality, -mortality_val)
-    assign(tbl_name, tmp)
+    
+    if(tbl %has_name% "mortality"){
+      tbl <- tbl %>% 
+        mutate(mortality_val = str_extract(mortality, "scale 0 to 5|%|/")) %>% 
+        mutate(mortality_rate = case_when(
+          mortality_val == "scale 0 to 5" ~ suppressWarnings(as.numeric(str_remove(mortality, "\\(scale 0 to 5\\)"))) * 0.2,
+          mortality_val == "%" ~  suppressWarnings(as.numeric(str_remove(mortality, "%")) / 100),
+          mortality_val == "/" ~ suppressWarnings(as.numeric(str_remove_all(mortality, ".*/|%")) / 100))) %>% 
+        select(-mortality, -mortality_val)
+    }
+    
+    if(tbl %has_name% "morbidity"){
+      tbl <- tbl %>% 
+        mutate(morbidity_val = str_extract(morbidity, "scale 0 to 5|%|/")) %>% 
+        mutate(morbidity_rate = case_when(
+          morbidity_val == "scale 0 to 5" ~ suppressWarnings(as.numeric(str_remove(morbidity, "\\(scale 0 to 5\\)"))) * 0.2,
+          morbidity_val == "%" ~  suppressWarnings(as.numeric(str_remove(morbidity, "%")) / 100),
+          morbidity_val == "/" ~ suppressWarnings(as.numeric(str_remove_all(morbidity, ".*/|%")) / 100))) %>% 
+        select(-morbidity, -morbidity_val)
+    }
+    assign(tbl_name, tbl)
   }
   
   # Laboratories table ---------------------------------------------------
