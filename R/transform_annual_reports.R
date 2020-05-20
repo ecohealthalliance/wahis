@@ -373,7 +373,15 @@ transform_annual_reports <- function(annual_reports) {
       summarize(official_vaccination = sum_na(official_vaccination),
                 control_measures = paste(na.omit(unique(control_measures)), collapse = " ") # may result in some dupes, handled below
       ) %>% 
-      ungroup()
+      ungroup() %>% 
+      mutate(official_vaccination = 0,
+                susceptible = 0,
+                cases = 0,
+                deaths = 0,
+                killed_and_disposed_of = 0,
+                slaughtered = 0,
+                vaccination_in_response_to_the_outbreak = 0)
+                
     warn_that(!any(is.na(animal_hosts_absent$taxa)))
   }
   
