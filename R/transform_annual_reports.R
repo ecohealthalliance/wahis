@@ -43,13 +43,13 @@ transform_annual_reports <- function(annual_reports) {
   if(length(tbl_name_absent)){
     warning(paste("Following tables are empty:", paste(tbl_name_absent, collapse = ", ")))
   }
-
+  
   #####  Table name assertions 
   iwalk(wahis_joined, function(tbl, tbl_name){
     name_check <- annual_reports_field_names()[[tbl_name]]
     warn_that(tbl %has_name% name_check)
   })
-
+  
   #####  NA handling
   wahis_joined <- map(wahis_joined, function(x){
     x %>%
@@ -184,7 +184,11 @@ transform_annual_reports <- function(annual_reports) {
     mutate(disease_clean = str_remove(disease_clean, "\\(domestic and wild\\)|\\(domestic\\)|\\(wild\\)"))  %>% 
     mutate(disease_clean = trimws(disease_clean)) %>% 
     mutate(disease_clean = textclean::replace_non_ascii(disease_clean)) %>% 
-    rename(disease_old = disease, disease = disease_clean)
+    rename(disease_old = disease, disease = disease_clean) %>% 
+    # simplifying disease pop
+    mutate(disease_population = recode(disease_population, 
+                                       "not specified" = "domestic",
+                                       "domestic and wild" = "domestic"))
   
   # export for manual lookup (see inst/processing_scripts/clean_disease_names.R)
   # animal_disease_export <- animal_disease_lookup %>%
@@ -251,14 +255,17 @@ transform_annual_reports <- function(annual_reports) {
     
     animal_diseases_present <- diseases_present %>% 
       group_by(country, country_iso3c, report, report_year, report_months, report_semester,
-               disease, disease_population, disease_class, ando_id, disease_status, serotype) %>%
+               disease, disease_population, disease_class, ando_id, disease_status) %>%
       summarize(new_outbreaks = sum_na(new_outbreaks),
                 total_outbreaks = sum_na(total_outbreaks),
                 taxa = paste(sort(unique(na.omit(taxa))), collapse = "; "),
                 oie_listed = "true" %in% unique(oie_listed),
+                serotype = paste(na.omit(serotype), collapse = ", "), 
                 notes = paste(na.omit(notes), collapse = "\n")) %>%
       ungroup() %>%
       mutate(taxa = na_if(taxa, ""),
+             serotype = map_chr(str_split(serotype, ", "), ~paste(unique(.), collapse = "; ")),
+             serotype = na_if(serotype, ""),
              notes = na_if(notes, ""))
     
     # sc <- get_dupes(animal_diseases_present, report, disease, disease_population, serotype, taxa)
@@ -318,12 +325,16 @@ transform_annual_reports <- function(annual_reports) {
       mutate(disease_status = "present") %>%
       group_by(country, country_iso3c, report, report_year, report_months, report_semester,
                disease, disease_population, disease_class, ando_id, disease_status,
-               serotype, period, temporal_scale, adm, adm_type) %>% 
+               period, temporal_scale, adm, adm_type) %>% 
       summarize(new_outbreaks_detail = sum_na(new_outbreaks_detail),
                 total_outbreaks_detail = sum_na(total_outbreaks_detail),
+                serotype = paste(na.omit(serotype), collapse = ", "),
                 taxa = paste(sort(unique(na.omit(taxa))), collapse = "; ")) %>%
-      ungroup() %>%
-      mutate(taxa = na_if(taxa, ""))
+      ungroup() %>%  
+      mutate(taxa = na_if(taxa, ""),
+             serotype = map_chr(str_split(serotype, ", "), ~paste(unique(.), collapse = "; ")),
+             serotype = na_if(serotype, ""))
+    
     
     # sc <- get_dupes(animal_diseases_detail, report, disease, disease_population, serotype, period, adm, taxa)
   }
@@ -334,7 +345,7 @@ transform_annual_reports <- function(annual_reports) {
   if(nrow(diseases_present)){
     animal_hosts_present <- diseases_present %>%
       group_by(country, country_iso3c, report, report_year, report_months, report_semester,
-               disease, disease_population, disease_class, ando_id, disease_status, serotype, taxa) %>%
+               disease, disease_population, disease_class, ando_id, disease_status, taxa) %>%
       summarize(official_vaccination = sum_na(official_vaccination),
                 susceptible = sum_na(susceptible),
                 cases = sum_na(cases),
@@ -342,6 +353,7 @@ transform_annual_reports <- function(annual_reports) {
                 killed_and_disposed_of = sum_na(killed_and_disposed_of),
                 slaughtered = sum_na(slaughtered),
                 vaccination_in_response_to_the_outbreak = sum_na(vaccination_in_response_to_the_outbreak),
+                serotype = paste(na.omit(serotype), collapse = ", "),
                 measuring_units = paste(na.omit(unique(measuring_units)), collapse = " "), # this results in a few weird unit combos
                 control_measures = paste(na.omit(unique(control_measures)), collapse = " ") # may result in some dupes, handled below
       ) %>%
@@ -351,7 +363,9 @@ transform_annual_reports <- function(annual_reports) {
       unite(control_measures, control_measures, control_measures2, sep = " ") %>% # this is clunky but other approaches with paste and glue were sloooow
       mutate(control_measures = str_trim(control_measures)) %>%
       mutate(control_measures = na_if(control_measures, "")) %>% 
-      mutate(measuring_units = na_if(measuring_units, "")) 
+      mutate(measuring_units = na_if(measuring_units, "")) %>% 
+      mutate(serotype = map_chr(str_split(serotype, ", "), ~paste(unique(.), collapse = "; ")),
+             serotype = na_if(serotype, ""))
     
     # fix seemingly incorrect measurement units (hives for non-bees)
     animal_hosts_present <- animal_hosts_present %>%
@@ -365,6 +379,10 @@ transform_annual_reports <- function(annual_reports) {
     warn_that(nrow(taxa_check)==0)
   }
   
+  # animal_hosts_present %>%
+  #   janitor::get_dupes(country_iso3c, report_year, report_semester, taxa, disease, disease_status) %>%
+  #   View()
+  # 
   if(nrow(diseases_absent)){
     animal_hosts_absent <- diseases_absent %>%
       mutate(disease_status = "absent") %>% 
@@ -375,13 +393,13 @@ transform_annual_reports <- function(annual_reports) {
       ) %>% 
       ungroup() %>% 
       mutate(official_vaccination = 0,
-                susceptible = 0,
-                cases = 0,
-                deaths = 0,
-                killed_and_disposed_of = 0,
-                slaughtered = 0,
-                vaccination_in_response_to_the_outbreak = 0)
-                
+             susceptible = 0,
+             cases = 0,
+             deaths = 0,
+             killed_and_disposed_of = 0,
+             slaughtered = 0,
+             vaccination_in_response_to_the_outbreak = 0)
+    
     warn_that(!any(is.na(animal_hosts_absent$taxa)))
   }
   
@@ -409,15 +427,19 @@ transform_annual_reports <- function(annual_reports) {
       mutate(measuring_units = ifelse(measuring_units == "Hives" & taxa != "api" & taxa != "***",  "Animals",  measuring_units)) %>% 
       group_by(country, country_iso3c, report, report_year, report_months, report_semester,
                disease, disease_population, disease_class, ando_id, disease_status, taxa, family_name, latin_name,
-               serotype, period, temporal_scale, adm, adm_type) %>% 
+               period, temporal_scale, adm, adm_type) %>% 
       summarize(susceptible_detail = sum_na(susceptible),
                 cases_detail = sum_na(cases),
                 deaths_detail = sum_na(deaths),
                 killed_and_disposed_of_detail = sum_na(killed_and_disposed_of),
                 slaughtered_detail = sum_na(slaughtered),
                 vaccination_in_response_to_the_outbreak_detail = sum_na(vaccination_in_response_to_the_outbreak),
+                serotype = paste(na.omit(serotype), collapse = ", "),
                 measuring_units = paste(na.omit(unique(measuring_units)), collapse = " ")) %>%  # this results in a few weird unit combos
-      ungroup() 
+      ungroup() %>% 
+      mutate(serotype = map_chr(str_split(serotype, ", "), ~paste(unique(.), collapse = "; ")),
+             serotype = na_if(serotype, "")) %>% 
+      mutate(measuring_units = na_if(measuring_units, "")) 
   }
   
   # Human tables  ------------------------------------------
