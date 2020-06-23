@@ -307,7 +307,6 @@ transform_annual_reports <- function(annual_reports) {
     bind_rows(animal_diseases_unreported) 
   
   # remove cases where diseases are listed with more than one status. present or suspected > absent > unreported
-  
   if(nrow(animal_diseases)){
     animal_diseases <- animal_diseases %>% 
       mutate(disease_status_rank = recode(disease_status, "present" = 1, "suspected" = 1, "absent" = 2, "unreported" = 3)) %>%
@@ -418,6 +417,17 @@ transform_annual_reports <- function(annual_reports) {
       mutate(control_measures = str_split(control_measures, " ")) %>% # make control_measures into list
       mutate(control_measures = map(control_measures, ~control_lookup[.])) %>% # lookup all items in list
       mutate(control_measures = map_chr(control_measures, ~str_flatten(sort(unique(.)), collapse = "; "))) # back to string, now with full code measures
+  }
+  
+  # remove cases where diseases are listed with more than one status. present or suspected > absent > unreported
+  if(nrow(animal_hosts)){
+    animal_hosts <- animal_hosts %>% 
+      mutate(disease_status_rank = recode(disease_status, "present" = 1, "suspected" = 1, "absent" = 2, "unreported" = 3)) %>%
+      group_by(report, disease, disease_population, taxa) %>%
+      filter(disease_status_rank == min(disease_status_rank)) %>%
+      ungroup() %>% 
+      select(-disease_status_rank) %>% 
+      mutate(disease_status  = recode(disease_status, "unreported" = "absent")) # for our purposes, assume unreported = absent
   }
   
   ##### animal_hosts_detail table
