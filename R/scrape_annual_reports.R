@@ -33,7 +33,7 @@ report_rab <- function(resp) {
 #' @export
 #' @import xml2 purrr dplyr tidyr stringr
 #' @importFrom scrapetools map_curl
-#' @importFrom rvest xml_node
+#' @importFrom rvest xml_node xml_nodes
 scrape_annual_report_list <- function() {
     
     message("Getting list of countries")

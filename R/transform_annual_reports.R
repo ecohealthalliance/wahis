@@ -7,11 +7,13 @@ sum_na <- function(vec) ifelse(all(is.na(vec)), NA_integer_, sum(as.numeric(vec)
 #' @import dplyr tidyr stringr purrr
 #' @importFrom assertthat %has_name%
 #' @importFrom janitor make_clean_names get_dupes
-#' @importFrom readr read_csv
+#' @importFrom readr read_csv cols col_character
 #' @importFrom readxl read_xlsx
 #' @importFrom textclean replace_non_ascii
 #' @export
 transform_annual_reports <- function(annual_reports) {
+  
+  message("Transforming annual reports")
   
   # Initial processing ------------------------------------------------------
   
@@ -57,15 +59,29 @@ transform_annual_reports <- function(annual_reports) {
   })
   
   ##### Read in lookup tables
-  taxa_lookup <- read_csv(system.file("annual_report_lookups", "lookup_species.csv", package = "wahis")) %>%
+  taxa_lookup <- read_csv(system.file("annual_report_lookups", "lookup_species.csv", package = "wahis"), col_types = cols(
+    code_value = col_character(),
+    code = col_character(),
+    group = col_character()
+  )) %>%
     rename(taxa_class = group)
   
-  suspected_code <- read_csv(system.file("annual_report_lookups", "lookup_occurrence.csv", package = "wahis")) %>%
+  suspected_code <- read_csv(system.file("annual_report_lookups", "lookup_occurrence.csv", package = "wahis"), col_types = cols(
+    code_value = col_character(),
+    code = col_character(),
+    code_description = col_character(),
+    disease_status = col_character()
+  )) %>%
     mutate(code = str_remove_all(code, "\"")) %>% 
     filter(disease_status == "suspected") %>% 
     pull(code)
   
-  control <- read_csv(system.file("annual_report_lookups", "lookup_control.csv", package = "wahis"))
+  control <- read_csv(system.file("annual_report_lookups", "lookup_control.csv", package = "wahis"), col_types = cols(
+    code = col_character(),
+    code_value = col_character(),
+    code_description = col_character(),
+    group = col_character()
+  ))
   control$code[control$code_value == "Vaccination in response to the outbreak(s)"] <- "Vr"
   control <- control %>% select(code, code_value) %>% distinct() %>% arrange(code) 
   control_lookup <- structure(as.vector(tolower(control$code_value)), .Names = tolower(control$code))
@@ -216,7 +232,7 @@ transform_annual_reports <- function(annual_reports) {
     if(nrow(tbl)==0) next()
     disease_joined <- tbl %>% 
       rename(disease_old = disease) %>% 
-      left_join(animal_disease_lookup) %>% 
+      left_join(animal_disease_lookup, by = "disease_old") %>% 
       mutate(disease = coalesce(preferred_label, disease)) %>% 
       select(-preferred_label, -disease_old) 
     warn_that(!any(is.na(disease_joined$disease)))
@@ -372,7 +388,7 @@ transform_annual_reports <- function(annual_reports) {
     
     # confirming we do not have dupe taxa
     taxa_check <- animal_hosts_present %>%
-      group_by(report, disease, disease, disease_population, serotype, disease_status) %>%
+      group_by(report, disease, disease_population, serotype, disease_status) %>%
       mutate(n = n(), n_taxa = n_distinct(taxa)) %>%
       filter(n != n_taxa) 
     warn_that(nrow(taxa_check)==0)

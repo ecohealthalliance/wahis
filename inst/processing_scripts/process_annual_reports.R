@@ -15,7 +15,7 @@ devtools::load_all(here::here()) #doing this as scraping functions may not be ex
 #! These are example files for testing the scraper functions. Actual files are downloaded and processed in repel-infrastructure/repeldb
 filenames <- list.files(here::here("data-raw/wahis-raw-annual-reports"),
                         pattern = "*.html",
-                        full.names = TRUE)
+                        full.names = TRUE)[sample(length(filenames), size = 200)]
 
 # Run ingest (~25 mins) ---------------------------------------------------------
 message(paste(length(filenames), "files to process"))
@@ -36,4 +36,4 @@ annual_reports <-  readr::read_rds(here::here("data-processed", "wahis_ingested_
 annual_reports_transformed <- wahis::transform_annual_reports(annual_reports)
 
 # Export transformed files-----------------------------------------------
-readr::write_rds(annual_reports_transformed, here::here("data-processed", "wahis_transformed_annual_reports.rds))
+readr::write_rds(annual_reports_transformed, here::here("data-processed", "wahis_transformed_annual_reports.rds"))
