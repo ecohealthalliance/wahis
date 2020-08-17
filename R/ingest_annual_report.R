@@ -123,7 +123,7 @@ add_notes <- function(tbl){
 #' @importFrom rvest html_table html_text xml_nodes
 ingest_annual_report <- function(web_page, encoding = "ISO-8859-1") {
     
-    message(paste("Ingesting", basename(web_page)))
+    message(paste("Ingesting Annual Report", basename(web_page)))
     
     # get page
     page <- suppressWarnings(read_xml(web_page, encoding = encoding, as_html = TRUE, options = c("RECOVER", "NOERROR", "NOBLANKS")))

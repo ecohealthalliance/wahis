@@ -10,6 +10,8 @@
 
 transform_outbreak_reports <- function(outbreak_reports) {
   
+  message("Transforming outbreak reports")
+  
   # Proprocessing ---------------------------------------------------
   outbreak_reports2 <- keep(outbreak_reports, function(x){
     !is.null(x) && !is.null(x$ingest_status) && x$ingest_status == "available"
@@ -45,7 +47,7 @@ transform_outbreak_reports <- function(outbreak_reports) {
     mutate(follow_up = ifelse(str_detect(report_type, "immediate notification"), 0, str_extract(report_type, "[[:digit:]]+"))) %>%
     mutate(final_report = str_detect(report_type, "final report")) %>% 
     mutate(endemic = str_detect(future_reporting, "the event cannot be considered resolved")) %>% 
-    left_join(country_lookup) %>% 
+    left_join(country_lookup, by = "country") %>% 
     select(id, country, country_iso3c, everything())
   
   # New outbreak?
@@ -66,7 +68,7 @@ transform_outbreak_reports <- function(outbreak_reports) {
   check_final <- outbreak_reports_events %>% 
     select(id, immediate_report, report_date) %>% 
     filter(immediate_report %in% missing_resolved$immediate_report) %>% 
-    left_join(missing_resolved %>% select(id, final_report)) %>% 
+    left_join(missing_resolved %>% select(id, final_report),  by = "id") %>% 
     mutate(final_report = coalesce(final_report, FALSE)) %>% 
     group_by(immediate_report) %>% 
     mutate(check = report_date == max(report_date)) %>% 

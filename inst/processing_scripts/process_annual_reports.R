@@ -15,7 +15,7 @@ devtools::load_all(here::here()) #doing this as scraping functions may not be ex
 #! These are example files for testing the scraper functions. Actual files are downloaded and processed in repel-infrastructure/repeldb
 filenames <- list.files(here::here("data-raw/wahis-raw-annual-reports"),
                         pattern = "*.html",
-                        full.names = TRUE)[sample(length(filenames), size = 200)]
+                        full.names = TRUE)
 
 # Run ingest (~25 mins) ---------------------------------------------------------
 message(paste(length(filenames), "files to process"))
