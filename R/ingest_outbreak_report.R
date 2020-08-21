@@ -33,8 +33,6 @@
 #' @importFrom rvest html_node html_table
 ingest_outbreak_report <- function(web_page, encoding = "ISO-8859-1") {
     
-    message(paste("Ingesting Outbreak Report", basename(web_page)))
-    
     page <- suppressWarnings(read_xml(web_page, encoding = encoding, as_html = TRUE, options = c("RECOVER", "NOERROR", 
                                                                                                  "NOBLANKS")))
     if (length(page) < 2) {
