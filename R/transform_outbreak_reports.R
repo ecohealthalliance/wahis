@@ -64,24 +64,26 @@ transform_outbreak_reports <- function(outbreak_reports) {
     filter(is.na(date_event_resolved)) %>% 
     filter(final_report)
   
-  # Check threads to confirm these are final. If they are, then assume last report is the end date.
-  check_final <- outbreak_reports_events %>% 
-    select(id, immediate_report, report_date) %>% 
-    filter(immediate_report %in% missing_resolved$immediate_report) %>% 
-    left_join(missing_resolved %>% select(id, final_report),  by = "id") %>% 
-    mutate(final_report = coalesce(final_report, FALSE)) %>% 
-    group_by(immediate_report) %>% 
-    mutate(check = report_date == max(report_date)) %>% 
-    ungroup() %>% 
-    mutate(confirm_final = final_report == check)
-  
-  check_final_resolved <- check_final %>% 
-    filter(final_report, check)
-  check_final_unresolved <- check_final %>% 
-    filter(final_report, !check)
-  
-  outbreak_reports_events <- outbreak_reports_events %>% 
-    mutate(date_event_resolved = if_else(id %in% check_final_resolved$id, report_date, date_event_resolved)) 
+  if(nrow(missing_resolved)){
+    # Check threads to confirm these are final. If they are, then assume last report is the end date.
+    check_final <- outbreak_reports_events %>% 
+      select(id, immediate_report, report_date) %>% 
+      filter(immediate_report %in% missing_resolved$immediate_report) %>% 
+      left_join(missing_resolved %>% select(id, final_report),  by = "id") %>% 
+      mutate(final_report = coalesce(final_report, FALSE)) %>% 
+      group_by(immediate_report) %>% 
+      mutate(check = report_date == max(report_date)) %>% 
+      ungroup() %>% 
+      mutate(confirm_final = final_report == check)
+    
+    check_final_resolved <- check_final %>% 
+      filter(final_report, check)
+    check_final_unresolved <- check_final %>% 
+      filter(final_report, !check)
+    
+    outbreak_reports_events <- outbreak_reports_events %>% 
+      mutate(date_event_resolved = if_else(id %in% check_final_resolved$id, report_date, date_event_resolved)) 
+  }
   
   # Disease standardization
   
