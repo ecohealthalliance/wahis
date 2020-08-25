@@ -493,7 +493,7 @@ transform_annual_reports <- function(annual_reports) {
                                                    mutate(table = "annual_human"))
     
     disease_humans <- disease_humans %>%
-      left_join(human_disease_lookup) %>% 
+      left_join(human_disease_lookup,  by = "disease") %>% 
       mutate(disease = coalesce(preferred_label, disease)) %>% 
       select(-preferred_label) %>% 
       gather(key = "human_disease_status", value = "value", no_information_available:disease_present_number_of_cases_known) %>%

@@ -38,7 +38,7 @@ transform_outbreak_reports <- function(outbreak_reports) {
   
   # Get iso3c codes
   country_lookup <- tibble(country = unique(outbreak_reports_events$country)) %>% 
-    mutate(country_iso3c = countrycode(sourcevar = country, origin = "country.name", destination = "iso3c"))
+    mutate(country_iso3c = suppressWarnings(countrycode(sourcevar = country, origin = "country.name", destination = "iso3c")))
   
   # Cleaning
   outbreak_reports_events <- outbreak_reports_events %>%
