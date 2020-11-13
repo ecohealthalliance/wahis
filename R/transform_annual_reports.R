@@ -556,7 +556,6 @@ transform_annual_reports <- function(annual_reports) {
     mutate(submission_animal_type = recode(submission_animal_type, "terrestrial and aquatic" = "aquatic and terrestrial"))
   names(wahis_joined) <- paste0("annual_reports_", names(wahis_joined))
   
-  
   # Postprocess -------------------------------------------------------------
   
   # check measurement units
@@ -569,6 +568,20 @@ transform_annual_reports <- function(annual_reports) {
   
   # remove empty tables
   wahis_joined <- keep(wahis_joined, ~nrow(.)>0)
+  
+  # change some columns to numeric
+  if(!purrr::is_empty(wahis_joined)){
+    wahis_joined  <- map(wahis_joined, function(tb){
+      tb %>%
+        mutate_at(vars(suppressWarnings(one_of("oie_listed"))), as.logical) %>% 
+        mutate_at(vars(suppressWarnings(one_of("report_year", "report_semester", 
+                                               "latitude", "longitude",
+                                               "new_outbreaks", "total_outbreaks", "official_vaccination", "susceptible", "cases", "deaths", "killed_and_disposed_of", "slaughtered", "vaccination_in_response_to_the_outbreak_s",
+                                               "human_cases", "human_deaths", "total", "number", "public_sector", "doses_produced", "doses_exported",
+                                               "year_of_start_of_activity", "year_of_cessation_of_activity", "year_of_start_of_production", "year_of_end_of_production_if_production_ended"
+        ))), as.numeric)
+    })
+  }
   
   if(nrow(wahis_joined$annual_reports_diseases_unmatched)){warning("Unmatched diseases. Check annual_reports_diseases_unmatched table.")}
   
