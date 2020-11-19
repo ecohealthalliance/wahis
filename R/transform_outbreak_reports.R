@@ -160,8 +160,12 @@ transform_outbreak_reports <- function(outbreak_reports) {
       rename(total_morbidity_perc = total_apparent_morbidity_rate,
              total_mortality_perc = total_apparent_mortality_rate,
              total_case_fatality_perc = total_apparent_case_fatality_rate,
-             total_susceptible_animals_lost_perc = total_proportion_susceptible_animals_lost)
-  }
+             total_susceptible_animals_lost_perc = total_proportion_susceptible_animals_lost) %>% 
+      mutate_at(vars(starts_with("total_")),  ~str_remove_all(., "\\**"))  %>% # note "**" means not calculated because of missing information
+      mutate_at(vars(starts_with("total_")),  ~str_remove_all(., "-")) 
+      }
+  
+
   
   # Fixes to mortality and morbidity fields (events and outbreak tables) ---------------------------------
   for(tbl_name in c("outbreak_reports_events", "outbreak_reports_detail")){
@@ -211,6 +215,20 @@ transform_outbreak_reports <- function(outbreak_reports) {
   
   # remove empty tables
   wahis_joined <- keep(wahis_joined, ~nrow(.)>0)
+  
+  # change some columns to numeric
+  if(!purrr::is_empty(wahis_joined)){
+    wahis_joined  <- map(wahis_joined, function(tb){
+      tb %>%
+        mutate_at(vars(suppressWarnings(one_of("id", "immediate_report", "total_new_outbreaks", "follow_up",
+                                               "mortality_rate", "morbidity_rate",
+                                               "susceptible", "deaths", "killed_and_disposed_of", "cases", "slaughtered",
+                                               "total_susceptible", "total_deaths", "total_killed_and_disposed_of", "total_cases", "total_slaughtered",
+                                               "total_morbidity_perc", "total_mortality_perc", "total_case_fatality_perc", "total_susceptible_animals_lost_perc"
+        ))), as.numeric)
+    })
+  }
+  
   
   if(nrow(wahis_joined$outbreak_reports_diseases_unmatched)){warning("Unmatched diseases. Check outbreak_reports_diseases_unmatched table.")}
   
