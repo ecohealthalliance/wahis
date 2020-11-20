@@ -90,10 +90,11 @@ scrape_annual_report_list <- function() {
     all_tab <- left_join(countries, all_tab, by = "code") %>%
         complete(country, year) %>%
         arrange(country, year) %>%
-        mutate(report_year = as.character(year)) %>% 
+        mutate(report_year = as.numeric(year)) %>% 
         select(country, code, report_year, status_code, `1`, `2`, `0`) %>%
         pivot_longer(cols = matches("(1|2|0)"), names_to = "report_semester", values_to = "reported") %>%
         mutate(datettime_checked_reported = Sys.time()) %>% 
+        mutate(report_semester = as.numeric(report_semester)) %>% 
         rename(country_iso3c = code) %>% 
         mutate(report = paste(country_iso3c, report_year, report_semester, sep = "_"))
     
