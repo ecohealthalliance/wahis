@@ -120,7 +120,7 @@ add_notes <- function(tbl){
 #' ##ingest_annual_report("../data-raw/raw_wahis_reports/BWA_2016_sem0.html")
 #' @export
 #' @import xml2 purrr dplyr tidyr stringr stringi
-#' @importFrom rvest html_table
+#' @importFrom rvest html_table html_text xml_nodes
 ingest_annual_report <- function(web_page, encoding = "ISO-8859-1") {
     
     # get page

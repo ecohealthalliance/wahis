@@ -36,4 +36,4 @@ annual_reports <-  readr::read_rds(here::here("data-processed", "wahis_ingested_
 annual_reports_transformed <- wahis::transform_annual_reports(annual_reports)
 
 # Export transformed files-----------------------------------------------
-readr::write_rds(annual_reports_transformed, here::here("data-processed", "wahis_transformed_annual_reports.rds))
+readr::write_rds(annual_reports_transformed, here::here("data-processed", "wahis_transformed_annual_reports.rds"))

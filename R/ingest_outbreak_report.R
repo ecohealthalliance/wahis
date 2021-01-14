@@ -155,7 +155,7 @@ ingest_outbreak_report <- function(web_page, encoding = "ISO-8859-1") {
         outbreak_summary <- table %>%
             xml_children() %>%
             table_value(html_table, trim = TRUE, header=TRUE) %>%
-            reduce(full_join) %>%
+            reduce(full_join, by = "Species") %>%
             #mutate(outbreaks = total_outbreaks) %>%
             mutate(id = record$id) %>%
             select(id, everything())

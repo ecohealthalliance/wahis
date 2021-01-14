@@ -2,6 +2,7 @@
 #' @return A vector of outbreak report IDs
 #' @export
 #' @import xml2 purrr dplyr tidyr stringr
+#' @importFrom rvest html_nodes html_attr
 
 scrape_outbreak_report_list <- function() {
     weekly_pg <-

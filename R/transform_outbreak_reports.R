@@ -10,6 +10,8 @@
 
 transform_outbreak_reports <- function(outbreak_reports) {
   
+  message("Transforming outbreak reports")
+  
   # Proprocessing ---------------------------------------------------
   outbreak_reports2 <- keep(outbreak_reports, function(x){
     !is.null(x) && !is.null(x$ingest_status) && x$ingest_status == "available"
@@ -36,7 +38,7 @@ transform_outbreak_reports <- function(outbreak_reports) {
   
   # Get iso3c codes
   country_lookup <- tibble(country = unique(outbreak_reports_events$country)) %>% 
-    mutate(country_iso3c = countrycode(sourcevar = country, origin = "country.name", destination = "iso3c"))
+    mutate(country_iso3c = suppressWarnings(countrycode(sourcevar = country, origin = "country.name", destination = "iso3c")))
   
   # Cleaning
   outbreak_reports_events <- outbreak_reports_events %>%
@@ -45,7 +47,7 @@ transform_outbreak_reports <- function(outbreak_reports) {
     mutate(follow_up = ifelse(str_detect(report_type, "immediate notification"), 0, str_extract(report_type, "[[:digit:]]+"))) %>%
     mutate(final_report = str_detect(report_type, "final report")) %>% 
     mutate(endemic = str_detect(future_reporting, "the event cannot be considered resolved")) %>% 
-    left_join(country_lookup) %>% 
+    left_join(country_lookup, by = "country") %>% 
     select(id, country, country_iso3c, everything())
   
   # New outbreak?
@@ -62,24 +64,26 @@ transform_outbreak_reports <- function(outbreak_reports) {
     filter(is.na(date_event_resolved)) %>% 
     filter(final_report)
   
-  # Check threads to confirm these are final. If they are, then assume last report is the end date.
-  check_final <- outbreak_reports_events %>% 
-    select(id, immediate_report, report_date) %>% 
-    filter(immediate_report %in% missing_resolved$immediate_report) %>% 
-    left_join(missing_resolved %>% select(id, final_report)) %>% 
-    mutate(final_report = coalesce(final_report, FALSE)) %>% 
-    group_by(immediate_report) %>% 
-    mutate(check = report_date == max(report_date)) %>% 
-    ungroup() %>% 
-    mutate(confirm_final = final_report == check)
-  
-  check_final_resolved <- check_final %>% 
-    filter(final_report, check)
-  check_final_unresolved <- check_final %>% 
-    filter(final_report, !check)
-  
-  outbreak_reports_events <- outbreak_reports_events %>% 
-    mutate(date_event_resolved = if_else(id %in% check_final_resolved$id, report_date, date_event_resolved)) 
+  if(nrow(missing_resolved)){
+    # Check threads to confirm these are final. If they are, then assume last report is the end date.
+    check_final <- outbreak_reports_events %>% 
+      select(id, immediate_report, report_date) %>% 
+      filter(immediate_report %in% missing_resolved$immediate_report) %>% 
+      left_join(missing_resolved %>% select(id, final_report),  by = "id") %>% 
+      mutate(final_report = coalesce(final_report, FALSE)) %>% 
+      group_by(immediate_report) %>% 
+      mutate(check = report_date == max(report_date)) %>% 
+      ungroup() %>% 
+      mutate(confirm_final = final_report == check)
+    
+    check_final_resolved <- check_final %>% 
+      filter(final_report, check)
+    check_final_unresolved <- check_final %>% 
+      filter(final_report, !check)
+    
+    outbreak_reports_events <- outbreak_reports_events %>% 
+      mutate(date_event_resolved = if_else(id %in% check_final_resolved$id, report_date, date_event_resolved)) 
+  }
   
   # Disease standardization
   
@@ -156,8 +160,12 @@ transform_outbreak_reports <- function(outbreak_reports) {
       rename(total_morbidity_perc = total_apparent_morbidity_rate,
              total_mortality_perc = total_apparent_mortality_rate,
              total_case_fatality_perc = total_apparent_case_fatality_rate,
-             total_susceptible_animals_lost_perc = total_proportion_susceptible_animals_lost)
-  }
+             total_susceptible_animals_lost_perc = total_proportion_susceptible_animals_lost) %>% 
+      mutate_at(vars(starts_with("total_")),  ~str_remove_all(., "\\**"))  %>% # note "**" means not calculated because of missing information
+      mutate_at(vars(starts_with("total_")),  ~str_remove_all(., "-")) 
+      }
+  
+
   
   # Fixes to mortality and morbidity fields (events and outbreak tables) ---------------------------------
   for(tbl_name in c("outbreak_reports_events", "outbreak_reports_detail")){
@@ -207,6 +215,20 @@ transform_outbreak_reports <- function(outbreak_reports) {
   
   # remove empty tables
   wahis_joined <- keep(wahis_joined, ~nrow(.)>0)
+  
+  # change some columns to numeric
+  if(!purrr::is_empty(wahis_joined)){
+    wahis_joined  <- map(wahis_joined, function(tb){
+      tb %>%
+        mutate_at(vars(suppressWarnings(one_of("id", "immediate_report", "total_new_outbreaks", "follow_up",
+                                               "mortality_rate", "morbidity_rate",
+                                               "susceptible", "deaths", "killed_and_disposed_of", "cases", "slaughtered",
+                                               "total_susceptible", "total_deaths", "total_killed_and_disposed_of", "total_cases", "total_slaughtered",
+                                               "total_morbidity_perc", "total_mortality_perc", "total_case_fatality_perc", "total_susceptible_animals_lost_perc"
+        ))), as.numeric)
+    })
+  }
+  
   
   if(nrow(wahis_joined$outbreak_reports_diseases_unmatched)){warning("Unmatched diseases. Check outbreak_reports_diseases_unmatched table.")}
   
