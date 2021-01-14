@@ -1,21 +1,23 @@
 #' Scrape birdlife data for migratory bird species by country
+#' @param directory where bird migration data is saved
 #' @import purrr stringr 
 #' @importFrom httr GET write_disk
 #' @import here
 #' @export
 download_bird_migration <- function(){
-  suppressWarnings(dir.create(here("data-raw/bli-bird-migration")))
+  suppressWarnings(dir.create(here(directory, "bli-bird-migration")))
   walk(1:280, function(i){
     url <- paste0("http://datazone.birdlife.org/species/results?cty=", i, "&cri=&fam=0&gen=0&spc=&cmn=&bt=&rec=N&vag=N&sea=&wat=&aze=&lab=&enb=&stmig=Y")
     ipad <- str_pad(i, 3, pad = "0")
     request <- httr::GET(url, 
-                         httr::write_disk(here(paste0("data-raw/bli-bird-migration/", ipad, ".html")), overwrite = TRUE))
+                         httr::write_disk(here(paste0(directory, "/bli-bird-migration/", ipad, ".html")), overwrite = TRUE))
   })
 }
 
 
 #' Transform birdlife data to return counts of overlapping migratory species between pairwise countries
-#' @import dplyr tidyr purrr xml2 stringr
+#' @param directory where bird migration data is saved
+#' @import dplyr tidyr purrr xml2 stringr here
 #' @importFrom rvest html_nodes
 #' @importFrom countrycode countrycode
 #' @importFrom assertthat are_equal
@@ -23,7 +25,7 @@ download_bird_migration <- function(){
 transform_bird_migration <- function(){
   
   # import data
-  filenames <- list.files(here::here("data-raw/bli-bird-migration"),
+  filenames <- list.files(here(directory, "bli-bird-migration"),
                           pattern = "*.html",
                           full.names = TRUE)
   

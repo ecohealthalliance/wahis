@@ -4,7 +4,10 @@
 \alias{get_livestock_item_id}
 \title{FAO item lookup table}
 \usage{
-get_livestock_item_id()
+get_livestock_item_id(directory)
+}
+\arguments{
+\item{directory}{where livestock data is saved}
 }
 \description{
 FAO item lookup table

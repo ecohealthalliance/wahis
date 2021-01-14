@@ -6,6 +6,9 @@
 \usage{
 transform_bird_migration()
 }
+\arguments{
+\item{directory}{where bird migration data is saved}
+}
 \description{
 Transform birdlife data to return counts of overlapping migratory species between pairwise countries
 }

@@ -4,10 +4,12 @@
 \alias{download_wildlife}
 \title{Download iucn data}
 \usage{
-download_wildlife(token)
+download_wildlife(token, directory)
 }
 \arguments{
 \item{token}{IUCN redlist API token}
+
+\item{directory}{where migration data is saved}
 }
 \description{
 Download iucn data

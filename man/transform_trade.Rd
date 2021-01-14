@@ -4,7 +4,10 @@
 \alias{transform_trade}
 \title{Transform ots data to return pairwise trade values}
 \usage{
-transform_trade()
+transform_trade(directory)
+}
+\arguments{
+\item{directory}{where ots-trade.rds is saved}
 }
 \description{
 Transform ots data to return pairwise trade values

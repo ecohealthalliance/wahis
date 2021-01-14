@@ -6,6 +6,9 @@
 \usage{
 download_bird_migration()
 }
+\arguments{
+\item{directory}{where bird migration data is saved}
+}
 \description{
 Scrape birdlife data for migratory bird species by country
 }

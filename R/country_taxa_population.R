@@ -1,27 +1,29 @@
 #' Download fao taxa population data
+#' @param directory where taxa population is saved
 #' @import here
 #' @export
-download_taxa_population <- function(){
-    suppressWarnings(dir.create(here("data-raw/fao-taxa-population")))
+download_taxa_population <- function(directory){
+    suppressWarnings(dir.create(here(directory, "fao-taxa-population")))
     download.file("http://fenixservices.fao.org/faostat/static/bulkdownloads/Production_Livestock_E_All_Data_(Normalized).zip",
-                  destfile =  here("data-raw/fao-taxa-population/fao-taxa-population.zip"))
+                  destfile =  here(directory, "fao-taxa-population/fao-taxa-population.zip"))
 }
 
 
 #' Transform fao taxa data 
+#' @param directory where taxa population is saved
 #' @import dplyr tidyr here
 #' @importFrom countrycode countrycode
 #' @importFrom janitor clean_names
 #' @importFrom vroom vroom
 #' @export
 
-transform_taxa_population <- function(){
+transform_taxa_population <- function(directory){
     
-    setwd(here("data-raw/fao-taxa-population"))
-    unzip(here("data-raw/fao-taxa-population/fao-taxa-population.zip"))
+    setwd(here(directory, "fao-taxa-population"))
+    unzip(here(directory, "fao-taxa-population/fao-taxa-population.zip"))
     setwd(here())
     
-    fao <- vroom(here("data-raw/fao-taxa-population/Production_Livestock_E_All_Data_(Normalized).csv"), 
+    fao <- vroom(here(directory, "fao-taxa-population/Production_Livestock_E_All_Data_(Normalized).csv"), 
                     col_types = cols(
                         `Area Code` = col_skip(),
                         Area = col_character(),

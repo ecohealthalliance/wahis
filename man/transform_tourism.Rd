@@ -4,7 +4,10 @@
 \alias{transform_tourism}
 \title{Transform wto tourism data}
 \usage{
-transform_tourism()
+transform_tourism(directory)
+}
+\arguments{
+\item{directory}{where tourism is saved}
 }
 \description{
 Transform wto tourism data

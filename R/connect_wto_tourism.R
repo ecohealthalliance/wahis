@@ -1,12 +1,13 @@
 #' Download wto tourism data
+#' @param directory where tourism is saved
 #' @param username UNWTO email
 #' @param password UNWTO password
 #' @import dplyr here xml2 purrr stringr
 #' @importFrom rvest html_session html_form set_values submit_form jump_to
 #' @export
-download_tourism <- function(username, password){
+download_tourism <- function(username, password, directory){
   
-  suppressWarnings(dir.create(here("data-raw/wto-tourism")))
+  suppressWarnings(dir.create(here(directory, "wto-tourism")))
   
   # sign into site
   start_page <- "https://www.e-unwto.org/action/showLogin?uri=%2Faction%2FdoSearch%3FstartPage%3D0%26ConceptID%3D2451%26target%3Dtopic%26pageSize%3D100"
@@ -29,19 +30,20 @@ download_tourism <- function(username, password){
     filename <- basename(url) %>% str_extract('[0-9]+')
     filename_full <- paste0(url, "/suppl_file/", filename, ".xlsx")
     xlsx_download <- jump_to(session, filename_full)
-    writeBin(xlsx_download$response$content, here(paste0("data-raw/wto-tourism/", filename, ".xlsx")))
+    writeBin(xlsx_download$response$content, here(paste0(directory, "wto-tourism/", filename, ".xlsx")))
   })
 }
 
 #' Transform wto tourism data
+#' @param directory where tourism is saved
 #' @import dplyr here stringr purrr
 #' @importFrom readxl read_xlsx
 #' @importFrom countrycode countrycode
 #' @importFrom janitor clean_names
 #' @export
-transform_tourism <- function(){
+transform_tourism <- function(directory){
   
-  filenames <- list.files(here::here("data-raw/wto-tourism"),
+  filenames <- list.files(here::here(directory, "wto-tourism"),
                           pattern = "*.xlsx",
                           full.names = TRUE)  
   

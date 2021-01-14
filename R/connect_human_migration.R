@@ -1,25 +1,27 @@
 
 #' Download UN migrant data
+#' @param directory where migration data is saved
 #' @import here
 #' @export
-download_human_migration <- function(){
-  suppressWarnings(dir.create(here("data-raw/un-human-migration")))
+download_human_migration <- function(directory){
+  suppressWarnings(dir.create(here(directory, "un-human-migration")))
   download.file("https://www.un.org/en/development/desa/population/migration/data/empirical2/data/UN_MigFlow_All_CountryFiles.zip",
-                destfile =  here("data-raw/un-human-migration/migrant-flow.zip"))
-  unzip(here("data-raw/un-human-migration/migrant-flow.zip"), exdir = here("data-raw/un-human-migration"))
+                destfile =  here(directory, "un-human-migration/migrant-flow.zip"))
+  unzip(here(directory, "un-human-migration/migrant-flow.zip"), exdir = here(directory, "un-human-migration"))
 }
 
 #' Transform UN migrant data
+#' @param directory where migration data is saved
 #' @import here dplyr tidyr purrr stringr
 #' @importFrom countrycode countrycode
 #' @importFrom readxl read_xlsx
 #' @importFrom janitor clean_names
 #' @export
 
-transform_human_migration <- function(){
+transform_human_migration <- function(directory){
   
   # all data
-  filenames <- list.files(here::here("data-raw/un-human-migration"),
+  filenames <- list.files(here::here(directory, "un-human-migration"),
                           pattern = "*.xlsx",
                           full.names = TRUE)
   

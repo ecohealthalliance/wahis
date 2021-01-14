@@ -4,7 +4,10 @@
 \alias{download_taxa_population}
 \title{Download fao taxa population data}
 \usage{
-download_taxa_population()
+download_taxa_population(directory)
+}
+\arguments{
+\item{directory}{where taxa population is saved}
 }
 \description{
 Download fao taxa population data
