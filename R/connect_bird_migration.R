@@ -4,7 +4,7 @@
 #' @importFrom httr GET write_disk
 #' @import here
 #' @export
-download_bird_migration <- function(){
+download_bird_migration <- function(directory){
   suppressWarnings(dir.create(here(directory, "bli-bird-migration")))
   walk(1:280, function(i){
     url <- paste0("http://datazone.birdlife.org/species/results?cty=", i, "&cri=&fam=0&gen=0&spc=&cmn=&bt=&rec=N&vag=N&sea=&wat=&aze=&lab=&enb=&stmig=Y")
@@ -22,7 +22,7 @@ download_bird_migration <- function(){
 #' @importFrom countrycode countrycode
 #' @importFrom assertthat are_equal
 #' @export
-transform_bird_migration <- function(){
+transform_bird_migration <- function(directory){
   
   # import data
   filenames <- list.files(here(directory, "bli-bird-migration"),
