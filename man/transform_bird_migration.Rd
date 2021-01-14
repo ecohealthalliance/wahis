@@ -4,7 +4,7 @@
 \alias{transform_bird_migration}
 \title{Transform birdlife data to return counts of overlapping migratory species between pairwise countries}
 \usage{
-transform_bird_migration()
+transform_bird_migration(directory)
 }
 \arguments{
 \item{directory}{where bird migration data is saved}
