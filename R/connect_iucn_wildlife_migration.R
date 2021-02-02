@@ -73,7 +73,7 @@ transform_wildlife_migration <- function(directory){
   }) %>% set_names(combo_names)
   
   # generate tibble of number animals shared by countries
-  wildlife_intersects_count <- imap_dfr(wildlife_intersects, ~tibble(countries = .y, n_migratrory_wildlife = length(.x))) %>%
+  wildlife_intersects_count <- imap_dfr(wildlife_intersects, ~tibble(countries = .y, n_migratory_wildlife = length(.x))) %>%
     separate(countries, into = c("country_origin", "country_destination"), sep = "-") 
   
   # because data is non-directional, copy the data for the opposite direction
