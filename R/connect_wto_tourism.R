@@ -30,7 +30,7 @@ download_tourism <- function(username, password, directory){
     filename <- basename(url) %>% str_extract('[0-9]+')
     filename_full <- paste0(url, "/suppl_file/", filename, ".xlsx")
     xlsx_download <- jump_to(session, filename_full)
-    writeBin(xlsx_download$response$content, here(paste0(directory, "wto-tourism/", filename, ".xlsx")))
+    writeBin(xlsx_download$response$content, here(directory, "wto-tourism", paste0(filename, ".xlsx")))
   })
 }
 
