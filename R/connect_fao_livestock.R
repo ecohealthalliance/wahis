@@ -48,17 +48,17 @@ transform_livestock <- function(directory){
     filter(unit %in% c("Head", "1000 Head")) %>%
     drop_na(value) %>%
     mutate(value = ifelse(unit == "1000 Head", value * 1000, value)) %>%
-    mutate(unit = "Head")
+    mutate(unit = "Head") %>% 
+    mutate_at(.vars = c("reporter_countries", "partner_countries"), ~iconv(., "UTF-8", "UTF-8", sub = ""))
   
   # get country iso3c
-  fao_countries <- unique(c(fao$reporter_countries, fao$partner_countries))
-  fao_countries <- iconv(fao_countries, "UTF-8", "UTF-8", sub='') 
+  fao_countries <- unique(c(fao_heads$reporter_countries, fao_heads$partner_countries))
   country_code_lookup <- suppressWarnings(countrycode::countrycode(fao_countries,
                                                   origin = "country.name",
                                                   destination = "iso3c"))
   names(country_code_lookup) <- fao_countries
   #country_code_lookup[is.na(country_code_lookup)]
-  country_code_lookup[grepl("d'Ivoire", names(country_code_lookup))] <- "CIV"
+  # country_code_lookup[grepl("d'Ivoire", names(country_code_lookup))] <- "CIV"
   
   fao_bilateral <- fao_heads %>%
     mutate(reporter_iso = country_code_lookup[reporter_countries],
