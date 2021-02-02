@@ -58,7 +58,7 @@ transform_livestock <- function(directory){
                                                   destination = "iso3c"))
   names(country_code_lookup) <- fao_countries
   #country_code_lookup[is.na(country_code_lookup)]
-  #country_code_lookup[grepl("d'Ivoire", names(country_code_lookup))] <- "CIV"
+  country_code_lookup[grepl("d'Ivoire", names(country_code_lookup))] <- "CIV"
   
   fao_bilateral <- fao_heads %>%
     mutate(reporter_iso = country_code_lookup[reporter_countries],
