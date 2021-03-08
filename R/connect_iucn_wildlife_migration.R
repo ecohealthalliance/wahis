@@ -1,11 +1,12 @@
 #' Download iucn data
 #' @param token IUCN redlist API token
+#' @param directory where migration data is saved
 #' @import dplyr purrr here
 #' @importFrom readr write_rds
 #' @importFrom jsonlite fromJSON
 #' @export
 
-download_wildlife <- function(token){
+download_wildlife <- function(token, directory){
   countries <- fromJSON(paste0("https://apiv3.iucnredlist.org/api/v3/country/list?token=", token))$results
   
   wildlife <- map_df(countries$isocode, function(iso){
@@ -20,14 +21,13 @@ download_wildlife <- function(token){
     return(result)
  })
   
-  suppressWarnings(dir.create(here("data-raw")))
-  
-  write_rds(wildlife, here("data-raw/iucn-wildlife.rds"))
+  write_rds(wildlife, here(directory, "iucn-wildlife.rds"))
 }
 
 
 
 #' Transform iucn data to return counts of overlapping species between pairwise countries
+#' @param directory where migration data is saved
 #' @import dplyr tidyr here purrr xml2
 #' @importFrom taxadb td_create filter_rank
 #' @importFrom countrycode countrycode
@@ -35,7 +35,7 @@ download_wildlife <- function(token){
 #' @importFrom rvest html_table
 #' @export
 
-transform_wildlife_migration <- function(){
+transform_wildlife_migration <- function(directory){
   
   # get list of migratory species
   page <- read_html("http://groms.de/groms_neu/view/order_stat_patt_spanish.php?search_pattern=")
@@ -49,7 +49,7 @@ transform_wildlife_migration <- function(){
     pull(scientificName)
   
   # read in iucn data and filter for migratory species and remove bird species
-  wildlife <- read_rds(here("data-raw/iucn-wildlife.rds")) %>%
+  wildlife <- read_rds(here(directory, "iucn-wildlife.rds")) %>%
     select(scientific_name, country) %>%
     distinct() %>%
     filter(country != "DT") %>% # disputed territory
@@ -73,7 +73,7 @@ transform_wildlife_migration <- function(){
   }) %>% set_names(combo_names)
   
   # generate tibble of number animals shared by countries
-  wildlife_intersects_count <- imap_dfr(wildlife_intersects, ~tibble(countries = .y, n_migratrory_wildlife = length(.x))) %>%
+  wildlife_intersects_count <- imap_dfr(wildlife_intersects, ~tibble(countries = .y, n_migratory_wildlife = length(.x))) %>%
     separate(countries, into = c("country_origin", "country_destination"), sep = "-") 
   
   # because data is non-directional, copy the data for the opposite direction

@@ -4,7 +4,10 @@
 \alias{transform_wildlife_migration}
 \title{Transform iucn data to return counts of overlapping species between pairwise countries}
 \usage{
-transform_wildlife_migration()
+transform_wildlife_migration(directory)
+}
+\arguments{
+\item{directory}{where migration data is saved}
 }
 \description{
 Transform iucn data to return counts of overlapping species between pairwise countries

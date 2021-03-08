@@ -4,7 +4,10 @@
 \alias{transform_human_migration}
 \title{Transform UN migrant data}
 \usage{
-transform_human_migration()
+transform_human_migration(directory)
+}
+\arguments{
+\item{directory}{where migration data is saved}
 }
 \description{
 Transform UN migrant data

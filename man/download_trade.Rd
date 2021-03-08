@@ -4,7 +4,10 @@
 \alias{download_trade}
 \title{Download ots data}
 \usage{
-download_trade()
+download_trade(directory)
+}
+\arguments{
+\item{directory}{where ots-trade.rds is saved}
 }
 \description{
 Download ots data

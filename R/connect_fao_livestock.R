@@ -1,29 +1,31 @@
 #' Download fao livestock data
+#' @param directory where livestock data is saved
 #' @import here
 #' @export
-download_livestock <- function(){
-  suppressWarnings(dir.create(here("data-raw/fao-livestock")))
+download_livestock <- function(directory){
+  suppressWarnings(dir.create(here(directory, "fao-livestock")))
   download.file("http://fenixservices.fao.org/faostat/static/bulkdownloads/Trade_DetailedTradeMatrix_E_All_Data_(Normalized).zip",
-                destfile =  here("data-raw/fao-livestock/fao-livestock.zip"))
+                destfile =  here(directory, "fao-livestock/fao-livestock.zip"))
 }
 
 #' Transform fao data to return pairwise livestock trade values
+#' @param directory where livestock data is saved
 #' @import dplyr tidyr here
 #' @importFrom countrycode countrycode
 #' @importFrom janitor clean_names
 #' @importFrom vroom vroom
 #' @export
 
-transform_livestock <- function(){
+transform_livestock <- function(directory){
   
   # unzip using OS command (based on this: https://stackoverflow.com/questions/42740206/r-possible-truncation-of-4gb-file)
-  setwd(here("data-raw/fao-livestock"))
+  setwd(here(directory, "fao-livestock"))
   system2("unzip", args = c("-o", # include override flag
-                     here("data-raw/fao-livestock/fao-livestock.zip")),
+                     here(directory, "fao-livestock/fao-livestock.zip")),
             stdout = TRUE)
   setwd(here())
 
-  fao <- vroom(here("data-raw/fao-livestock/Trade_DetailedTradeMatrix_E_All_Data_(Normalized).csv"), 
+  fao <- vroom(here(directory, "fao-livestock/Trade_DetailedTradeMatrix_E_All_Data_(Normalized).csv"), 
                col_types = cols(
                  `Reporter Country Code` = col_skip(),
                  `Reporter Countries` = col_character(),
@@ -46,16 +48,17 @@ transform_livestock <- function(){
     filter(unit %in% c("Head", "1000 Head")) %>%
     drop_na(value) %>%
     mutate(value = ifelse(unit == "1000 Head", value * 1000, value)) %>%
-    mutate(unit = "Head")
+    mutate(unit = "Head") %>% 
+    mutate_at(.vars = c("reporter_countries", "partner_countries"), ~iconv(., "UTF-8", "UTF-8", sub = ""))
   
   # get country iso3c
-  fao_countries <- unique(c(fao$reporter_countries, fao$partner_countries))
+  fao_countries <- unique(c(fao_heads$reporter_countries, fao_heads$partner_countries))
   country_code_lookup <- suppressWarnings(countrycode::countrycode(fao_countries,
                                                   origin = "country.name",
                                                   destination = "iso3c"))
   names(country_code_lookup) <- fao_countries
   #country_code_lookup[is.na(country_code_lookup)]
-  country_code_lookup[grepl("d'Ivoire", names(country_code_lookup))] <- "CIV"
+  # country_code_lookup[grepl("d'Ivoire", names(country_code_lookup))] <- "CIV"
   
   fao_bilateral <- fao_heads %>%
     mutate(reporter_iso = country_code_lookup[reporter_countries],
@@ -93,21 +96,22 @@ transform_livestock <- function(){
 }
 
 #' FAO item lookup table
+#' @param directory where livestock data is saved
 #' @import dplyr tidyr here
 #' @importFrom janitor clean_names
 #' @importFrom vroom vroom
 #' @export
 
-get_livestock_item_id <- function(){
+get_livestock_item_id <- function(directory){
   
   # unzip using OS command (based on this: https://stackoverflow.com/questions/42740206/r-possible-truncation-of-4gb-file)
-  setwd(here("data-raw/fao-livestock"))
+  setwd(here(directory, "fao-livestock"))
   system2("unzip", args = c("-o", # include override flag
-                            here("data-raw/fao-livestock/fao-livestock.zip")),
+                            here(directory, "fao-livestock/fao-livestock.zip")),
           stdout = TRUE)
   setwd(here())
   
-  vroom(here("data-raw/fao-livestock/Trade_DetailedTradeMatrix_E_All_Data_(Normalized).csv"), 
+  vroom(here(directory, "fao-livestock/Trade_DetailedTradeMatrix_E_All_Data_(Normalized).csv"), 
                col_types = cols(
                  `Reporter Country Code` = col_skip(),
                  `Reporter Countries` = col_skip(),

@@ -4,7 +4,10 @@
 \alias{download_livestock}
 \title{Download fao livestock data}
 \usage{
-download_livestock()
+download_livestock(directory)
+}
+\arguments{
+\item{directory}{where livestock data is saved}
 }
 \description{
 Download fao livestock data

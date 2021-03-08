@@ -4,12 +4,14 @@
 \alias{download_tourism}
 \title{Download wto tourism data}
 \usage{
-download_tourism(username, password)
+download_tourism(username, password, directory)
 }
 \arguments{
 \item{username}{UNWTO email}
 
 \item{password}{UNWTO password}
+
+\item{directory}{where tourism is saved}
 }
 \description{
 Download wto tourism data

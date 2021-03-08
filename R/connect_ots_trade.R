@@ -1,27 +1,33 @@
 #' Download ots data
+#' @param directory where ots-trade.rds is saved
 #' @import dplyr here tradestatistics
 #' @importFrom readr write_rds
+#' @importFrom jsonlite fromJSON
 #' @export
-download_trade <- function(){
+download_trade <- function(directory){
   
-  product_ids <- full_join(tradestatistics::ots_products, tradestatistics::ots_communities) %>%
-    filter(community_name %in% c("Foodstuffs","Animal and Vegetable Bi-Products", "Vegetable Products", "Animal Hides",  "Animal Products")) %>%
+  product_ids <- left_join(tradestatistics::ots_products, tradestatistics::ots_sections, by = "product_code") %>%
+    left_join(tradestatistics::ots_sections_shortnames, by = "section_code") %>% 
+    filter(section_shortname_english %in% c("Foodstuffs","Animal and Vegetable Bi-Products", "Vegetable Products", "Animal Hides",  "Animal Products")) %>%
     pull(product_code)
   
   suppressWarnings(dir.create(here("data-raw")))
-  ots <- ots_create_tidy_data(years = c(2000:2017), table = "yrpc",  products = product_ids,
-                              include_communities = TRUE, include_shortnames = TRUE) 
   
-  write_rds(ots, here("data-raw/ots-trade.rds"))
+  max_year <- fromJSON("https://api.tradestatistics.io/year_range")[2,]
+  
+  ots <- ots_create_tidy_data(years = c(2000:max_year), table = "yrpc",  products = product_ids) 
+  
+  write_rds(ots, here(directory, "ots-trade.rds"))
 }
 
 #' Transform ots data to return pairwise trade values
+#' @param directory where ots-trade.rds is saved
 #' @import dplyr tidyr here
 #' @importFrom readr read_rds
 #' @export
-transform_trade <- function(){
+transform_trade <- function(directory){
   
-  ots <- read_rds(here("data-raw/ots-trade.rds"))
+  ots <- read_rds(here(directory, "ots-trade.rds"))
   
   # assign country destination and origin
   ots_export <- ots %>%

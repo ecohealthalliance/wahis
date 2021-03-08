@@ -4,7 +4,10 @@
 \alias{download_human_migration}
 \title{Download UN migrant data}
 \usage{
-download_human_migration()
+download_human_migration(directory)
+}
+\arguments{
+\item{directory}{where migration data is saved}
 }
 \description{
 Download UN migrant data

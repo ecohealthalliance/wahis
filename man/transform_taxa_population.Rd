@@ -4,7 +4,10 @@
 \alias{transform_taxa_population}
 \title{Transform fao taxa data}
 \usage{
-transform_taxa_population()
+transform_taxa_population(directory)
+}
+\arguments{
+\item{directory}{where taxa population is saved}
 }
 \description{
 Transform fao taxa data
