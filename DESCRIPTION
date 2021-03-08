@@ -59,4 +59,5 @@ Suggests:
     fs
 Remotes:
   noamross/scrapetools,
-  ropensci/taxadb
+  ropensci/taxadb,
+  ropensci/arkdb
