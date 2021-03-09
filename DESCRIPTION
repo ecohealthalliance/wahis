@@ -58,6 +58,4 @@ Suggests:
     furrr,
     fs
 Remotes:
-  noamross/scrapetools,
-  ropensci/arkdb,
-  ropensci/taxadb
+  noamross/scrapetools
