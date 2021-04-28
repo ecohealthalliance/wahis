@@ -36,7 +36,8 @@ Imports:
     geosphere,
     taxadb,
     countrycode,
-    textclean
+    textclean,
+    ncdf4
 Suggests:
     spelling, 
     testthat,
