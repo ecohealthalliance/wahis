@@ -36,7 +36,8 @@ Imports:
     geosphere,
     taxadb,
     countrycode,
-    textclean
+    textclean,
+    ncdf4
 Suggests:
     spelling, 
     testthat,
@@ -58,4 +59,5 @@ Suggests:
     furrr,
     fs
 Remotes:
-  noamross/scrapetools
+  noamross/scrapetools,
+  ropensci/tradestatistics
