@@ -5,6 +5,7 @@
 #' @export
 ingest_outbreak_report2 <- function(web_page){
    fromJSON(web_page)
+    # add id and webpage
 }
 
 #' Function to safely run ingest_outbreak_report
