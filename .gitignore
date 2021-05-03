@@ -16,3 +16,5 @@ data-raw2/*
 !data-raw2/.gitkeep
 data-processed/*
 !data-processed/.gitkeep
+rasters/*
+!rasters/.gitkeep
