@@ -1,32 +1,21 @@
 
 #' Extract Info from WAHIS Weekly Disease Information API
-#'
-#' @param start_i The report from which to start download
-#' @export
+#' @param web_page API url
 #' @importFrom jsonlite fromJSON
-ingest_outbreak_report2 <- function(start_i = 1){
-    
-    url_base <- "https://wahis.oie.int/pi/getReport/"
-    
-    report_avail <- TRUE
-    i <- start_i # 17192
-    out <- list()
-    
-    # reports are sequential
-    while(report_avail){
-        print(i)
-        url <- paste0(url_base, i)
-        result <- try(fromJSON(url), silent = TRUE)
-        if(class(result) == "try-error"){
-            report_avail <- FALSE
-        }else{
-            out[[i]] <- result
-            out[[i]]$report_id <- i
-            i <- i + 1
-        }
-    }
-    
-    return(out)
+#' @export
+ingest_outbreak_report2 <- function(web_page){
+   fromJSON(web_page)
 }
 
-# transform
+#' Function to safely run ingest_outbreak_report
+#' @param web_page API url
+#' @import purrr
+#' @export
+safe_ingest_outbreak2 <- function(web_page) {
+    out <- safely(ingest_outbreak_report2)(web_page)
+    if(!is.null(out$result)) {
+        return(out$result)
+    } else {
+        return(list(ingest_status = paste("ingestion error: ", out$error)))
+    }
+}

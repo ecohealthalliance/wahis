@@ -1,24 +1,32 @@
 #!/usr/bin/env Rscript
 
 # This script is for testing. Processing for database is done in repel-infrastructure. 
+library(fs)
+library(future)
+library(furrr)
 library(tidyverse)
 library(tictoc)
 
 # Set up parallel plan  --------------------------------------------------------
 
+plan(multiprocess) # This takes a bit to load on many cores as all the processes are starting
 devtools::load_all(here::here()) #doing this as scraping functions may not be exported
 
-# Run ingest ---------------------------------------------------------
+# List all files  ---------------------------------------------------------
+filenames <- paste0("https://wahis.oie.int/pi/getReport/", 1:17200) # need to identify last report
+
+# Run ingest (~25 mins) ---------------------------------------------------------
+message(paste(length(filenames), "files to process"))
 tic()
-wahis_outbreak <- ingest_outbreak_report2(start_i =  1)  
+wahis_outbreak <- future_map(filenames, wahis:::safe_ingest_outbreak2, .progress = TRUE)  
 toc()
 
 # Save ingested files   ------------------------------------------------------
 dir_create(here::here("data-processed"))
 readr::write_rds(wahis_outbreak, here::here("data-processed", "wahis_ingested_outbreak_reports2.rds"), compress = "xz", compression = 9L)
 
-# # Transform files   ------------------------------------------------------
-# outbreak_reports <-  readr::read_rds(here::here("data-processed", "wahis_ingested_outbreak_reports2.rds"))
+# Transform files   ------------------------------------------------------
+# outbreak_reports <-  readr::read_rds(here::here("data-processed", "wahis_ingested_outbreak_reports.rds"))
 # outbreak_reports_transformed <- transform_outbreak_reports(outbreak_reports)
 # 
 # # Export transformed files-----------------------------------------------
