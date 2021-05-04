@@ -1,11 +1,12 @@
 
 #' Extract Info from WAHIS Weekly Disease Information API
 #' @param web_page API url
-#' @importFrom jsonlite fromJSON
+#' @import httr
 #' @export
 ingest_outbreak_report2 <- function(web_page){
-   fromJSON(web_page)
-    # add id and webpage
+    req <- httr::GET(url = web_page, 
+                      httr::add_headers(`Accept-Language` = "en-US;"))
+    content(req, as="parsed")
 }
 
 #' Function to safely run ingest_outbreak_report
