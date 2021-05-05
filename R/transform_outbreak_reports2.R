@@ -12,30 +12,74 @@ transform_outbreak_reports <- function(outbreak_reports) {
   
   message("Transforming outbreak reports")
   
-  # Proprocessing ---------------------------------------------------
+  # Preprocessing ---------------------------------------------------
+  # outbreak_reports[which(map_int(outbreak_reports, length)==2)]
+  
   outbreak_reports2 <- discard(outbreak_reports, function(x){
-    !is.null(x$ingest_status) && str_detect(x$ingest_status, "ingestion error")
+    !is.null(x$ingest_status) && str_detect(x$ingest_status, "ingestion error") |
+      !is.null(x$message) && str_detect(x$message, "Endpoint request timed out") 
+    
   })
   if(!length(outbreak_reports2)) return(NULL)
   
   # Events table ------------------------------------------------------------
+  
   outbreak_reports_events <- map_dfr(outbreak_reports2, function(x){
-      map_dfc(c("senderDto", "generalInfoDto", "reportDto"), function(tbl){
-        out <- x[[tbl]] %>% 
-          compact() %>% 
-          as_tibble() 
-        if(tbl=="generalInfoDto") out <- out %>% select(-reportDate)
-      }) 
-    }) %>% 
+    map_dfc(c("senderDto", "generalInfoDto", "reportDto", "totalCases", "report_info_id"), function(tbl){
+      out <- x[[tbl]] %>%
+        compact() %>%
+        as_tibble()
+      if(tbl=="generalInfoDto") out <- out %>% select(-one_of("reportDate"))
+      if(tbl=="totalCases" & nrow(out)) out <- out %>% rename(total_cases = value)
+      if(tbl=="report_info_id" & nrow(out)) out <- out %>% rename(report_info_id = value)
+      return(out)
+    })
+  }) %>%
     janitor::clean_names()
   
-
-  # TEMP compare to exisitinng tables ---------------------------------------------------
-  conn <- repeldata::repel_remote_conn()
-  events_table <- DBI::dbReadTable(conn, "outbreak_reports_events") %>% as_tibble()
-  names(events_table)
+  # join with :
+  reports <- scrape_outbreak_report_list() %>% 
+    select(report_info_id, immediate_report = event_id_oie_reference)
   
-
+  outbreak_reports_events2 <- outbreak_reports_events %>%
+    left_join(reports) %>% 
+    mutate(country_or_territory = case_when(
+      country_or_territory == "Central African (Rep.)" ~ "Central African Republic",
+      country_or_territory == "Dominican (Rep.)" ~ "Dominican Republic",
+      country_or_territory == "Ceuta" ~ "Morocco",
+      country_or_territory == "Melilla"~ "Morocco",
+      TRUE ~ country_or_territory
+    )) %>%
+    mutate(country_iso3c = countrycode::countrycode(country_or_territory, origin = "country.name", destination = "iso3c")) %>%
+    select(id = report_id,
+           country = country_or_territory,
+           country_iso3c,
+           disease_category,
+           disease = disease_name,
+           is_aquatic,
+           report_date,
+           report_type = report_title,
+           reason_for_notification = translated_reason,
+           date_of_start_of_the_event = start_date,
+           date_event_resolved = end_date,
+           date_of_previous_occurrence = last_occurance_date,
+           casual_agent,
+           serotype = disease_type,
+           total_cases,
+           immediate_report, 
+           everything() 
+    )
+  
+  #TODO add controls (";"), ando
+  # outbreak_reports_outbreaks
+  # documentation
+  
+  #  # TEMP compare to exisitinng tables ---------------------------------------------------
+  # conn <- repeldata::repel_remote_conn()
+  # events_table <- DBI::dbReadTable(conn, "outbreak_reports_events") %>% as_tibble()
+  # names(events_table)
+  
+  
   # exclude_fields <- c("Related reports", "related_reports", # can be determined from immediatate reports
   #                     "outbreak_detail", "outbreak_summary", "diagnostic_tests", # addressed in detail below
   #                     "ingest_status" # all available

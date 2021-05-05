@@ -4,10 +4,10 @@
 \alias{safe_ingest_outbreak2}
 \title{Function to safely run ingest_outbreak_report}
 \usage{
-safe_ingest_outbreak2(web_page)
+safe_ingest_outbreak2(report_info_id)
 }
 \arguments{
-\item{web_page}{API url}
+\item{report_info_id}{url id for outbreak report}
 }
 \description{
 Function to safely run ingest_outbreak_report
