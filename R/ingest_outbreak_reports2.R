@@ -1,7 +1,7 @@
 
 #' Extract Info from WAHIS Weekly Disease Information API
 #' @param web_page API url
-#' @import httr
+#' @importFrom httr GET content
 #' @export
 ingest_outbreak_report2 <- function(web_page){
     req <- httr::GET(url = web_page, 
