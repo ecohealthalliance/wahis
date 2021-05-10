@@ -25,7 +25,7 @@ transform_outbreak_reports <- function(outbreak_reports) {
   # Events table ------------------------------------------------------------
   
   outbreak_reports_events <- map_dfr(outbreak_reports2, function(x){
-    map_dfc(c("senderDto", "generalInfoDto", "reportDto", "totalCases", "report_info_id"), function(tbl){
+    map_dfc(c("senderDto", "generalInfoDto", "reportDto", "report_info_id"), function(tbl){
       out <- x[[tbl]] %>%
         compact() %>%
         as_tibble()
@@ -37,10 +37,10 @@ transform_outbreak_reports <- function(outbreak_reports) {
   }) %>%
     janitor::clean_names()
   
-  # join with :
   reports <- scrape_outbreak_report_list() %>% 
-    select(report_info_id, immediate_report = event_id_oie_reference)
-  
+    select(report_info_id, # url
+           outbreak_thread_id = event_id_oie_reference) # thread number (does not reference a specific report)
+
   outbreak_reports_events2 <- outbreak_reports_events %>%
     left_join(reports) %>% 
     mutate(country_or_territory = case_when(
@@ -50,8 +50,10 @@ transform_outbreak_reports <- function(outbreak_reports) {
       country_or_territory == "Melilla"~ "Morocco",
       TRUE ~ country_or_territory
     )) %>%
+    mutate_if(is.character, tolower) %>%
     mutate(country_iso3c = countrycode::countrycode(country_or_territory, origin = "country.name", destination = "iso3c")) %>%
-    select(id = report_id,
+    select(report_id,
+           url_report_id = report_info_id, # url
            country = country_or_territory,
            country_iso3c,
            disease_category,
@@ -60,154 +62,187 @@ transform_outbreak_reports <- function(outbreak_reports) {
            report_date,
            report_type = report_title,
            reason_for_notification = translated_reason,
+           date_of_confirmation_of_the_event = confirmed_on,
            date_of_start_of_the_event = start_date,
            date_event_resolved = end_date,
            date_of_previous_occurrence = last_occurance_date,
            casual_agent,
            serotype = disease_type,
-           total_cases,
-           immediate_report, 
+           future_reporting = event_description_status,
+           outbreak_thread_id, 
            everything() 
-    )
+    ) 
   
-  #TODO add controls (";"), ando
-  # outbreak_reports_outbreaks
-  # documentation
+  # Cleaning
+  outbreak_reports_events2 <- outbreak_reports_events2 %>%
+    mutate(follow_up_count = ifelse(str_detect(report_type, "immediate notification"), 0, str_extract(report_type, "[[:digit:]]+"))) %>%
+    mutate(is_final_report = str_detect(report_type, "final report")) %>%
+    mutate(is_endemic = str_detect(future_reporting, "the event cannot be considered resolved"))
   
-  #  # TEMP compare to exisitinng tables ---------------------------------------------------
+  # Dates handling - convert to  ISO-8601
+  outbreak_reports_events2 <- outbreak_reports_events2 %>%
+    mutate_at(vars(contains("date")), ~lubridate::as_datetime(.)) 
+  
+  # Check for missing date_event_resolved
+  missing_resolved <- outbreak_reports_events2 %>%
+    filter(is.na(date_event_resolved)) %>%
+    filter(is_final_report)
+  
+  if(nrow(missing_resolved)){
+    # Check threads to confirm these are final. If they are, then assume last report is the end date.
+    check_final <- outbreak_reports_events2 %>%
+      select(report_id, outbreak_thread_id, report_date) %>%
+      filter(outbreak_thread_id %in% missing_resolved$outbreak_thread_id) %>%
+      left_join(missing_resolved %>% select(report_id, is_final_report),  by = "report_id") %>%
+      mutate(is_final_report = coalesce(is_final_report, FALSE)) %>%
+      group_by(outbreak_thread_id) %>%
+      mutate(check = report_date == max(report_date)) %>%
+      ungroup() %>%
+      mutate(confirm_final = is_final_report == check)
+    
+    check_final_resolved <- check_final %>%
+      filter(is_final_report, check)
+    check_final_unresolved <- check_final %>%
+      filter(is_final_report, !check)
+    
+    outbreak_reports_events2 <- outbreak_reports_events2 %>%
+      mutate(date_event_resolved = if_else(report_id %in% check_final_resolved$report_id, report_date, date_event_resolved))
+  }
+  
+  # Disease standardization
+  
+  # disease_export <- outbreak_reports_events %>%
+  #   distinct(disease, causal_agent) %>%
+  #   mutate_all(~tolower(trimws(.)))
+  # write_csv(disease_export, here::here("inst/diseases/outbreak_report_diseases.csv"))
+  
+  ando_disease_lookup <- readxl::read_xlsx(system.file("diseases", "disease_lookup.xlsx", package = "wahis")) %>%
+    mutate(disease = textclean::replace_non_ascii(disease)) %>%
+    rename(disease_class = class_desc) %>%
+    filter(report == "animal") %>%
+    select(-report, -no_match_found) %>%
+    mutate_at(.vars = c("ando_id", "preferred_label", "disease_class"), ~na_if(., "NA"))
+  
+  outbreak_reports_events2 <- outbreak_reports_events2 %>%
+    mutate(disease = trimws(disease)) %>%
+    mutate(disease = textclean::replace_non_ascii(disease)) %>%
+    mutate(disease = ifelse(disease == "", causal_agent, disease)) %>%
+    mutate(disease = str_remove_all(disease, "\\s*\\([^\\)]+\\)")) %>% 
+    mutate(disease = str_remove(disease, "virus")) %>% 
+    mutate(disease = trimws(disease)) %>%
+    left_join(ando_disease_lookup, by = "disease") %>%
+    mutate(disease = coalesce(preferred_label, disease)) %>%
+    select(-preferred_label) %>%
+    distinct()
+  
+  diseases_unmatched <- outbreak_reports_events2 %>%
+    filter(is.na(ando_id)) %>%
+    distinct(disease) %>%
+    mutate(table = "outbreak_animal")
+  
+  # write_csv(diseases_unmatched, here::here("inst/diseases/outbreak_report_diseases_unmatched_20210507.csv"))
+  
+  # Check threads to make sure disease is consistent across thread
+  # outbreak_reports_events2 %>%
+  #   group_by(outbreak_thread_id) %>%
+  #   mutate(disease_count = n_distinct(disease)) %>%
+  #   ungroup() %>%
+  #   filter(disease_count > 1) %>%
+  #   View() # these are missing immediate reports
+  
+  ### Understanding  IDs
+  # outbreak_reports_events2$report_id # unique individual report id (in = initial, fur = follow up report)
+  # outbreak_reports_events2$url_report_id # unique individual report url value
+  # outbreak_reports_events2$outbreak_thread_id # outbreak thread identifier - does not correspond to report_id or url_report_id
+  
+  # Outbreak tables ---------------------------------------------------
+  #TODO
+  # outbreak table
+  # testing to see if this works in our pipeline
+  # documentation in readme - when did it change, how does the api work
+  # caching
+  # 6 month reports
+  
+  # impact - over event and thread
+  # radii of space
+  # time course
+  # cases - deaths
+  # confirm lat/lon
+  
   # conn <- repeldata::repel_remote_conn()
-  # events_table <- DBI::dbReadTable(conn, "outbreak_reports_events") %>% as_tibble()
-  # names(events_table)
+  # DBI::dbListTables(conn)
+  # outbreak_reports_outbreaks <- DBI::dbReadTable(conn, "outbreak_reports_outbreaks")
+  # examp <- janitor::get_dupes(outbreak_reports_outbreaks, id, outbreak_number)
   
+  # outbreak_reports_detail$oieReference 
+  # ^ denotes different locations within one report - not unique because there can be mltiple species
+  # outbreak_reports_detail$outbreakInfoId 
+  # seems to be a unique id that is reduntant with oieReference - leaving out for now
+
+  tic()
+  outbreak_reports_detail <- map_dfr(outbreak_reports2[1:200], function(x){
+    
+    report_id <- tibble(report_id = x$reportDto$reportId)
+    outbreak_map <-  x$eventOutbreakDto$outbreakMap
+
+    if(is.null(outbreak_map)) return()
+    
+    map_dfr(outbreak_map, function(xx){   
+      out <- xx %>% 
+        compact() %>% 
+        purrr::keep(., ~!is.list(.x)) %>% 
+        as_tibble() %>% 
+        distinct() %>% 
+        bind_cols(report_id, .)
+      
+      # add species details
+      out <- xx$speciesDetails[-length(xx$speciesDetails)] %>% 
+        compact() %>%  
+        map_dfr(as_tibble) %>% 
+        bind_cols(out, .)
+      
+      # add animal cat
+      out <- xx$animalCategory %>% 
+        compact() %>% 
+        map_dfr(as_tibble) %>% 
+        bind_cols(out, .)
+      
+      # add control measures
+      out <- out %>% 
+        mutate(control_measures = paste(xx$controlMeasures, collapse = "; "))
+      
+      return(out)
+    }) 
+  })
+  toc()
   
-  # exclude_fields <- c("Related reports", "related_reports", # can be determined from immediatate reports
-  #                     "outbreak_detail", "outbreak_summary", "diagnostic_tests", # addressed in detail below
-  #                     "ingest_status" # all available
-  # )
-  # 
-  # outbreak_reports2 <-  modify(outbreak_reports2, function(x){
-  #   x$total_new_outbreaks <- as.character(x$total_new_outbreaks)
-  #   return(x)
-  # })
-  # 
-  # # Events table ---------------------------------------------------
-  # outbreak_reports_events <- map_dfr(outbreak_reports2, function(x){
-  #   exclude_index <- which(names(x) %in% exclude_fields)
-  #   as_tibble(x[-exclude_index])
-  # }) %>% 
-  #   janitor::clean_names() 
-  # 
-  # # Get iso3c codes
-  # country_lookup <- tibble(country = unique(outbreak_reports_events$country)) %>% 
-  #   mutate(country_iso3c = suppressWarnings(countrycode(sourcevar = country, origin = "country.name", destination = "iso3c")))
-  # 
-  # # Cleaning
-  # outbreak_reports_events <- outbreak_reports_events %>%
-  #   mutate_at(vars(-country), ~tolower(.)) %>% 
-  #   mutate(immediate_report = ifelse(str_detect(report_type, "immediate notification"), id, immediate_report)) %>%
-  #   mutate(follow_up = ifelse(str_detect(report_type, "immediate notification"), 0, str_extract(report_type, "[[:digit:]]+"))) %>%
-  #   mutate(final_report = str_detect(report_type, "final report")) %>% 
-  #   mutate(endemic = str_detect(future_reporting, "the event cannot be considered resolved")) %>% 
-  #   left_join(country_lookup, by = "country") %>% 
-  #   select(id, country, country_iso3c, everything())
-  # 
-  # # New outbreak?
-  # outbreak_reports_events <- outbreak_reports_events %>%
-  #   mutate(new_outbreak_in_report = map_lgl(outbreak_reports2, ~length(.$outbreak_summary) > 1))
-  # 
-  # # Dates handling - convert to  ISO-8601 
-  # outbreak_reports_events <- outbreak_reports_events %>%
-  #   mutate_at(vars(starts_with("date"), "report_date", -"date_of_previous_occurrence"), ~dmy(.)) %>% 
-  #   mutate(date_of_previous_occurrence = messy_dates(date_of_previous_occurrence))
-  # 
-  # # Check for missing date_event_resolved
-  # missing_resolved <- outbreak_reports_events %>% 
-  #   filter(is.na(date_event_resolved)) %>% 
-  #   filter(final_report)
-  # 
-  # if(nrow(missing_resolved)){
-  #   # Check threads to confirm these are final. If they are, then assume last report is the end date.
-  #   check_final <- outbreak_reports_events %>% 
-  #     select(id, immediate_report, report_date) %>% 
-  #     filter(immediate_report %in% missing_resolved$immediate_report) %>% 
-  #     left_join(missing_resolved %>% select(id, final_report),  by = "id") %>% 
-  #     mutate(final_report = coalesce(final_report, FALSE)) %>% 
-  #     group_by(immediate_report) %>% 
-  #     mutate(check = report_date == max(report_date)) %>% 
-  #     ungroup() %>% 
-  #     mutate(confirm_final = final_report == check)
-  #   
-  #   check_final_resolved <- check_final %>% 
-  #     filter(final_report, check)
-  #   check_final_unresolved <- check_final %>% 
-  #     filter(final_report, !check)
-  #   
-  #   outbreak_reports_events <- outbreak_reports_events %>% 
-  #     mutate(date_event_resolved = if_else(id %in% check_final_resolved$id, report_date, date_event_resolved)) 
-  # }
-  # 
-  # # Disease standardization
-  # 
-  # # disease_export <- outbreak_reports_events %>% 
-  # #   distinct(disease, causal_agent) %>% 
-  # #   mutate_all(~tolower(trimws(.)))
-  # # write_csv(disease_export, here::here("inst/diseases/outbreak_report_diseases.csv"))
-  # 
-  # ando_disease_lookup <- readxl::read_xlsx(system.file("diseases", "disease_lookup.xlsx", package = "wahis")) %>% 
-  #   mutate(disease = textclean::replace_non_ascii(disease)) %>% 
-  #   rename(disease_class = class_desc) %>% 
-  #   filter(report == "animal") %>% 
-  #   select(-report, -no_match_found) %>% 
-  #   mutate_at(.vars = c("ando_id", "preferred_label", "disease_class"), ~na_if(., "NA"))
-  # 
-  # outbreak_reports_events <- outbreak_reports_events %>% 
-  #   mutate(disease = trimws(disease)) %>% 
-  #   mutate(disease = textclean::replace_non_ascii(disease)) %>% 
-  #   mutate(disease = ifelse(disease == "", causal_agent, disease)) %>% 
-  #   left_join(ando_disease_lookup, by = "disease") %>% 
-  #   mutate(disease = coalesce(preferred_label, disease)) %>% 
-  #   select(-preferred_label) %>% 
-  #   distinct() 
-  # 
-  # diseases_unmatched <- outbreak_reports_events %>% 
-  #   filter(is.na(ando_id)) %>% 
-  #   distinct(disease) %>% 
-  #   mutate(table = "outbreak_animal")
-  # 
-  # # Check threads to make sure disease is consistent across thread
-  # # outbreak_reports_events %>% 
-  # #   group_by(immediate_report) %>% 
-  # #   mutate(disease_count = n_distinct(disease)) %>% 
-  # #   ungroup() %>% 
-  # #   filter(disease_count > 1) %>% 
-  # #   View() # these are missing immediate reports
-  # 
-  # # Outbreak tables ---------------------------------------------------
-  # 
-  # outbreak_reports_detail <- map_df(outbreak_reports2, function(x){
-  #   if(length(x$outbreak_detail) == 1){return()}
-  #   x$outbreak_detail })
-  # 
-  # if(nrow(outbreak_reports_detail)) {
-  #   
-  #   outbreak_reports_detail <- outbreak_reports_detail %>%
-  #     mutate_all(~tolower(.)) %>% 
-  #     janitor::clean_names() %>%
-  #     mutate(outbreak_number = trimws(outbreak_number))
-  #   
-  #   # clean dates
-  #   warn_that(unique(str_length(outbreak_reports_detail$date_of_start_of_the_outbreak)) == 10)
-  #   
-  #   outbreak_reports_detail <- outbreak_reports_detail %>%
-  #     mutate(date_of_start_of_the_outbreak = dmy(date_of_start_of_the_outbreak)) %>% 
-  #     mutate(outbreak_status2 = str_extract(outbreak_status, "resolved|continuing")) %>% 
-  #     mutate(date_outbreak_resolved = case_when(outbreak_status2 == "resolved" ~
-  #                                                 str_extract(outbreak_status, "(?<=\\().+?(?=\\))"))) %>% 
-  #     mutate(date_outbreak_resolved = dmy(date_outbreak_resolved)) %>% 
-  #     select(-outbreak_status) %>% 
-  #     rename(outbreak_status = outbreak_status2)
-  #   
-  # }
+  if(nrow(outbreak_reports_detail)) {
+    
+    # note: vaccinated is missing?????
+    outbreak_reports_detail2 <- outbreak_reports_detail %>%
+      mutate_if(is.character, tolower) %>%
+      janitor::clean_names()  %>% 
+      select(-starts_with("total_")) %>% # these are rolling and values and may cause confusion
+      select(-specie_id, -morbidity, -mortality, -outbreak_info_id) %>% 
+      rename(taxa = spicie_name,
+             killed_and_disposed = killed,
+             slaughtered_for_commercial_use = slaughtered) %>% 
+      mutate_at(vars(susceptible, cases, deaths, killed_and_disposed, slaughtered_for_commercial_use), ~replace_na(., 0))
+    
+    #TODO
+    # clean dates
+    warn_that(unique(str_length(outbreak_reports_detail$date_of_start_of_the_outbreak)) == 10)
+    
+    outbreak_reports_detail <- outbreak_reports_detail %>%
+      mutate(date_of_start_of_the_outbreak = dmy(date_of_start_of_the_outbreak)) %>%
+      mutate(outbreak_status2 = str_extract(outbreak_status, "resolved|continuing")) %>%
+      mutate(date_outbreak_resolved = case_when(outbreak_status2 == "resolved" ~
+                                                  str_extract(outbreak_status, "(?<=\\().+?(?=\\))"))) %>%
+      mutate(date_outbreak_resolved = dmy(date_outbreak_resolved)) %>%
+      select(-outbreak_status) %>%
+      rename(outbreak_status = outbreak_status2)
+    
+  }
   # 
   # outbreak_reports_summary <- map_df(outbreak_reports2, function(x){
   #   if(length(x$outbreak_summary) == 1){return()}
@@ -281,7 +316,7 @@ transform_outbreak_reports <- function(outbreak_reports) {
   # if(!purrr::is_empty(wahis_joined)){
   #   wahis_joined  <- map(wahis_joined, function(tb){
   #     tb %>%
-  #       mutate_at(vars(suppressWarnings(one_of("id", "immediate_report", "total_new_outbreaks", "follow_up",
+  #       mutate_at(vars(suppressWarnings(one_of("id", "outbreak_thread_id", "total_new_outbreaks", "follow_up",
   #                                              "mortality_rate", "morbidity_rate",
   #                                              "susceptible", "deaths", "killed_and_disposed_of", "cases", "slaughtered",
   #                                              "total_susceptible", "total_deaths", "total_killed_and_disposed_of", "total_cases", "total_slaughtered",
