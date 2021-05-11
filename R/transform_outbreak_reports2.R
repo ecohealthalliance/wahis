@@ -162,7 +162,7 @@ transform_outbreak_reports2 <- function(outbreak_reports) {
   # outbreak_reports_detail$outbreakInfoId  and outbreak_reports_detail$outbreakId
   # seems to be reduntant with oieReference - leaving out for now
 
-  outbreak_reports_detail <- map_dfr(outbreak_reports2[1:200], function(x){
+  outbreak_reports_detail <- map_dfr(outbreak_reports2, function(x){
     
     report_id <- tibble(report_id = x$reportDto$reportId)
     outbreak_map <-  x$eventOutbreakDto$outbreakMap

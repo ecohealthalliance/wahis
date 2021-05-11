@@ -27,7 +27,8 @@ readr::write_rds(wahis_outbreak, here::here("data-processed", "wahis_ingested_ou
 
 # Transform files   ------------------------------------------------------
 outbreak_reports <-  readr::read_rds(here::here("data-processed", "wahis_ingested_outbreak_reports2.rds"))
-# outbreak_reports_transformed <- transform_outbreak_reports2(outbreak_reports)
-# 
-# # Export transformed files-----------------------------------------------
-# readr::write_rds(outbreak_reports_transfor    med, here::here("data-processed", "wahis_transformed_outbreak_reports.rds"), compress = "xz", compression = 9L)
+tic()
+outbreak_reports_transformed <- transform_outbreak_reports2(outbreak_reports)
+toc()
+# Export transformed files-----------------------------------------------
+readr::write_rds(outbreak_reports_transformed, here::here("data-processed", "wahis_transformed_outbreak_reports.rds"), compress = "xz", compression = 9L)
