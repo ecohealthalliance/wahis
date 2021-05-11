@@ -1,6 +1,6 @@
 #' Convert a list of scraped ourbreak reports to a list of table
 #' @param outbreak_reports a list of outbreak reports produced by [ingest_outbreak_report]
-#' @import dplyr tidyr purrr stringr
+#' @import dplyr tidyr purrr stringr furrr
 #' @importFrom janitor clean_names
 #' @importFrom lubridate dmy myd ymd
 #' @importFrom textclean replace_non_ascii
@@ -40,7 +40,7 @@ transform_outbreak_reports2 <- function(outbreak_reports) {
   reports <- scrape_outbreak_report_list() %>% 
     select(report_info_id, # url
            outbreak_thread_id = event_id_oie_reference) # thread number (does not reference a specific report)
-
+  
   outbreak_reports_events <- outbreak_reports_events %>%
     left_join(reports) %>% 
     mutate(country_or_territory = case_when(
@@ -156,17 +156,18 @@ transform_outbreak_reports2 <- function(outbreak_reports) {
   # outbreak_reports_events$outbreak_thread_id # outbreak thread identifier - does not correspond to report_id or url_report_id
   
   # Outbreak tables ---------------------------------------------------
-
+  
   # outbreak_reports_detail$oieReference 
   # ^ denotes different locations within one report - not unique because there can be mltiple species
   # outbreak_reports_detail$outbreakInfoId  and outbreak_reports_detail$outbreakId
   # seems to be reduntant with oieReference - leaving out for now
-
-  outbreak_reports_detail <- map_dfr(outbreak_reports2, function(x){
+  
+  plan(multisession) # This takes a bit to load on many cores as all the processes are starting
+  outbreak_reports_detail <- future_map(outbreak_reports2, function(x){
     
     report_id <- tibble(report_id = x$reportDto$reportId)
     outbreak_map <-  x$eventOutbreakDto$outbreakMap
-
+    
     if(is.null(outbreak_map)) return()
     
     map_dfr(outbreak_map, function(xx){   
@@ -195,10 +196,11 @@ transform_outbreak_reports2 <- function(outbreak_reports) {
       
       return(out)
     }) 
-  })
+  }, .progress = TRUE)
   
-  
-  if(nrow(outbreak_reports_detail)) {
+  if(length(outbreak_reports_detail)) {
+    
+    outbreak_reports_detail <- reduce(outbreak_reports_detail, bind_rows)
     
     # note: vaccinated is missing?????
     outbreak_reports_detail <- outbreak_reports_detail %>%
@@ -214,7 +216,7 @@ transform_outbreak_reports2 <- function(outbreak_reports) {
       mutate_at(vars(susceptible, cases, deaths, killed_and_disposed, slaughtered_for_commercial_use), ~replace_na(., 0))
     
   }
-
+  
   # # Laboratories table ---------------------------------------------------
   # outbreak_reports_laboratories <- map_dfr(outbreak_reports2, function(x){
   #   tests <- x$diagnostic_tests 
@@ -233,12 +235,12 @@ transform_outbreak_reports2 <- function(outbreak_reports) {
                        #"outbreak_reports_outbreaks_summary" = outbreak_reports_summary,
                        #"outbreak_reports_laboratories" = outbreak_reports_laboratories,
                        "outbreak_reports_diseases_unmatched" = diseases_unmatched)
-
+  
   # remove empty tables
   wahis_joined <- keep(wahis_joined, ~nrow(.)>0)
-
+  
   if(nrow(wahis_joined$outbreak_reports_diseases_unmatched)){warning("Unmatched diseases. Check outbreak_reports_diseases_unmatched table.")}
-
+  
   return(wahis_joined)
 }
 
