@@ -1,19 +1,39 @@
 #' Extract Info from WAHIS Outbreak Reports
-#' @return A vector of outbreak report IDs
+#' @return A tibble of outbreak reports metadata
 #' @export
-#' @import xml2 purrr dplyr tidyr stringr
-#' @importFrom rvest html_nodes html_attr
+#' @import purrr dplyr tidyr
+#' @importFrom janitor clean_names
+#' @importFrom httr POST content
+#' @importFrom assertthat assert_that
 
-scrape_outbreak_report_list <- function() {
-    weekly_pg <-
-        read_html("http://www.oie.int/wahis_2/public/wahid.php/Diseaseinformation/WI")
+scrape_outbreak_report_list <- function(start_date = "2000-01-01", end_date = Sys.Date()) {
     
-    report_ids <- weekly_pg %>%
-        html_nodes(xpath = "//a[contains(@href, 'Reviewreport')]") %>%
-        html_attr("href") %>%
-        stri_extract_last_regex("(?<=\\,)\\d{3,6}(?=\\))") %>%
-        as.numeric() %>%
-        sort(decreasing=TRUE)
+    page_size <- 1000000L
     
-    return(report_ids)
+    body_data <-
+        list(
+            pageNumber = 1L,
+            pageSize = page_size,
+            searchText = "",
+            sortColName = "",
+            sortColOrder = "ASC",
+            reportFilters = list(reportDate = list(
+                startDate = start_date, endDate = end_date
+            )),
+            languageChanged = FALSE
+        )
+    
+    report_list_response <- POST(
+        "https://wahis.oie.int/pi/getReportList",
+        body = body_data,
+        encode = "json")
+    
+    report_list <- content(report_list_response)[[2]]
+    
+    assertthat::assert_that(length(report_list) < page_size) # otherwise you are not retrieving all the results
+    
+    reports <- map_dfr(report_list, as_tibble) %>% 
+        janitor::clean_names()
+    
+    return(reports)
 }

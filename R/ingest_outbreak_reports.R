@@ -3,7 +3,7 @@
 #' @param report_info_id url id for outbreak report
 #' @importFrom httr GET RETRY content
 #' @export
-ingest_outbreak_report2 <- function(report_info_id){
+ingest_outbreak_report <- function(report_info_id){
     
     web_page <- paste0("https://wahis.oie.int/pi/getReport/", report_info_id) 
     
