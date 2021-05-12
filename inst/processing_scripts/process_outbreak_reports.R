@@ -13,20 +13,21 @@ library(tictoc)
 devtools::load_all(here::here()) #doing this as scraping functions may not be exported
 
 # List all files  ---------------------------------------------------------
-# reports <- scrape_outbreak_report_list()
-
+reports <- scrape_outbreak_report_list()
+web_pages <- paste0("https://wahis.oie.int/pi/getReport/", reports$report_info_id)
+    
 # Run ingest (~35 mins) ---------------------------------------------------------
-# message(paste(n_distinct(reports$report_info_id), "files to process"))
-# tic()
-# wahis_outbreak <- future_map(reports$report_info_id, wahis:::safe_ingest_outbreak, .progress = TRUE)  
-# toc()
+message(paste(n_distinct(reports$report_info_id), "files to process"))
+tic()
+wahis_outbreak <- future_map(web_pages, wahis:::safe_ingest_outbreak, .progress = TRUE)
+toc()
 
 # Save ingested files   ------------------------------------------------------
 # dir_create(here::here("data-processed"))
 # readr::write_rds(wahis_outbreak, here::here("data-processed", "wahis_ingested_outbreak_reports.rds"), compress = "xz", compression = 9L)
 
 # Transform files   ------------------------------------------------------
-outbreak_reports <-  readr::read_rds(here::here("data-processed", "wahis_ingested_outbreak_reports.rds"))
+outbreak_reports <-  readr::read_rds(here::here("data-processed", "wahis_ingested_outbreak_reports2.rds"))
 tic()
 outbreak_reports_transformed <- transform_outbreak_reports(outbreak_reports)
 toc()

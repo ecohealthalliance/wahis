@@ -4,10 +4,10 @@
 \alias{ingest_outbreak_report}
 \title{Extract Info from WAHIS Weekly Disease Information API}
 \usage{
-ingest_outbreak_report(report_info_id)
+ingest_outbreak_report(web_page)
 }
 \arguments{
-\item{report_info_id}{url id for outbreak report}
+\item{web_page}{url for outbreak report}
 }
 \description{
 Extract Info from WAHIS Weekly Disease Information API

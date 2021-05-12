@@ -1,11 +1,9 @@
 
 #' Extract Info from WAHIS Weekly Disease Information API
-#' @param report_info_id url id for outbreak report
+#' @param web_page url for outbreak report
 #' @importFrom httr GET RETRY content
 #' @export
-ingest_outbreak_report <- function(report_info_id){
-    
-    web_page <- paste0("https://wahis.oie.int/pi/getReport/", report_info_id) 
+ingest_outbreak_report <- function(web_page){
     
     req <- httr::RETRY(verb = "GET",
                        url = web_page, 
@@ -14,17 +12,17 @@ ingest_outbreak_report <- function(report_info_id){
                       httr::add_headers(`Accept-Language` = "en-US;"))
     
     out <- httr::content(req, as="parsed")
-    out$report_info_id <- report_info_id
+    out$report_info_id <- as.integer(basename(web_page))
     
     return(out)
 }
 
 #' Function to safely run ingest_outbreak_report
-#' @param report_info_id url id for outbreak report
+#' @param web_page url for outbreak report
 #' @import purrr
 #' @export
-safe_ingest_outbreak2 <- function(report_info_id) {
-    out <- safely(ingest_outbreak_report2)(report_info_id)
+safe_ingest_outbreak <- function(web_page) {
+    out <- safely(ingest_outbreak_report)(web_page)
     if(!is.null(out$result)) {
         return(out$result)
     } else {
