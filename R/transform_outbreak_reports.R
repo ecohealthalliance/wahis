@@ -1,6 +1,7 @@
 #' Convert a list of scraped ourbreak reports to a list of table
 #' @param outbreak_reports a list of outbreak reports produced by [ingest_outbreak_report]
-#' @import dplyr tidyr purrr stringr furrr
+#' @import dplyr tidyr purrr stringr
+#' @importFrom glue glue_collapse
 #' @importFrom janitor clean_names
 #' @importFrom lubridate dmy myd ymd
 #' @importFrom textclean replace_non_ascii
@@ -39,7 +40,7 @@ transform_outbreak_reports <- function(outbreak_reports) {
   
   reports <- scrape_outbreak_report_list() %>% 
     select(report_info_id, # url
-           outbreak_thread_id = event_id_oie_reference) # thread number (does not reference a specific report)
+           outbreak_thread_id = event_id_oie_reference) # thread number (references report_id of original report)
   
   outbreak_reports_events <- outbreak_reports_events %>%
     left_join(reports) %>% 
@@ -158,45 +159,39 @@ transform_outbreak_reports <- function(outbreak_reports) {
   # Outbreak tables ---------------------------------------------------
   
   # outbreak_reports_detail$oieReference 
-  # ^ denotes different locations within one report - not unique because there can be mltiple species
+  # ^ denotes different locations within one report - not unique because there can be multiple species
   # outbreak_reports_detail$outbreakInfoId  and outbreak_reports_detail$outbreakId
   # seems to be reduntant with oieReference - leaving out for now
-  
-  plan(multisession) # This takes a bit to load on many cores as all the processes are starting
-  outbreak_reports_detail <- future_map(outbreak_reports2, function(x){
-    
-    report_id <- tibble(report_id = x$reportDto$reportId)
-    outbreak_map <-  x$eventOutbreakDto$outbreakMap
-    
-    if(is.null(outbreak_map)) return()
-    
-    map_dfr(outbreak_map, function(xx){   
-      out <- xx %>% 
-        compact() %>% 
-        purrr::keep(., ~!is.list(.x)) %>% 
-        as_tibble() %>% 
-        distinct() %>% 
-        bind_cols(report_id, .)
+    outbreak_reports_detail <- imap(outbreak_reports2, function(x, i){
       
-      # add species details
-      out <- xx$speciesDetails[-length(xx$speciesDetails)] %>% 
-        compact() %>%  
-        map_dfr(as_tibble) %>% 
-        bind_cols(out, .)
+      report_id <- tibble(report_id = x$reportDto$reportId)
+      outbreak_map <-  x$eventOutbreakDto$outbreakMap
+      print(i)
+      if(is.null(outbreak_map)) return()
       
-      # add animal cat
-      out <- xx$animalCategory %>% 
-        compact() %>% 
-        map_dfr(as_tibble) %>% 
-        bind_cols(out, .)
-      
-      # add control measures
-      out <- out %>% 
-        mutate(control_measures = paste(xx$controlMeasures, collapse = "; "))
-      
-      return(out)
-    }) 
-  }, .progress = TRUE)
+      map_dfr(outbreak_map, function(xx){   
+        
+        a1 <- xx[which(!sapply(xx, is.list))]
+        a2 <- as_tibble(a1)
+        out <- bind_cols(report_id, a2)
+        
+        # add species details
+        b1 <- xx$speciesDetails[-length(xx$speciesDetails)]
+        b2 <-  map_dfr(b1, as_tibble)
+        out <- bind_cols(out, b2)
+        
+        # add animal cat
+        c1 <- xx$animalCategory
+        c2 <-  map_dfr(c1, as_tibble)
+        out <- bind_cols(out, c2)
+        
+        # add control measures
+        cm <- glue::glue_collapse(unique(xx$controlMeasures), sep = "; ")
+        if(length(cm)) out$control_measures <- cm
+        
+        return(out)
+      }) 
+  })
   
   if(length(outbreak_reports_detail)) {
     
@@ -210,25 +205,13 @@ transform_outbreak_reports <- function(outbreak_reports) {
       select(-specie_id, -morbidity, -mortality, -outbreak_info_id, -outbreak_id) %>% 
       rename(species_name = spicie_name,
              killed_and_disposed = killed,
-             slaughtered_for_commercial_use = slaughtered) %>% 
+             slaughtered_for_commercial_use = slaughtered,
+             outbreak_location_id = oie_reference) %>% 
       mutate_all(~na_if(., "" )) %>% 
       mutate_at(vars(contains("date")), ~lubridate::as_datetime(.)) %>% 
       mutate_at(vars(susceptible, cases, deaths, killed_and_disposed, slaughtered_for_commercial_use), ~replace_na(., 0))
-    
   }
-  
-  # # Laboratories table ---------------------------------------------------
-  # outbreak_reports_laboratories <- map_dfr(outbreak_reports2, function(x){
-  #   tests <- x$diagnostic_tests 
-  #   if(is.null(dim(tests))){
-  #     return()
-  #   }
-  #   return(tests)
-  # }) %>%
-  #   janitor::clean_names() %>% 
-  #   mutate_all(~tolower(.)) %>% 
-  #   mutate(test_date = dmy(test_date))
-  # 
+
   # Export -----------------------------------------------
   wahis_joined <- list("outbreak_reports_events" = outbreak_reports_events,
                        "outbreak_reports_outbreaks" = outbreak_reports_detail,
