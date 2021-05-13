@@ -205,7 +205,7 @@ transform_outbreak_reports <- function(outbreak_reports,
       mutate_if(is.character, tolower) %>%
       janitor::clean_names()  %>% 
       select(-starts_with("total_")) %>% # these are rolling and values and may cause confusion
-      select(-specie_id, -morbidity, -mortality, -outbreak_info_id, -outbreak_id) %>% 
+      select(-suppressWarnings(one_of("specie_id")), -suppressWarnings(one_of("morbidity")), -suppressWarnings(one_of("mortality")), -suppressWarnings(one_of("outbreak_info_id")), -suppressWarnings(one_of("outbreak_id"))) %>% 
       rename(species_name = spicie_name,
              killed_and_disposed = killed,
              slaughtered_for_commercial_use = slaughtered,
