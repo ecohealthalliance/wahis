@@ -1,5 +1,6 @@
 #' Convert a list of scraped ourbreak reports to a list of table
 #' @param outbreak_reports a list of outbreak reports produced by [ingest_outbreak_report]
+#' @param report_list produced by scrape_outbreak_report_list()
 #' @import dplyr tidyr purrr stringr
 #' @importFrom glue glue_collapse
 #' @importFrom janitor clean_names
@@ -9,7 +10,8 @@
 #' @importFrom assertthat %has_name%
 #' @export
 
-transform_outbreak_reports <- function(outbreak_reports) {
+transform_outbreak_reports <- function(outbreak_reports,
+                                       report_list) {
   
   message("Transforming outbreak reports")
   
@@ -19,7 +21,6 @@ transform_outbreak_reports <- function(outbreak_reports) {
   outbreak_reports2 <- discard(outbreak_reports, function(x){
     !is.null(x$ingest_status) && str_detect(x$ingest_status, "ingestion error") |
       !is.null(x$message) && str_detect(x$message, "Endpoint request timed out") 
-    
   })
   if(!length(outbreak_reports2)) return(NULL)
   
@@ -38,7 +39,7 @@ transform_outbreak_reports <- function(outbreak_reports) {
   }) %>%
     janitor::clean_names()
   
-  reports <- scrape_outbreak_report_list() %>% 
+  reports <- report_list %>% 
     select(report_info_id, # url
            outbreak_thread_id = event_id_oie_reference) # thread number (references report_id of original report)
   
@@ -162,35 +163,38 @@ transform_outbreak_reports <- function(outbreak_reports) {
   # ^ denotes different locations within one report - not unique because there can be multiple species
   # outbreak_reports_detail$outbreakInfoId  and outbreak_reports_detail$outbreakId
   # seems to be reduntant with oieReference - leaving out for now
-    outbreak_reports_detail <- imap(outbreak_reports2, function(x, i){
-      
-      report_id <- tibble(report_id = x$reportDto$reportId)
-      outbreak_map <-  x$eventOutbreakDto$outbreakMap
-      print(i)
-      if(is.null(outbreak_map)) return()
-      
-      map_dfr(outbreak_map, function(xx){   
-        
-        a1 <- xx[which(!sapply(xx, is.list))]
-        a2 <- as_tibble(a1)
-        out <- bind_cols(report_id, a2)
-        
-        # add species details
-        b1 <- xx$speciesDetails[-length(xx$speciesDetails)]
-        b2 <-  map_dfr(b1, as_tibble)
-        out <- bind_cols(out, b2)
-        
-        # add animal cat
-        c1 <- xx$animalCategory
-        c2 <-  map_dfr(c1, as_tibble)
-        out <- bind_cols(out, c2)
-        
-        # add control measures
-        cm <- glue::glue_collapse(unique(xx$controlMeasures), sep = "; ")
-        if(length(cm)) out$control_measures <- cm
-        
-        return(out)
-      }) 
+  
+  process_outbreak_map <- function(outbreak_loc, report_id){
+    
+    # base dataframe
+    out <- as_tibble(outbreak_loc[which(!sapply(outbreak_loc, is.list))])
+    out$report_id <- report_id 
+    
+    # add species details
+    sd <- as_tibble(lapply(X =  transpose(outbreak_loc$speciesDetails[-length(outbreak_loc$speciesDetails)]), 
+                           FUN = unlist), .name_repair = "minimal")
+    out <- bind_cols(out, sd, .name_repair = "minimal")
+    
+    # add animal category
+    ac <- as_tibble(lapply(X =  transpose(outbreak_loc$animalCategory), FUN = unlist), .name_repair = "minimal")
+    out <- bind_cols(out, ac, .name_repair = "minimal")
+    
+    # add control measures
+    cm <- glue::glue_collapse(unique(outbreak_loc$controlMeasures), sep = "; ")
+    if(length(cm)) out$control_measures <- cm
+    
+    return(out)
+  }
+  
+  outbreak_reports_detail <- imap(outbreak_reports2, function(x, i){
+    
+    report_id <- x$reportDto$reportId 
+    outbreak_map <-  x$eventOutbreakDto$outbreakMap
+    print(i)
+    
+    if(is.null(outbreak_map)) return()
+    
+    map_dfr(outbreak_map, process_outbreak_map, report_id = report_id)
   })
   
   if(length(outbreak_reports_detail)) {
@@ -211,7 +215,7 @@ transform_outbreak_reports <- function(outbreak_reports) {
       mutate_at(vars(contains("date")), ~lubridate::as_datetime(.)) %>% 
       mutate_at(vars(susceptible, cases, deaths, killed_and_disposed, slaughtered_for_commercial_use), ~replace_na(., 0))
   }
-
+  
   # Export -----------------------------------------------
   wahis_joined <- list("outbreak_reports_events" = outbreak_reports_events,
                        "outbreak_reports_outbreaks" = outbreak_reports_detail,
