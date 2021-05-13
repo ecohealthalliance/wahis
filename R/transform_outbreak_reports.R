@@ -225,7 +225,7 @@ transform_outbreak_reports <- function(outbreak_reports,
   # remove empty tables
   wahis_joined <- keep(wahis_joined, ~nrow(.)>0)
   
-  if(nrow(wahis_joined$outbreak_reports_diseases_unmatched)){warning("Unmatched diseases. Check outbreak_reports_diseases_unmatched table.")}
+ # if(nrow(wahis_joined$outbreak_reports_diseases_unmatched)){warning("Unmatched diseases. Check outbreak_reports_diseases_unmatched table.")}
   
   return(wahis_joined)
 }
