@@ -44,7 +44,7 @@ transform_outbreak_reports <- function(outbreak_reports,
            outbreak_thread_id = event_id_oie_reference) # thread number (references report_id of original report)
   
   outbreak_reports_events <- outbreak_reports_events %>%
-    left_join(reports) %>% 
+    left_join(reports,  by = "report_info_id") %>% 
     mutate(country_or_territory = case_when(
       country_or_territory == "Central African (Rep.)" ~ "Central African Republic",
       country_or_territory == "Dominican (Rep.)" ~ "Dominican Republic",
@@ -167,21 +167,20 @@ transform_outbreak_reports <- function(outbreak_reports,
   process_outbreak_map <- function(outbreak_loc, report_id){
     
     # base dataframe
+    outbreak_loc[["geographicCoordinates"]] <- NULL
+    outbreak_loc[["newlyAddedCm"]] <- NULL
+    cm <- glue::glue_collapse(unique(outbreak_loc$controlMeasures), sep = "; ")
+    outbreak_loc[["controlMeasures"]] <- NULL
     out <- as_tibble(outbreak_loc[which(!sapply(outbreak_loc, is.list))])
     out$report_id <- report_id 
+    if(length(cm)) out$control_measures <- cm
     
     # add species details
-    sd <- as_tibble(lapply(X =  transpose(outbreak_loc$speciesDetails[-length(outbreak_loc$speciesDetails)]), 
-                           FUN = unlist), .name_repair = "minimal")
+    sd <- outbreak_loc$speciesDetails[-nrow(outbreak_loc$speciesDetails),]
     out <- bind_cols(out, sd, .name_repair = "minimal")
     
     # add animal category
-    ac <- as_tibble(lapply(X =  transpose(outbreak_loc$animalCategory), FUN = unlist), .name_repair = "minimal")
-    out <- bind_cols(out, ac, .name_repair = "minimal")
-    
-    # add control measures
-    cm <- glue::glue_collapse(unique(outbreak_loc$controlMeasures), sep = "; ")
-    if(length(cm)) out$control_measures <- cm
+    out <- bind_cols(out, outbreak_loc$animalCategory, .name_repair = "minimal")
     
     return(out)
   }

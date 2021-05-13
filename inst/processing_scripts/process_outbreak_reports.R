@@ -19,7 +19,15 @@ web_pages <- paste0("https://wahis.oie.int/pi/getReport/", reports$report_info_i
 # Run ingest (~35 mins) ---------------------------------------------------------
 message(paste(n_distinct(reports$report_info_id), "files to process"))
 tic()
-wahis_outbreak <- future_map(web_pages, safe_ingest_outbreak, .progress = TRUE)
+report_resps <- map_curl(
+    urls = web_pages[1:20],
+    .f = function(x) wahis::safe_ingest_outbreak(x),
+    .host_con = 6L, # can turn up
+    .delay = 1L, # can turn down
+    .timeout = nrow(reports_to_get)*120L,
+    .handle_opts = list(low_speed_limit = 100, low_speed_time = 300), # bytes/sec
+    .retry = 3
+)
 toc()
 
 # Save ingested files   ------------------------------------------------------
@@ -27,9 +35,10 @@ toc()
 # readr::write_rds(wahis_outbreak, here::here("data-processed", "wahis_ingested_outbreak_reports.rds"), compress = "xz", compression = 9L)
 
 # Transform files   ------------------------------------------------------
-outbreak_reports <-  readr::read_rds(here::here("data-processed", "wahis_ingested_outbreak_reports2.rds"))
+# outbreak_reports <-  readr::read_rds(here::here("data-processed", "wahis_ingested_outbreak_reports2.rds"))
 tic()
-outbreak_reports_transformed <- transform_outbreak_reports(outbreak_reports, reports)
+outbreak_reports_transformed <- transform_outbreak_reports(outbreak_reports = report_resps,
+                                                           report_list = reports)
 toc()
 # Export transformed files-----------------------------------------------
 readr::write_rds(outbreak_reports_transformed, here::here("data-processed", "wahis_transformed_outbreak_reports.rds"), compress = "xz", compression = 9L)
