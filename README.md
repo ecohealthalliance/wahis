@@ -24,6 +24,6 @@ The following data sets can be accessed through this package:
 - OTS trade data (`download_trade()` and `transform_trade()`)  
 - WTO tourism data (`download_tourism()` and `transform_tourism()`)  
 - FAO taxa population data (`download_taxa_population()` and `transform_taxa_population()`)  
-- Climatic raster data (`download_rasters()` and `transform_rasters()`)  
+- Raster data of livestock and human populations, climatic variables, economic activity and transit accessibility (`download_rasters()` and `transform_rasters()`)  
 
 
