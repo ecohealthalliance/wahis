@@ -54,24 +54,36 @@ transform_outbreak_reports <- function(outbreak_reports,
     )) %>%
     mutate_if(is.character, tolower) %>%
     mutate(country_iso3c = countrycode::countrycode(country_or_territory, origin = "country.name", destination = "iso3c")) %>%
-    select(report_id,
-           url_report_id = report_info_id, # url
-           country = country_or_territory,
-           country_iso3c,
-           disease_category,
-           disease = disease_name,
-           is_aquatic,
-           report_date,
-           report_type = report_title,
-           reason_for_notification = translated_reason,
-           date_of_confirmation_of_the_event = confirmed_on,
-           date_of_start_of_the_event = start_date,
-           date_event_resolved = end_date,
-           date_of_previous_occurrence = last_occurance_date,
-           casual_agent,
-           serotype = disease_type,
-           future_reporting = event_description_status,
-           outbreak_thread_id, 
+    rename_all(recode, 
+               report_info_id =  "url_report_id",
+               country_or_territory = "country",
+               disease_name = "disease",
+               report_title = "report_type",
+               translated_reason = "reason_for_notification",
+               confirmed_on = "date_of_confirmation_of_the_event",
+               start_date = "date_of_start_of_the_event",
+               end_date = "date_event_resolved",
+               last_occurance_date = "date_of_previous_occurrence",
+               disease_type = "serotype",
+               event_description_status = "future_reporting") %>%
+    select(suppressWarnings(one_of("report_id",
+                                   "url_report_id",
+                                   "outbreak_thread_id", 
+                                   "country",
+                                   "country_iso3c",
+                                   "disease_category",
+                                   "disease",
+                                   "is_aquatic",
+                                   "report_date",
+                                   "report_type",
+                                   "reason_for_notification",
+                                   "date_of_confirmation_of_the_event",
+                                   "date_of_start_of_the_event",
+                                   "date_event_resolved",
+                                   "date_of_previous_occurrence",
+                                   "casual_agent",
+                                   "serotype",
+                                   "future_reporting")),
            everything() 
     ) 
   
@@ -176,11 +188,15 @@ transform_outbreak_reports <- function(outbreak_reports,
     if(length(cm)) out$control_measures <- cm
     
     # add species details
-    sd <- outbreak_loc$speciesDetails[-nrow(outbreak_loc$speciesDetails),]
-    out <- bind_cols(out, sd, .name_repair = "minimal")
+    if(!is.null(outbreak_loc$speciesDetails)){
+      sd <- outbreak_loc$speciesDetails[-nrow(outbreak_loc$speciesDetails),]
+      out <- bind_cols(out, sd, .name_repair = "minimal")
+    }
     
     # add animal category
-    out <- bind_cols(out, outbreak_loc$animalCategory, .name_repair = "minimal")
+    if(!is.null(outbreak_loc$animalCategory)){
+      out <- bind_cols(out, outbreak_loc$animalCategory, .name_repair = "minimal")
+    }
     
     return(out)
   }
@@ -225,7 +241,7 @@ transform_outbreak_reports <- function(outbreak_reports,
   # remove empty tables
   wahis_joined <- keep(wahis_joined, ~nrow(.)>0)
   
- # if(nrow(wahis_joined$outbreak_reports_diseases_unmatched)){warning("Unmatched diseases. Check outbreak_reports_diseases_unmatched table.")}
+  # if(nrow(wahis_joined$outbreak_reports_diseases_unmatched)){warning("Unmatched diseases. Check outbreak_reports_diseases_unmatched table.")}
   
   return(wahis_joined)
 }
