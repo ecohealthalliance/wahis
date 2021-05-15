@@ -98,6 +98,7 @@ transform_outbreak_reports <- function(outbreak_reports,
     mutate_at(vars(contains("date")), ~lubridate::as_datetime(.)) 
   
   # Check for missing date_event_resolved
+  if(is.null(outbreak_reports_events$date_event_resolved)) outbreak_reports_events$date_event_resolved <- NA
   missing_resolved <- outbreak_reports_events %>%
     filter(is.na(date_event_resolved)) %>%
     filter(is_final_report)
@@ -181,11 +182,13 @@ transform_outbreak_reports <- function(outbreak_reports,
     # base dataframe
     outbreak_loc[["geographicCoordinates"]] <- NULL
     outbreak_loc[["newlyAddedCm"]] <- NULL
+    outbreak_loc[["administrativeDivisionList"]] <- NULL
     cm <- glue::glue_collapse(unique(outbreak_loc$controlMeasures), sep = "; ")
     outbreak_loc[["controlMeasures"]] <- NULL
     out <- as_tibble(outbreak_loc[which(!sapply(outbreak_loc, is.list))])
     out$report_id <- report_id 
     if(length(cm)) out$control_measures <- cm
+    assert_that(nrow(out) == 1)
     
     # add species details
     if(!is.null(outbreak_loc$speciesDetails)){
