@@ -183,6 +183,7 @@ transform_outbreak_reports <- function(outbreak_reports,
     outbreak_loc[["geographicCoordinates"]] <- NULL
     outbreak_loc[["newlyAddedCm"]] <- NULL
     outbreak_loc[["administrativeDivisionList"]] <- NULL
+    outbreak_loc[["diagSummary"]] <- NULL
     cm <- glue::glue_collapse(unique(outbreak_loc$controlMeasures), sep = "; ")
     outbreak_loc[["controlMeasures"]] <- NULL
     out <- as_tibble(outbreak_loc[which(!sapply(outbreak_loc, is.list))])
