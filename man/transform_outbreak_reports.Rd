@@ -4,10 +4,12 @@
 \alias{transform_outbreak_reports}
 \title{Convert a list of scraped ourbreak reports to a list of table}
 \usage{
-transform_outbreak_reports(outbreak_reports)
+transform_outbreak_reports(outbreak_reports, report_list)
 }
 \arguments{
 \item{outbreak_reports}{a list of outbreak reports produced by [ingest_outbreak_report]}
+
+\item{report_list}{produced by scrape_outbreak_report_list()}
 }
 \description{
 Convert a list of scraped ourbreak reports to a list of table

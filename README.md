@@ -1,30 +1,29 @@
 
-# wahis
 
-This repo is for processing and eventually serving data from the [OIE WAHIS](http://www.oie.int/wahis_2/public/wahid.php) database as an R package.
+This package provides access to veterinary disease data from [OIE WAHIS](https://wahis.oie.int/#/home) as well as several other data sets that may support analysis of veterinary diseases.
 
-- `inst/scraping_scripts` contains scripts to download HTML and PDF-formatted
-   records from OIE.  These are downloaded to `data-raw`.  As this is a very
-   slow process and these raw data are biggist, these data are `.gitignored`,
-   and can by synced with an EHA S3 bucket with `inst/sync_aws_data.R`
-   
--  Functions (In `R/`) process individual HTML or PDF files.  There are three
-   types of records - outbreaks, old outbreak PDFs, and annual reports. There
-   should be one function for each type of file that processes it into a record 
-   that can be inserted into a database.  These should have tests, developed
-   as we encounter various pathological records.
-   
--  `inst/processing_scripts` contains scripts to run on all downloaded data,
-   using the package functions, to generate the final database.
-   
--  Final form for all the data should be a series of CSVs that also work as
-   an SQL database (probably MonetDB or duckdb, possibly with JSON extensions)
+#### wahis data
 
--  Package structure will eventually be similar to **lemis** or **citesdb**,
-   but with the database also archived/served remotely for other processes
-   in the REPEL project.
-   
--  CI/CD should eventually scrape WAHIS, rebuild and reploy the database
-   regularly (monthly) or with updates to the package.
+- _outbreak reports_ 
+   - `inst/processing_scripts/process_outbreak_reports.R` provides an example workflow for retrieving wahis outbreak reports
+   - `scrape_outbreak_report_list()` returns a master list of available outbreak reports
+   - `ingest_outbreak_report()` accepts a curl response from the wahis API and returns outbreak report content as a list. `safe_ingest_outbreak()` is a wrapper to handle errors when ingesting reports.
+   - `transform_outbreak_reports()` converts outbreak report content into formatted data. It yields three tibbles (saved in a single list object):
+      - `outbreak_reports_events` contains high-level outbreak event data. Each row corresponds to a report. `report_id` is the unique report ID and `url_report_id` is the value appended to the API url for the given report.
+      - `outbreak_reports_outbreaks` provides detailed location and impact data for outbreak events. This table can be joined with `outbreak_reports_events` by `report_id`. `outbreak_location_id` is a unique ID for each location (e.g, farm or village) within a outbreak.
+      - `outbreak_reports_diseases_unmatched` lists diseases from the outbreak reports that did not match the ANDO ontology. These diseases are _not_ removed from the database.
+
+#### other data sets
+
+The following data sets can be accessed through this package:  
+- Birdlife data for migratory bird species (`download_bird_migration()` and `transform_bird_migration()`)  
+- FAO livestock population (`download_livestock()` and `transform_livestock()`)  
+- Country borders from CIA factbook (`get_country_borders()`)  
+- UN human migration data (`download_human_migration()` and `transform_human_migration()`)  
+- Wildlife migration data combined from IUCN and GROMS (`download_wildlife()` and `transform_wildlife_migration()`)  
+- OTS trade data (`download_trade()` and `transform_trade()`)  
+- WTO tourism data (`download_tourism()` and `transform_tourism()`)  
+- FAO taxa population data (`download_taxa_population()` and `transform_taxa_population()`)  
+- Raster data of livestock and human populations, climatic variables, economic activity and transit accessibility (`download_rasters()` and `transform_rasters()`)  
 
 

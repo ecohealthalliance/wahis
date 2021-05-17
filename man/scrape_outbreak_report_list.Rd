@@ -4,10 +4,10 @@
 \alias{scrape_outbreak_report_list}
 \title{Extract Info from WAHIS Outbreak Reports}
 \usage{
-scrape_outbreak_report_list()
+scrape_outbreak_report_list(start_date = "2000-01-01", end_date = Sys.Date())
 }
 \value{
-A vector of outbreak report IDs
+A tibble of outbreak reports metadata
 }
 \description{
 Extract Info from WAHIS Outbreak Reports
