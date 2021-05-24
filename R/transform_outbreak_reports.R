@@ -39,9 +39,17 @@ transform_outbreak_reports <- function(outbreak_reports,
   }) %>%
     janitor::clean_names()
   
-  reports <- report_list %>% 
+  reports <- report_list %>%
     select(report_info_id, # url
-           outbreak_thread_id = event_id_oie_reference) # thread number (references report_id of original report)
+           outbreak_thread_id = event_id_oie_reference) # thread number
+  # n_distinct(reports$report_info_id)
+  # n_distinct(reports$outbreak_thread_id)
+  
+  lookup_outbreak_thread_url <-  report_list %>% 
+    filter(report_type == "IN") %>% 
+    select(outbreak_thread_id = event_id_oie_reference, url_outbreak_thread_id = report_info_id) 
+  
+  reports <- left_join(reports, lookup_outbreak_thread_url, by = "outbreak_thread_id")
   
   outbreak_reports_events <- outbreak_reports_events %>%
     left_join(reports,  by = "report_info_id") %>% 
@@ -69,6 +77,7 @@ transform_outbreak_reports <- function(outbreak_reports,
     select(suppressWarnings(one_of("report_id",
                                    "url_report_id",
                                    "outbreak_thread_id", 
+                                   "url_outbreak_thread_id",
                                    "country",
                                    "country_iso3c",
                                    "disease_category",
@@ -221,11 +230,11 @@ transform_outbreak_reports <- function(outbreak_reports,
     
     outbreak_reports_detail <- reduce(outbreak_reports_detail, bind_rows)
     
-    # note: vaccinated is missing?????
     outbreak_reports_detail <- outbreak_reports_detail %>%
       mutate_if(is.character, tolower) %>%
       janitor::clean_names()  %>% 
       select(-starts_with("total_")) %>% # these are rolling and values and may cause confusion
+      select(-suppressWarnings(one_of("prod_type"))) %>% 
       select(-suppressWarnings(one_of("specie_id")), -suppressWarnings(one_of("morbidity")), -suppressWarnings(one_of("mortality")), -suppressWarnings(one_of("outbreak_info_id")), -suppressWarnings(one_of("outbreak_id"))) %>% 
       rename(species_name = spicie_name,
              killed_and_disposed = killed,
@@ -234,6 +243,19 @@ transform_outbreak_reports <- function(outbreak_reports,
       mutate_all(~na_if(., "" )) %>% 
       mutate_at(vars(contains("date")), ~lubridate::as_datetime(.)) %>% 
       mutate_at(vars(susceptible, cases, deaths, killed_and_disposed, slaughtered_for_commercial_use), ~replace_na(., 0))
+    
+    cnames <- colnames(outbreak_reports_detail)
+    
+    if("wildlife_type" %in% cnames & "type_of_wildlife" %in% cnames){
+      outbreak_reports_detail <- outbreak_reports_detail %>%
+        mutate(wildlife_type = coalesce(wildlife_type, type_of_wildlife)) %>% 
+        select(-type_of_wildlife)
+    }
+    if(!"wildlife_type" %in% cnames & "type_of_wildlife" %in% cnames){
+      outbreak_reports_detail <- outbreak_reports_detail %>%
+        rename(wildlife_type = type_of_wildlife)
+    }
+    
   }
   
   # Export -----------------------------------------------

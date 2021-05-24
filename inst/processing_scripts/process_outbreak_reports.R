@@ -1,44 +1,49 @@
-#!/usr/bin/env Rscript
+devtools::load_all()
 
-# This script is for testing. Processing for database is done in repel-infrastructure. 
-library(fs)
-library(future)
-library(furrr)
-library(tidyverse)
-library(tictoc)
+# get outbreak reports list -----------------------------------------------
 
-# Set up parallel plan  --------------------------------------------------------
+report_list <- scrape_outbreak_report_list() 
 
-# plan(multisession) # This takes a bit to load on many cores as all the processes are starting
-devtools::load_all(here::here()) #doing this as scraping functions may not be exported
+reports_to_get <- report_list %>%
+    select(report_info_id, # url
+           outbreak_thread_id = event_id_oie_reference) # thread number
 
-# List all files  ---------------------------------------------------------
-reports <- scrape_outbreak_report_list()
-web_pages <- paste0("https://wahis.oie.int/pi/getReport/", reports$report_info_id)
+lookup_outbreak_thread_url <-  report_list %>% 
+    filter(report_type == "IN") %>% 
+    select(outbreak_thread_id = event_id_oie_reference, url_outbreak_thread_id = report_info_id) 
+
+reports_to_get <- left_join(reports_to_get, lookup_outbreak_thread_url, by = "outbreak_thread_id") %>% 
+    mutate(url =  paste0("https://wahis.oie.int/pi/getReport/", report_info_id))
+
+reports_to_get <- filter(reports_to_get, url_outbreak_thread_id == 27769)
     
-# Run ingest (~35 mins) ---------------------------------------------------------
-message(paste(n_distinct(reports$report_info_id), "files to process"))
-tic()
-report_resps <- map_curl(
-    urls = web_pages[1:20],
-    .f = function(x) wahis::safe_ingest_outbreak(x),
-    .host_con = 6L, # can turn up
-    .delay = 1L, # can turn down
-    .timeout = nrow(reports_to_get)*120L,
-    .handle_opts = list(low_speed_limit = 100, low_speed_time = 300), # bytes/sec
-    .retry = 3
-)
-toc()
+# Pulling reports ----------------------------
+message("Pulling ", nrow(reports_to_get), " reports")
+
+report_resps <- split(reports_to_get, (1:nrow(reports_to_get)-1) %/% 100) %>% # batching by 100s
+    map(function(reports_to_get_split){
+        map_curl(
+            urls = reports_to_get_split$url,
+            .f = function(x) wahis::safe_ingest_outbreak(x),
+            .host_con = 8L, # can turn up
+            .delay = 0.5,
+            #.timeout = nrow(reports_to_get)*120L,
+            .handle_opts = list(low_speed_limit = 100, low_speed_time = 300), # bytes/sec
+            .retry = 2
+            # need to add language here?
+        )
+    })
 
 # Save ingested files   ------------------------------------------------------
 # dir_create(here::here("data-processed"))
-# readr::write_rds(wahis_outbreak, here::here("data-processed", "wahis_ingested_outbreak_reports.rds"), compress = "xz", compression = 9L)
+# readr::write_rds(report_resps, here::here("data-processed", "report_resps_outbreak.rds.rds"), compress = "xz", compression = 9L)
+# report_resps <- read_rds(here::here("data-processed", "report_resps_outbreak.rds"))
+report_resps <- reduce(report_resps, c)
 
 # Transform files   ------------------------------------------------------
-# outbreak_reports <-  readr::read_rds(here::here("data-processed", "wahis_ingested_outbreak_reports2.rds"))
-tic()
-outbreak_reports_transformed <- transform_outbreak_reports(outbreak_reports = report_resps,
-                                                           report_list = reports)
-toc()
-# Export transformed files-----------------------------------------------
-readr::write_rds(outbreak_reports_transformed, here::here("data-processed", "wahis_transformed_outbreak_reports.rds"), compress = "xz", compression = 9L)
+# tables
+outbreak_report_tables <- split(report_resps, (1:length(report_resps)-1) %/% 1000) %>% # batching by 1000s (probably only necessary for initial run)
+    map(., transform_outbreak_reports, report_list)
+
+outbreak_report_tables <- transpose(outbreak_report_tables) %>%
+    map(function(x) reduce(x, bind_rows))
