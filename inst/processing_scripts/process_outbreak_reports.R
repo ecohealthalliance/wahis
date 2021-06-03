@@ -15,8 +15,6 @@ lookup_outbreak_thread_url <-  report_list %>%
 reports_to_get <- left_join(reports_to_get, lookup_outbreak_thread_url, by = "outbreak_thread_id") %>% 
     mutate(url =  paste0("https://wahis.oie.int/pi/getReport/", report_info_id))
 
-reports_to_get <- filter(reports_to_get, url_outbreak_thread_id == 27769)
-    
 # Pulling reports ----------------------------
 message("Pulling ", nrow(reports_to_get), " reports")
 
