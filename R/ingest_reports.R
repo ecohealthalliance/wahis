@@ -1,12 +1,17 @@
 
-#' Extract Info from WAHIS Weekly Disease Information API
+#' Extract Info from WAHIS API
 #' @param resp curl API response
 #' @importFrom jsonlite fromJSON
 #' @export
-ingest_outbreak_report <- function(resp){ 
+ingest_report <- function(resp){ 
     
     out <- fromJSON(rawToChar(resp$content))
-    out$report_info_id <- as.integer(basename(resp$url))
+    
+    report_info_id <- suppressWarnings(as.integer(basename(resp$url)))
+    
+    if(!is.na(report_info_id)){
+        out$report_info_id <- report_info_id
+    }
     
     return(out)
 }
@@ -15,8 +20,8 @@ ingest_outbreak_report <- function(resp){
 #' @param resp curl API response
 #' @import purrr
 #' @export
-safe_ingest_outbreak <- function(resp) {
-    out <- safely(ingest_outbreak_report)(resp)
+safe_ingest <- function(resp) {
+    out <- safely(ingest_report)(resp)
     if(!is.null(out$result)) {
         return(out$result)
     } else {
