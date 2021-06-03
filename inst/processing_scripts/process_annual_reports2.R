@@ -11,9 +11,22 @@ reports_to_get <- report_list %>%
 # Pulling reports ----------------------------
 message("Pulling ", nrow(reports_to_get), " reports")
 
-# this works
-req <- httr::GET(url = reports_to_get$url[[1]],
-                 httr::add_headers(`Accept-Language` = "en"))
-content(req, as="parsed")
+report_resps <- split(reports_to_get, (1:nrow(reports_to_get)-1) %/% 100) %>% # batching by 100s
+    map(function(reports_to_get_split){
+        map_curl(
+            urls = reports_to_get_split$url,
+            .f = function(x) wahis::safe_ingest(x),
+            .host_con = 8L,
+            .delay = 0.5,
+            .handle_opts = list(low_speed_limit = 100, low_speed_time = 300), # bytes/sec
+            .retry = 2,
+            .handle_headers = list(`Accept-Language` = "en")
+        )
+    })
 
-#TODO translate into using map_curl
+# Save ingested files   ------------------------------------------------------
+# dir_create(here::here("data-processed"))
+readr::write_rds(report_resps, here::here("data-processed", "report_resps_six_month.rds"), compress = "xz", compression = 9L)
+# report_resps <- read_rds(here::here("data-processed", "report_resps_six_month.rds"))
+# report_resps <- reduce(report_resps, c)
+
