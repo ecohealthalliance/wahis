@@ -51,59 +51,43 @@ transform_outbreak_reports <- function(six_month_reports) {
     
     diseases_present <- map(six_month_reports2[1], function(x){
         
-        #TODO write function that unnests/pulls as appropriate
-        #TODO where are the case counts?
-        
-        # 1 - high level order by taxa
         dat <- x$occCodePresentDiseaseList %>% 
             as_tibble()  %>% 
             unnest(reportDiseaseDtoList) 
-        #    glimpse(dat)
+
+        out <- dat
+        i <- 1
+        while(i <= ncol(out)){
+            
+            col_c <- sapply(out, class)
+
+            if(!col_c[i]  %in% c("list", "data.frame")){
+                i <- i + 1
+                next()
+            }
+            
+            col_n <- names(col_c[i])
+
+            if(col_c[i]  == "data.frame"){
+                out <- out %>% 
+                    bind_cols(pull(., col_n)) %>% 
+                    select(-!!col_n)
+                i <- i # do not iterate
+            }
+            
+            if(col_c[i]  == "list"){
+                if(all(map_lgl(pull(out, col_n), is.null))|length(compact(pull(out, col_n))) == 0) {
+                    i <- i + 1
+                    next()
+                }
+                out <- out %>% 
+                    unnest(col_n, names_repair = "universal") 
+                i <- i # do not iterate
+            }
+            
+            if(nrow(out)==0) stop()
+        }
         
-        # 1.1 diseaseDto
-        out <- dat %>% 
-            bind_cols(pull(., diseaseDto)) %>% 
-            select(-diseaseDto) %>% 
-            unnest(diseaseDecomp) 
-        #   glimpse(out)
-        
-        # 1.2 reportOccCmDto
-        out <- out %>% 
-            bind_cols(pull(., reportOccCmDto)) %>% 
-            select(-reportOccCmDto)
-        #   glimpse(out)
-        
-        # 1.2.1 occSummariesList
-        out <- out %>% 
-            unnest(occSummariesList)  %>% 
-            bind_cols(pull(., occurrenceCodeDto)) %>% 
-            select(-occurrenceCodeDto)
-        #  glimpse(out)
-        
-        # 1.2.2 cmSummariesList
-        out <- out %>% 
-            select(-isWild, -nature, -status) %>% 
-            unnest(cmSummariesList) %>% 
-            unnest(speciesCmList) %>% 
-            unnest(cmList)
-        #  glimpse(out)
-        
-        # 1.3 templatePreviewDto
-        out <- out %>% 
-            bind_cols(pull(., templatePreviewDto)) %>% 
-            select(-templatePreviewDto) %>% 
-            unnest(qtyPeriodList) %>% 
-            bind_cols(pull(., periodDto)) %>% 
-            select(-periodDto) %>% 
-            select(-qtyPeriodList) # all null
-        #  glimpse(out)
-        
-        # for now, remove diseaseTypeDto - may not be necessary
-        out <- out %>% 
-            select(-diseaseTypeDto)
-        assert_that(!any(map_lgl(out, is.list)))
-        
-        return(out)
     })
     
     
