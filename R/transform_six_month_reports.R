@@ -47,27 +47,41 @@ transform_six_month_reports <- function(six_month_reports) {
     initializationDto$isAquatic
     initializationDto$areaId
     
+    replace_x <- function(x, replacement = NA_character_) {
+        if (length(x) == 0 || length(x[[1]]) == 0) {
+            replacement
+        } else {
+            x
+        }
+    }
+    
+    
     # disease present ---------------------------------------------------------
     
-    diseases_present <- map(six_month_reports2[1], function(x){
+    diseases_present <- imap(six_month_reports2[1:20], function(x, i){
         
+        print(i)
         dat <- x$occCodePresentDiseaseList %>% 
-            as_tibble()  %>% 
-            unnest(reportDiseaseDtoList) 
-
+            as_tibble() 
+        
+        if(nrow(dat) == 0) return()
+        
+        dat <- dat %>%    
+         unnest(reportDiseaseDtoList) 
+        
         out <- dat
         i <- 1
         while(i <= ncol(out)){
             
             col_c <- class(pull(out, i))
-
+            
             if(!col_c  %in% c("list", "data.frame")){
                 i <- i + 1
                 next()
             }
             
             col_n <- names(out[,i])
-
+            
             if(col_c  == "data.frame"){
                 out <- out %>% 
                     bind_cols(pull(., col_n)) %>% 
@@ -77,12 +91,16 @@ transform_six_month_reports <- function(six_month_reports) {
             
             if(col_c  == "list"){
                 if(all(map_lgl(pull(out, col_n), is.null))|length(compact(pull(out, col_n))) == 0) {
-                    i <- i + 1
+                    out <- out %>% 
+                        select(-!!col_n)
+                    i <- i # do not iterate
                     next()
                 }
+                
                 out <- out %>%
-                   # mutate(test = map(diseaseTypeList, ~ ifelse(length(.x) == 0, "", c(.x))))
+                    purrr::modify_depth(2, replace_x) %>% 
                     unnest(col_n, names_repair = "universal") 
+                
                 i <- i # do not iterate
             }
             
