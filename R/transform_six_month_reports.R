@@ -9,7 +9,7 @@
 #' @importFrom assertthat %has_name%
 #' @export
 
-transform_outbreak_reports <- function(six_month_reports) {
+transform_six_month_reports <- function(six_month_reports) {
     
     message("Transforming six month reports")
     
@@ -59,28 +59,29 @@ transform_outbreak_reports <- function(six_month_reports) {
         i <- 1
         while(i <= ncol(out)){
             
-            col_c <- sapply(out, class)
+            col_c <- class(pull(out, i))
 
-            if(!col_c[i]  %in% c("list", "data.frame")){
+            if(!col_c  %in% c("list", "data.frame")){
                 i <- i + 1
                 next()
             }
             
-            col_n <- names(col_c[i])
+            col_n <- names(out[,i])
 
-            if(col_c[i]  == "data.frame"){
+            if(col_c  == "data.frame"){
                 out <- out %>% 
                     bind_cols(pull(., col_n)) %>% 
                     select(-!!col_n)
                 i <- i # do not iterate
             }
             
-            if(col_c[i]  == "list"){
+            if(col_c  == "list"){
                 if(all(map_lgl(pull(out, col_n), is.null))|length(compact(pull(out, col_n))) == 0) {
                     i <- i + 1
                     next()
                 }
-                out <- out %>% 
+                out <- out %>%
+                   # mutate(test = map(diseaseTypeList, ~ ifelse(length(.x) == 0, "", c(.x))))
                     unnest(col_n, names_repair = "universal") 
                 i <- i # do not iterate
             }
