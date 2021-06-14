@@ -242,7 +242,7 @@ transform_outbreak_reports <- function(outbreak_reports,
              outbreak_location_id = oie_reference) %>% 
       mutate_all(~na_if(., "" )) %>% 
       mutate_at(vars(contains("date")), ~lubridate::as_datetime(.)) %>% 
-      mutate_at(vars(susceptible, cases, deaths, killed_and_disposed, slaughtered_for_commercial_use), ~replace_na(., 0))
+      mutate_at(vars(suppressWarnings(one_of("susceptible", "cases", "deaths", "killed_and_disposed", "slaughtered_for_commercial_use"))), ~replace_na(., 0))
     
     cnames <- colnames(outbreak_reports_detail)
     
