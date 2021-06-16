@@ -107,7 +107,7 @@ transform_outbreak_reports <- function(outbreak_reports,
     mutate_at(vars(contains("date")), ~lubridate::as_datetime(.)) 
   
   # Check for missing date_event_resolved
-  if(is.null(outbreak_reports_events$date_event_resolved)) outbreak_reports_events$date_event_resolved <- NA
+  if(suppressWarnings(is.null(outbreak_reports_events$date_event_resolved))) outbreak_reports_events$date_event_resolved <- NA
   missing_resolved <- outbreak_reports_events %>%
     filter(is.na(date_event_resolved)) %>%
     filter(is_final_report)
@@ -236,10 +236,10 @@ transform_outbreak_reports <- function(outbreak_reports,
       select(-starts_with("total_")) %>% # these are rolling and values and may cause confusion
       select(-suppressWarnings(one_of("prod_type"))) %>% 
       select(-suppressWarnings(one_of("specie_id")), -suppressWarnings(one_of("morbidity")), -suppressWarnings(one_of("mortality")), -suppressWarnings(one_of("outbreak_info_id")), -suppressWarnings(one_of("outbreak_id"))) %>% 
-      rename(species_name = spicie_name,
-             killed_and_disposed = killed,
-             slaughtered_for_commercial_use = slaughtered,
-             outbreak_location_id = oie_reference) %>% 
+      rename_with(~str_replace(., "^spicie_name$", "species_name"), suppressWarnings(one_of("spicie_name"))) %>% 
+      rename_with( ~str_replace(., "^killed$", "killed_and_disposed"), suppressWarnings(one_of("killed"))) %>% 
+      rename_with( ~str_replace(., "^slaughtered$", "slaughtered_for_commercial_use"), suppressWarnings(one_of("slaughtered"))) %>% 
+      rename_with( ~str_replace(., "^oie_reference$", "outbreak_location_id"), suppressWarnings(one_of("oie_reference"))) %>% 
       mutate_all(~na_if(., "" )) %>% 
       mutate_at(vars(contains("date")), ~lubridate::as_datetime(.)) %>% 
       mutate_at(vars(suppressWarnings(one_of("susceptible", "cases", "deaths", "killed_and_disposed", "slaughtered_for_commercial_use"))), ~replace_na(., 0))
