@@ -3,11 +3,11 @@ flex_unselect <- function(df, x){
 }
 
 flex_pull <- function(df, x){
-   if(x %in% colnames(df)){
-      return(pull(df, x))
-   }else{
-       return(NULL)
-   }
+    if(x %in% colnames(df)){
+        return(pull(df, x))
+    }else{
+        return(NULL)
+    }
 }
 
 flex_bind_cols <- function(df1, df2){
@@ -21,6 +21,26 @@ flex_unnest <- function(df, x){
     }else{
         return(out)
     }
+}
+
+flex_one_of <- function(x){
+    suppressWarnings(one_of(x))
+}
+
+assert_distinct <- function(df, x){
+  
+      out <- df %>% 
+        select(starts_with(x)) 
+    
+    if(ncol(out)==0) return(TRUE)
+    
+    out <- out %>% 
+        distinct() %>% 
+        t() %>% 
+        as_tibble() %>% 
+        distinct() 
+    
+    assert_that(nrow(out) ==1)
 }
 
 
@@ -86,6 +106,16 @@ transform_six_month_reports <- function(six_month_reports) {
         
         if(nrow(dat) == 0) return()
         
+        # top level info
+        dat <-  dat %>% 
+            mutate(report_id = x$reportId,
+                   report_semester = x$initializationDto$period$period,
+                   report_year = x$initializationDto$period$year,
+                   isAquatic = x$initializationDto$animalTypeDto$isAquatic,
+                   areaID = x$initializationDto$areaDto$areaId,
+                   oieReference = x$oieReference) %>% 
+            relocate(suppressWarnings(one_of("reportDiseaseDtoList")), .after = everything())
+        
         dat <- dat %>%    
             flex_unnest("reportDiseaseDtoList")
         
@@ -116,9 +146,58 @@ transform_six_month_reports <- function(six_month_reports) {
             flex_unnest("occSummariesList") %>% 
             flex_unnest("cmSummariesList") %>% 
             flex_bind_cols(flex_pull(., "occurrenceCodeDto")) %>% 
-            flex_unselect("occurrenceCodeDto") %>% 
-            flex_unnest("speciesCmList") %>% 
-            flex_unnest("cmList")
+            flex_unselect("occurrenceCodeDto")
+        
+        # check mismatches (dont worry about nature, status, newOutbreak, totalOutbreak because they are being excluded)
+        assert_distinct(out, "areaName")
+        areaname <- colnames(out)[str_detect(colnames(out), "areaName")]
+        if(length(areaname) > 1) { 
+            areaname_remove <- areaname[-1]
+            out <- out %>% 
+                select(-areaname_remove) 
+            
+            if(length(areaname) > 0){
+                out <- out %>% 
+                    rename(areaName = areaname[[1]]) 
+            }
+        }
+        
+        out <- out %>% 
+            select(
+                # country
+                report_id,# report
+                report_semester, # report semester
+                report_year, # report year
+                isAquatic,
+                areaID,
+                oieReference,
+               # starts_with("isWild"), # lots of inconsistencies, eg "https://wahis.oie.int/smr/pi/report/24848?format=preview"
+                flex_one_of("animalCategory"),
+                flex_one_of("diseaseName"), # disease
+                flex_one_of("isAbsenceOfOutbreak"), # disease_status
+                flex_one_of("animalCategoryDomestic"),
+                flex_one_of("animalCategoryWild"),
+                flex_one_of("code"),
+                flex_one_of("specieName"), # taxa
+                flex_one_of("subPeriodTrans"), # period
+                flex_one_of("areaName"),  # adm
+                flex_one_of("templateName"), # adm type
+                flex_one_of("susceptible"), # susceptible_detail
+                flex_one_of("quantitiesNcase"), # cases_detail
+                flex_one_of("quantitiesDead"), # deaths_detail
+                flex_one_of("killedAndDisplosed"), # killed_and_disposed_of_detail
+                flex_one_of("slaughtered"), # slaughtered_detail
+                flex_one_of("vaccinated"),
+                flex_one_of("transDiseaseType") # serotype
+                #  flex_one_of("quantatiesUnit") # measuring_units
+                # flex_one_of("measure") # control measures
+                #flex_one_of("vaccNb") # vaccination_in_response_to_the_outbreak_detail
+            )
+        
+        # get control measures separately
+        # cm <- out %>% 
+        #  flex_unnest("speciesCmList") %>% 
+        #  flex_unnest("cmList")
         
         # map_chr(out, class)
         
@@ -127,52 +206,14 @@ transform_six_month_reports <- function(six_month_reports) {
     })
     toc()
     
-    #TODO dupe name handling needs to be post processed -- too slow dealt with upfront , should allow universal fix then just select first occurance
-    #TODO field selections (commented out)
+    diseases_present <- compact(diseases_present)
+
+    #TODO check which columns are being excluded with select
+    #TODO summarize over control measures, separate out detail and summary
+    #TODO make yearly summary?
     #TODO get countryname
     #TODO add: iso3c, ando_id
-    #TODO summarize over control measures, separate out detail and summary
     #TODO add absence, unreported
     
-    # out <- out %>% 
-    #     mutate(report_id = x$reportId,
-    #            period = x$initializationDto$period$period,
-    #            year = x$initializationDto$period$year,
-    #            isAquatic = x$initializationDto$animalTypeDto$isAquatic,
-    #            areaID = x$initializationDto$areaDto$areaId,
-    #            oieReference = x$oieReference) %>% 
-    #     select(
-    #         # country
-    #         report_id,# report
-    #         period, # report semester
-    #         year, # report year
-    #         isAquatic,
-    #         areaID,
-    #         oieReference,
-    #         one_of_sw("diseaseName"), # disease
-    #         starts_with("isWild"),# disease population
-    #         one_of_sw("isAbsenceOfOutbreak"), # disease_status
-    #         one_of_sw("animalCategoryDomestic"),
-    #         one_of_sw("animalCategoryWild"),
-    #         one_of_sw("code"),
-    #         starts_with("specieName"), # taxa
-    #         one_of_sw("subPeriodTrans"), # period
-    #         # temporal_scale
-    #         starts_with("areaName"),  # adm
-    #         one_of_sw("templateName"), # adm type
-    #         one_of_sw("susceptible"), # susceptible_detail
-    #         one_of_sw("quantitiesNcase"), # cases_detail
-    #         one_of_sw("quantitiesDead"), # deaths_detail
-    #         one_of_sw("killedAndDisplosed"), # killed_and_disposed_of_detail
-    #         one_of_sw("slaughtered"), # slaughtered_detail
-    #         one_of_sw("vaccNb"), # vaccination_in_response_to_the_outbreak_detail
-    #         one_of_sw("vaccinated"),
-    #         # serotype
-    #         # measuring_units
-    #         one_of_sw("measure") # control measures
-    #     )
-    
-    
-    #  })
 }
 
