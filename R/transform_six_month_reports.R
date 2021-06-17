@@ -28,8 +28,8 @@ flex_one_of <- function(x){
 }
 
 assert_distinct <- function(df, x){
-  
-      out <- df %>% 
+    
+    out <- df %>% 
         select(starts_with(x)) 
     
     if(ncol(out)==0) return(TRUE)
@@ -67,20 +67,12 @@ transform_six_month_reports <- function(six_month_reports) {
     })
     if(!length(six_month_reports2)) return(NULL)
     
-    # annual_reports_animal_diseases
-    # annual_reports_animal_diseases_detail
-    # annual_reports_animal_hosts
-    # annual_reports_animal_hosts_detail
-    
-    conn <- repeldata::repel_local_conn()
-    annual_reports_animal_diseases <- DBI::dbReadTable(conn, "annual_reports_animal_diseases")
-    annual_reports_animal_diseases_detail <- DBI::dbReadTable(conn, "annual_reports_animal_diseases_detail")
-    
-    annual_reports_animal_hosts <- DBI::dbReadTable(conn, "annual_reports_animal_hosts")
-    annual_reports_animal_hosts_detail <- DBI::dbReadTable(conn, "annual_reports_animal_hosts_detail")
-    
-    #TODO I think annual_reports_animal_diseases & annual_reports_animal_diseases_detail can be removed
-    #TODO annual_reports_animal_hosts and annual_reports_animal_hosts_detail are what we need -> cases etc by disease, taxa
+    # conn <- repeldata::repel_local_conn()
+    # annual_reports_animal_diseases <- DBI::dbReadTable(conn, "annual_reports_animal_diseases")
+    # annual_reports_animal_diseases_detail <- DBI::dbReadTable(conn, "annual_reports_animal_diseases_detail")
+    # 
+    # annual_reports_animal_hosts <- DBI::dbReadTable(conn, "annual_reports_animal_hosts")
+    # annual_reports_animal_hosts_detail <- DBI::dbReadTable(conn, "annual_reports_animal_hosts_detail")
     
     
     # For url lookup ----------------------------------------------------------
@@ -93,13 +85,12 @@ transform_six_month_reports <- function(six_month_reports) {
     # initializationDto$areaId
     
     # disease present ---------------------------------------------------------
-    
-    # library(profvis)
-    # profvis({
     tic()
     diseases_present <- imap(six_month_reports2[1:200], function(x, y){
         
         print(y)
+        
+       
         
         dat <- x$occCodePresentDiseaseList %>% 
             as_tibble() 
@@ -109,6 +100,7 @@ transform_six_month_reports <- function(six_month_reports) {
         # top level info
         dat <-  dat %>% 
             mutate(report_id = x$reportId,
+                   report_country =  na.omit(x$reportInfoDto$reportUserInfoDtoList$countryOrTerritory),
                    report_semester = x$initializationDto$period$period,
                    report_year = x$initializationDto$period$year,
                    isAquatic = x$initializationDto$animalTypeDto$isAquatic,
@@ -120,12 +112,12 @@ transform_six_month_reports <- function(six_month_reports) {
             flex_unnest("reportDiseaseDtoList")
         
         # diseaseDto
-        out <- dat %>% 
+        dat <- dat %>% 
             mutate(diseaseName = .$diseaseDto$diseaseName) %>% 
             flex_unselect("diseaseDto")
         
         # templatePreviewDto
-        out <- out %>% 
+        dat <- dat %>% 
             mutate(templatePreviewDto = templatePreviewDto[[1]]) %>% 
             flex_unnest("templatePreviewDto") %>% 
             flex_unselect("templatePreviewDto") %>% 
@@ -140,7 +132,7 @@ transform_six_month_reports <- function(six_month_reports) {
             flex_unselect("qtySummariesDto")
         
         # reportOccCmDto
-        out <- out %>% 
+        dat <- dat %>% 
             flex_bind_cols(flex_pull(., "reportOccCmDto")) %>% 
             flex_unselect("reportOccCmDto") %>% 
             flex_unnest("occSummariesList") %>% 
@@ -149,29 +141,30 @@ transform_six_month_reports <- function(six_month_reports) {
             flex_unselect("occurrenceCodeDto")
         
         # check mismatches (dont worry about nature, status, newOutbreak, totalOutbreak because they are being excluded)
-        assert_distinct(out, "areaName")
-        areaname <- colnames(out)[str_detect(colnames(out), "areaName")]
+        assert_distinct(dat, "areaName")
+        areaname <- colnames(dat)[str_detect(colnames(dat), "areaName")]
         if(length(areaname) > 1) { 
             areaname_remove <- areaname[-1]
-            out <- out %>% 
-                select(-areaname_remove) 
+            dat <- dat %>% 
+                select(-all_of(areaname_remove) )
             
             if(length(areaname) > 0){
-                out <- out %>% 
+                dat <- dat %>% 
                     rename(areaName = areaname[[1]]) 
             }
         }
         
-        out <- out %>% 
+        # quant data select
+        quant <- dat %>% 
             select(
-                # country
+                report_country, # country
                 report_id,# report
                 report_semester, # report semester
                 report_year, # report year
                 isAquatic,
                 areaID,
                 oieReference,
-               # starts_with("isWild"), # lots of inconsistencies, eg "https://wahis.oie.int/smr/pi/report/24848?format=preview"
+                # starts_with("isWild"), # lots of inconsistencies, eg "https://wahis.oie.int/smr/pi/report/24848?format=preview"
                 flex_one_of("animalCategory"),
                 flex_one_of("diseaseName"), # disease
                 flex_one_of("isAbsenceOfOutbreak"), # disease_status
@@ -188,32 +181,50 @@ transform_six_month_reports <- function(six_month_reports) {
                 flex_one_of("killedAndDisplosed"), # killed_and_disposed_of_detail
                 flex_one_of("slaughtered"), # slaughtered_detail
                 flex_one_of("vaccinated"),
-                flex_one_of("transDiseaseType") # serotype
+                flex_one_of("transDiseaseType"),  # serotype
+                    flex_one_of("speciesCmList")
                 #  flex_one_of("quantatiesUnit") # measuring_units
                 # flex_one_of("measure") # control measures
                 #flex_one_of("vaccNb") # vaccination_in_response_to_the_outbreak_detail
             )
         
-        # get control measures separately
-        # cm <- out %>% 
-        #  flex_unnest("speciesCmList") %>% 
-        #  flex_unnest("cmList")
+        # control measures separately - disease and report specific
+        cm <- dat %>%
+            select(
+                report_country,
+                report_id,# report
+                report_semester, # report semester
+                report_year, # report year
+                isAquatic,
+                areaID,
+                oieReference,
+                diseaseName,
+                flex_one_of('speciesCmList')) %>% 
+            distinct() %>% 
+            flex_unnest("speciesCmList") %>% 
+            flex_unnest("cmList") %>% 
+            select(
+               -flex_one_of("cmId"),
+               -flex_one_of("nature"),
+               -flex_one_of("status"),
+               -flex_one_of("smrCmdId"),
+               -flex_one_of("cmKey"),
+               -flex_one_of("specieId")
+            )
         
-        # map_chr(out, class)
+        # map_chr(dat, class)
         
-        return(out)
+        return(list(quant, cm))
         
     })
     toc()
     
     diseases_present <- compact(diseases_present)
-
-    #TODO check which columns are being excluded with select
-    #TODO summarize over control measures, separate out detail and summary
-    #TODO make yearly summary?
-    #TODO get countryname
+    
+    #TODO post process, wild or not
     #TODO add: iso3c, ando_id
     #TODO add absence, unreported
+    #TODO make yearly summary?
     
 }
 
