@@ -15,7 +15,7 @@ flex_bind_cols <- function(df1, df2){
 }
 
 flex_unnest <- function(df, x){
-    out <- suppressMessages(suppressWarnings(unnest(data = df, cols = one_of(x), names_repair = "universal")))
+    out <- suppressMessages(suppressWarnings(unnest(data = df, cols = one_of(x), names_repair = "universal", keep_empty = TRUE)))
     if(nrow(out)==0){
         return(df)
     }else{
@@ -87,7 +87,7 @@ transform_six_month_reports <- function(six_month_reports) {
     transformed_reports <- imap(six_month_reports2[1:100], function(x, y){
         
         print(y)
-    
+        
         out <- map(c("occCodePresentDiseaseList", 
                      "occCodeAbsentDiseaseList",
                      "occCodeNoInfoDiseaseList"), function(xx){
@@ -105,7 +105,7 @@ transform_six_month_reports <- function(six_month_reports) {
                          # top level info
                          dat <-  dat %>% 
                              mutate(report_id = x$reportId,
-                                    report_country =  na.omit(x$reportInfoDto$reportUserInfoDtoList$countryOrTerritory),
+                                    country =  na.omit(x$reportInfoDto$reportUserInfoDtoList$countryOrTerritory),
                                     report_semester = x$initializationDto$period$period,
                                     report_year = x$initializationDto$period$year,
                                     isAquatic = x$initializationDto$animalTypeDto$isAquatic,
@@ -124,7 +124,7 @@ transform_six_month_reports <- function(six_month_reports) {
                          
                          # templatePreviewDto
                          dat <- dat %>% 
-                             mutate(templatePreviewDto = templatePreviewDto[[1]]) %>% 
+                             mutate(templatePreviewDto = templatePreviewDto[[1]]) %>%
                              flex_unnest("templatePreviewDto") %>% 
                              flex_unselect("templatePreviewDto") %>% 
                              flex_bind_cols(flex_pull(., "periodDto")) %>% 
@@ -161,8 +161,9 @@ transform_six_month_reports <- function(six_month_reports) {
                          
                          # quant data select
                          quant <- dat %>% 
+                             mutate_at(vars(flex_one_of("specieName")), ~if_else(is.na(.), groupName, .)) %>% 
                              select(
-                                 report_country, # country
+                                 country, # country
                                  report_id,# report
                                  report_semester, # report semester
                                  report_year, # report year
@@ -173,8 +174,6 @@ transform_six_month_reports <- function(six_month_reports) {
                                  # starts_with("isWild"), # lots of inconsistencies, eg "https://wahis.oie.int/smr/pi/report/24848?format=preview"
                                  flex_one_of("animalCategory"),
                                  flex_one_of("diseaseName"), # disease
-                                 flex_one_of("animalCategoryDomestic"),
-                                 flex_one_of("animalCategoryWild"),
                                  flex_one_of("code"),
                                  flex_one_of("specieName"), # taxa
                                  flex_one_of("subPeriodTrans"), # period
@@ -190,12 +189,13 @@ transform_six_month_reports <- function(six_month_reports) {
                                  #  flex_one_of("quantatiesUnit") # measuring_units
                                  # flex_one_of("measure") # control measures
                                  #flex_one_of("vaccNb") # vaccination_in_response_to_the_outbreak_detail
-                             )
+                             ) %>% 
+                             distinct()
                          
                          # control measures separately - disease and report specific
                          cm <- dat %>%
                              select(
-                                 report_country,
+                                 country,
                                  report_id,# report
                                  report_semester, # report semester
                                  report_year, # report year
@@ -216,7 +216,8 @@ transform_six_month_reports <- function(six_month_reports) {
                                  -flex_one_of("smrCmdId"),
                                  -flex_one_of("cmKey"),
                                  -flex_one_of("specieId")
-                             )
+                             ) %>% 
+                             distinct()
                          
                          
                          return(list("quant" = quant, "control_measures" = cm))
@@ -236,8 +237,17 @@ transform_six_month_reports <- function(six_month_reports) {
     quantitative_reports <- map_dfr(transformed_reports, ~.$quant)
     control_measures <- map_dfr(transformed_reports, ~.$control_measures)
     
-   
-    #TODO post process:  wild or not, iso3c, ando_id
-
+    disease_name_lookup <- tibble(country = unique(quantitative_reports$country)) %>% 
+        mutate(country_iso3c = countrycode::countrycode(sourcevar = country,origin = "country.name", destination = "iso3c"))
+    
+    quantitative_reports2 <- quantitative_reports %>% 
+        janitor::clean_names() %>% 
+        left_join(disease_name_lookup,  by = "country") 
+    
+    #TODO post process: 
+    # wild  - still working on this - need to not lose info from isWild cols
+    # ando_id
+    # renaming vars (compare to existing)
+    
 }
 
