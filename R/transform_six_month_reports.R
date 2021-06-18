@@ -135,8 +135,9 @@ transform_six_month_reports <- function(six_month_reports) {
                              flex_unselect("diseaseTypeCombDto")  %>% 
                              select(-ends_with("List")) %>% 
                              flex_bind_cols(flex_pull(., "qtySummariesDto")) %>% 
-                             flex_unselect("qtySummariesDto")
-                         
+                             flex_unselect("qtySummariesDto") %>% 
+                             rename_with( ~str_replace(., "isWild", "isWild0"), suppressWarnings(one_of("isWild"))) 
+
                          # reportOccCmDto
                          dat <- dat %>% 
                              flex_bind_cols(flex_pull(., "reportOccCmDto")) %>% 
@@ -160,8 +161,9 @@ transform_six_month_reports <- function(six_month_reports) {
                          }
                          
                          # quant data select
+                        if(!"specieName" %in% colnames(dat)) dat$specieName <- dat$groupName
                          quant <- dat %>% 
-                             mutate_at(vars(flex_one_of("specieName")), ~if_else(is.na(.), groupName, .)) %>% 
+                             mutate(specieName = if_else(is.na(specieName), groupName, specieName)) %>% 
                              select(
                                  country, # country
                                  report_id,# report
@@ -171,7 +173,7 @@ transform_six_month_reports <- function(six_month_reports) {
                                  areaID,
                                  oieReference,
                                  disease_status,
-                                 # starts_with("isWild"), # lots of inconsistencies, eg "https://wahis.oie.int/smr/pi/report/24848?format=preview"
+                                 starts_with("isWild"), 
                                  flex_one_of("animalCategory"),
                                  flex_one_of("diseaseName"), # disease
                                  flex_one_of("code"),
@@ -242,12 +244,15 @@ transform_six_month_reports <- function(six_month_reports) {
     
     quantitative_reports2 <- quantitative_reports %>% 
         janitor::clean_names() %>% 
+        mutate(is_wild = coalesce(is_wild0, is_wild)) %>% # when both is_wild0 and is_wild exist, is_wild0 is correct (and is_wild can be wrong)
+        select(-is_wild0) %>% 
         left_join(disease_name_lookup,  by = "country") 
     
+
     #TODO post process: 
-    # wild  - still working on this - need to not lose info from isWild cols
-    # ando_id
+    # ando_id 
     # renaming vars (compare to existing)
+    # control measures cleaning
     
 }
 
