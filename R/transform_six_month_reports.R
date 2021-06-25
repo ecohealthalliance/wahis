@@ -1,7 +1,17 @@
+#' Support function for flexible unselecting (does not require field to exist)
+#' @param df A data frame, data frame extension (e.g. a tibble), or a lazy data frame (e.g. from dbplyr or dtplyr). 
+#' @param x One or more unquoted expressions separated by commas. Variable names can be used as if they were positions in the data frame, so expressions like x:y can be used to select a range of variables.
+#' @import dplyr
+#' @noRd
 flex_unselect <- function(df, x){
     suppressWarnings(select(.data = df, -one_of(x)))
 }
 
+#' Support function for flexible pulling (does not require field to exist)
+#' @param df A data frame, data frame extension (e.g. a tibble), or a lazy data frame (e.g. from dbplyr or dtplyr). 
+#' @param x One or more unquoted expressions separated by commas. Variable names can be used as if they were positions in the data frame, so expressions like x:y can be used to select a range of variables.
+#' @import dplyr
+#' @noRd
 flex_pull <- function(df, x){
     if(x %in% colnames(df)){
         return(pull(df, x))
@@ -10,10 +20,20 @@ flex_pull <- function(df, x){
     }
 }
 
+#' Support function for flexible binding (allows duplicate columns to exist)
+#' @param df1 A data frame, data frame extension (e.g. a tibble), or a lazy data frame (e.g. from dbplyr or dtplyr). 
+#' @param df2 A data frame, data frame extension (e.g. a tibble), or a lazy data frame (e.g. from dbplyr or dtplyr). 
+#' @import dplyr
+#' @noRd
 flex_bind_cols <- function(df1, df2){
     suppressMessages(bind_cols(df1, df2))
 }
 
+#' Support function for flexible unnesting (does not require field to exist)
+#' @param df A data frame, data frame extension (e.g. a tibble), or a lazy data frame (e.g. from dbplyr or dtplyr). 
+#' @param x One or more unquoted expressions separated by commas. Variable names can be used as if they were positions in the data frame, so expressions like x:y can be used to select a range of variables.
+#' @import tidyr
+#' @noRd
 flex_unnest <- function(df, x){
     out <- suppressMessages(suppressWarnings(unnest(data = df, cols = one_of(x), names_repair = "universal", keep_empty = TRUE)))
     if(nrow(out)==0){
@@ -23,10 +43,20 @@ flex_unnest <- function(df, x){
     }
 }
 
+#' Support function for flexible one_of selection (does not throw warning when field does not exist)
+#' @param df A data frame, data frame extension (e.g. a tibble), or a lazy data frame (e.g. from dbplyr or dtplyr). 
+#' @param x One or more unquoted expressions separated by commas. Variable names can be used as if they were positions in the data frame, so expressions like x:y can be used to select a range of variables.
+#' @import dplyr
+#' @noRd
 flex_one_of <- function(x){
     suppressWarnings(one_of(x))
 }
 
+#' Support function to check that columns with identical names have identical info
+#' @param df A data frame, data frame extension (e.g. a tibble), or a lazy data frame (e.g. from dbplyr or dtplyr). 
+#' @param x One or more unquoted expressions separated by commas. Variable names can be used as if they were positions in the data frame, so expressions like x:y can be used to select a range of variables.
+#' @import dplyr
+#' @noRd
 assert_distinct <- function(df, x){
     
     out <- df %>% 
@@ -54,7 +84,6 @@ assert_distinct <- function(df, x){
 #' @importFrom countrycode countrycode
 #' @importFrom assertthat %has_name%
 #' @export
-
 transform_six_month_reports <- function(six_month_reports) {
     
     message("Transforming six month reports")
@@ -242,16 +271,50 @@ transform_six_month_reports <- function(six_month_reports) {
     disease_name_lookup <- tibble(country = unique(quantitative_reports$country)) %>% 
         mutate(country_iso3c = countrycode::countrycode(sourcevar = country,origin = "country.name", destination = "iso3c"))
     
-    quantitative_reports2 <- quantitative_reports %>% 
+    quantitative_reports <- quantitative_reports %>% 
         janitor::clean_names() %>% 
         mutate(is_wild = coalesce(is_wild0, is_wild)) %>% # when both is_wild0 and is_wild exist, is_wild0 is correct (and is_wild can be wrong)
-        select(-is_wild0) %>% 
-        left_join(disease_name_lookup,  by = "country") 
+        mutate(disease_population = ifelse(is_wild, "wild", "domestic")) %>% 
+        select(-is_wild0, -is_wild, -animal_category) %>% 
+        left_join(disease_name_lookup,  by = "country") %>% 
+        mutate(sub_period_trans = ifelse(is.na(sub_period_trans), report_semester, sub_period_trans)) %>% 
+        mutate(sub_period_trans = case_when(
+            sub_period_trans == "SEM01" ~ "January-June",
+            sub_period_trans == "SEM02" ~ "July-September",
+            TRUE ~ sub_period_trans)) %>% 
+        rename(disease = disease_name, disease_status_detail = code, 
+               taxa = specie_name, cases = quantities_ncase, deaths = quantities_dead,
+               serotype = trans_disease_type, adm = area_name, adm_type = template_name,
+               period = sub_period_trans)
     
-
+    ando_disease_lookup <- readxl::read_xlsx(system.file("diseases", "disease_lookup.xlsx", package = "wahis")) %>%
+        mutate(disease = textclean::replace_non_ascii(disease)) %>%
+        rename(disease_class = class_desc) %>%
+        filter(report == "animal") %>%
+        select(-report, -no_match_found) %>%
+        mutate_at(.vars = c("ando_id", "preferred_label", "disease_class"), ~na_if(., "NA"))
+    
+    quantitative_reports <- quantitative_reports %>%
+        mutate(disease = tolower(disease)) %>% 
+        mutate(disease = trimws(disease)) %>%
+        mutate(disease = textclean::replace_non_ascii(disease)) %>%
+        mutate(disease = ifelse(disease == "", causal_agent, disease)) %>%
+        mutate(disease = str_remove_all(disease, "\\s*\\([^\\)]+\\)")) %>% 
+        mutate(disease = str_remove(disease, "virus")) %>% 
+        mutate(disease = trimws(disease)) %>%
+        mutate(disease = str_squish(disease)) %>% 
+        left_join(ando_disease_lookup, by = "disease") %>%
+        mutate(disease = coalesce(preferred_label, disease)) %>%
+        select(-preferred_label) %>%
+        distinct()
+    
+    diseases_unmatched <- quantitative_reports %>%
+        filter(is.na(ando_id)) %>%
+        distinct(disease) %>%
+        mutate(table = "six_month_report")
+    
     #TODO post process: 
-    # ando_id 
-    # renaming vars (compare to existing)
+    # general present vs detail
     # control measures cleaning
     
 }
