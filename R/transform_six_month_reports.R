@@ -293,12 +293,36 @@ transform_six_month_reports <- function(six_month_reports) {
                taxa = specie_name, cases = quantities_ncase, deaths = quantities_dead,
                serotype = trans_disease_type, adm = area_name, adm_type = template_name,
                period = sub_period_trans, killed_and_disposed = killed_and_displosed) %>% 
+        mutate_if(is.character, tolower) %>% 
+        mutate(report_semester = as.integer(str_remove(report_semester, "sem"))) %>%
         filter(!is_aquatic) # multiple report ids per semesters - requires attention
     
     ## careful! disease_status_detail results in dupes 
     quantitative_reports <- quantitative_reports %>% 
         select(-disease_status_detail) %>% 
         distinct()
+    
+    ## now process control measures
+    control_measures <- map_dfr(transformed_reports, ~.$control_measures)
+    
+    control_measures <- control_measures %>%
+        clean_names() %>%
+        mutate(taxa = coalesce(specie_name,             # preference for species name associated with control measures
+                               specie_name0)) %>% # when species name is not associated with control measures, use higher level assignment
+        mutate(is_wild = coalesce(is_wild,            # preference for wild designation associated with control measures
+                                  coalesce(is_wild0, is_wild1) # this is the heuristic applied to quantitative data earlier (with is_wild now named is_wild1)
+        )) %>%
+        rename(disease = disease_name) %>%
+        mutate(disease_population = ifelse(is_wild, "wild", "domestic")) %>%
+        select(-specie_name, -specie_name0, -is_wild0, -is_wild1, -is_wild) %>%
+        distinct() %>%
+        group_by(country, report_id, report_semester, report_year, is_aquatic, area_id, oie_reference,
+                 disease_status, disease, disease_population, taxa) %>%
+        summarize(control_measures = paste(measure, collapse = "; "),
+                  control_measures_vaccines_administered =  str_flatten(vacc_nb)) %>%
+        ungroup() %>% 
+        mutate_if(is.character, tolower) %>% 
+        mutate(report_semester = as.integer(str_remove(report_semester, "sem")))
     
     ## lookup table for disease names
     ando_disease_lookup <- readxl::read_xlsx(system.file("diseases", "disease_lookup.xlsx", package = "wahis")) %>%
@@ -308,21 +332,27 @@ transform_six_month_reports <- function(six_month_reports) {
         select(-report, -no_match_found) %>%
         mutate_at(.vars = c("ando_id", "preferred_label", "disease_class"), ~na_if(., "NA"))
     
-    ## clean disease names
-    quantitative_reports <- quantitative_reports %>%
-        mutate(disease = tolower(disease)) %>%
-        mutate(disease = trimws(disease)) %>%
-        mutate(disease = textclean::replace_non_ascii(disease)) %>%
-        mutate(disease = ifelse(disease == "", causal_agent, disease)) %>%
-        mutate(disease = str_remove_all(disease, "\\s*\\([^\\)]+\\)")) %>%
-        mutate(disease = str_remove(disease, "virus")) %>%
-        mutate(disease = trimws(disease)) %>%
-        mutate(disease = str_squish(disease)) %>%
-        left_join(ando_disease_lookup, by = "disease") %>%
-        mutate(disease = coalesce(preferred_label, disease)) %>%
-        select(-preferred_label) %>%
-        distinct()
+    ## clean disease names on quantitative reports and control measures
+    dfs_cleaned <- map(list(quantitative_reports, control_measures), function(df){
+        
+        df %>%
+            mutate(disease = tolower(disease)) %>%
+            mutate(disease = trimws(disease)) %>%
+            mutate(disease = textclean::replace_non_ascii(disease)) %>%
+            mutate(disease = str_remove_all(disease, "\\s*\\([^\\)]+\\)")) %>%
+            mutate(disease = str_remove(disease, "virus")) %>%
+            mutate(disease = trimws(disease)) %>%
+            mutate(disease = str_squish(disease)) %>%
+            left_join(ando_disease_lookup, by = "disease") %>%
+            mutate(disease = coalesce(preferred_label, disease)) %>%
+            select(-preferred_label) %>%
+            distinct()
+    })
     
+    quantitative_reports <- dfs_cleaned[[1]]
+    control_measures <- dfs_cleaned[[2]]
+    
+    # identify disease names that do not match ando ontology
     diseases_unmatched <- quantitative_reports %>%
         filter(is.na(ando_id)) %>%
         distinct(disease) %>%
@@ -361,28 +391,23 @@ transform_six_month_reports <- function(six_month_reports) {
                   vaccinated = sum_na(vaccinated)) %>% 
         ungroup() %>% 
         mutate(disease_status = recode(disease_status, '1' = "present", '2' =  "absent", '3' = "unreported"))
-        
-    ## add control measures to summary table
-    control_measures <- map_dfr(transformed_reports, ~.$control_measures)
     
-    control_measures <- control_measures %>%
-        clean_names() %>%
-        mutate(taxa = coalesce(specie_name,             # preference for species name associated with control measures
-                               specie_name0)) %>% # when species name is not associated with control measures, use higher level assignment
-        mutate(is_wild = coalesce(is_wild,            # preference for wild designation associated with control measures
-                                  coalesce(is_wild0, is_wild1) # this is the heuristic applied to quantitative data earlier (with is_wild now named is_wild1)
-        )) %>%
-        rename(disease = disease_name) %>%
-        mutate(disease_population = ifelse(is_wild, "wild", "domestic")) %>%
-        select(-specie_name, -specie_name0, -is_wild0, -is_wild1, -is_wild) %>%
-        distinct() %>%
-        group_by(country, report_id, report_semester, report_year, is_aquatic, area_id, oie_reference,
-                 disease_status, disease, disease_population, taxa) %>%
-        summarize(control_measure = paste(measure, collapse = "; "),
-                  control_measure_vaccines_administered =  str_flatten(vacc_nb)) %>%
-        ungroup()
     
-    quantitative_reports_summary <- left_join(quantitative_reports_summary, control_measures, by = c("country", "report_id", "report_semester", "report_year", "is_aquatic", "area_id", "oie_reference", "disease_status", "disease", "taxa", "disease_population"))
+    ## for control measures - aggregate over cleaned disease names (note dupes)
+    # control_measures %>%
+    #     get_dupes(country, report_semester, report_year, disease_status, disease, disease_population, taxa)
+    control_measures <- control_measures %>% 
+        group_by(country, report_id, report_semester, report_year, is_aquatic, taxa, disease_population,
+                 area_id, oie_reference, disease_status, disease, ando_id, disease_class) %>% 
+        summarize(control_measures = unique(str_split(control_measures, pattern = "; ")),
+                  control_measures_vaccines_administered = sum(suppressWarnings(as.numeric(control_measures_vaccines_administered)))) %>% 
+        ungroup() %>% 
+        mutate(control_measures = map_chr(control_measures, ~str_c(sort(.), collapse = "; "))) %>% 
+        mutate(control_measures = na_if(control_measures, "NA"))
+    
+    quantitative_reports_summary <- left_join(quantitative_reports_summary, control_measures, by = c("country", "report_id", "report_semester", "report_year", 
+                                                                                                     "is_aquatic", "area_id", "oie_reference", "disease_status", 
+                                                                                                     "disease", "taxa", "disease_population"))
     
     # Export -----------------------------------------------
     wahis_joined <- list("quantitative_reports_summary" = quantitative_reports_summary,
