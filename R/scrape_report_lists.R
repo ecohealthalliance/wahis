@@ -50,6 +50,6 @@ scrape_outbreak_report_list <- function() {
 #' @return A tibble of reports
 #' @export
 scrape_six_month_report_list <- function() {
-    scrape_report_list( "https://wahis.oie.int/smr/pi/reports")
+    scrape_report_list("https://wahis.oie.int/smr/pi/reports")
 }
 

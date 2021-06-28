@@ -387,7 +387,7 @@ transform_six_month_reports <- function(six_month_reports) {
     # Export -----------------------------------------------
     wahis_joined <- list("quantitative_reports_summary" = quantitative_reports_summary,
                          "quantitative_reports_detail" = quantitative_reports_detail,
-                         "outbreak_reports_diseases_unmatched" = diseases_unmatched)
+                         "quantitative_reports_diseases_unmatched" = diseases_unmatched)
     
     return(wahis_joined)
     
