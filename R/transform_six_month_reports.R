@@ -73,22 +73,24 @@ assert_distinct <- function(df, x){
     assert_that(nrow(out) ==1)
 }
 
+# For summing counts 
+sum_na <- function(vec) ifelse(all(is.na(vec)), NA_integer_, sum(as.numeric(vec), na.rm = TRUE))
+
 
 #' Convert a list of scraped six month reports to a list of table
 #' @param six_month_reports a list of outbreak reports produced by [ingest_report]
 #' @import dplyr tidyr purrr stringr
-#' @importFrom glue glue_collapse
 #' @importFrom janitor clean_names
-#' @importFrom lubridate dmy myd ymd
 #' @importFrom textclean replace_non_ascii
 #' @importFrom countrycode countrycode
-#' @importFrom assertthat %has_name%
+#' @importFrom assertthat assert_that
 #' @export
 transform_six_month_reports <- function(six_month_reports) {
     
     message("Transforming six month reports")
     
     # Preprocessing ---------------------------------------------------
+    # remove errored reports
     
     six_month_reports2 <- discard(six_month_reports, function(x){
         !is.null(x$ingest_status) && str_detect(x$ingest_status, "ingestion error") |
@@ -103,17 +105,11 @@ transform_six_month_reports <- function(six_month_reports) {
     # annual_reports_animal_hosts <- DBI::dbReadTable(conn, "annual_reports_animal_hosts")
     # annual_reports_animal_hosts_detail <- DBI::dbReadTable(conn, "annual_reports_animal_hosts_detail")
     
-    
-    # For url lookup ----------------------------------------------------------
+    # For url lookup
     # https://wahis.oie.int/#/report-smr/view?reportId=20038&period=SEM01&areaId=2&isAquatic=false    
-    # x = six_month_reports2[[1]]
-    # x$reportId
-    # initializationDto <- map_dfc(x$initializationDto, as_tibble)
-    # initializationDto$period
-    # initializationDto$isAquatic
-    # initializationDto$areaId
     
-    transformed_reports <- imap(six_month_reports2[1:100], function(x, y){
+    # Extracting data from lists ---------------------------------------------------
+    transformed_reports <- imap(six_month_reports2, function(x, y){
         
         print(y)
         
@@ -165,8 +161,8 @@ transform_six_month_reports <- function(six_month_reports) {
                              select(-ends_with("List")) %>% 
                              flex_bind_cols(flex_pull(., "qtySummariesDto")) %>% 
                              flex_unselect("qtySummariesDto") %>% 
-                             rename_with( ~str_replace(., "isWild", "isWild0"), suppressWarnings(one_of("isWild"))) 
-
+                             rename_with(~str_replace(., "isWild", "isWild0"), suppressWarnings(one_of("isWild"))) 
+                         
                          # reportOccCmDto
                          dat <- dat %>% 
                              flex_bind_cols(flex_pull(., "reportOccCmDto")) %>% 
@@ -190,7 +186,7 @@ transform_six_month_reports <- function(six_month_reports) {
                          }
                          
                          # quant data select
-                        if(!"specieName" %in% colnames(dat)) dat$specieName <- dat$groupName
+                         if(!"specieName" %in% colnames(dat)) dat$specieName <- dat$groupName
                          quant <- dat %>% 
                              mutate(specieName = if_else(is.na(specieName), groupName, specieName)) %>% 
                              select(
@@ -217,14 +213,12 @@ transform_six_month_reports <- function(six_month_reports) {
                                  flex_one_of("slaughtered"), # slaughtered_detail
                                  flex_one_of("vaccinated"),
                                  flex_one_of("transDiseaseType")  # serotype
-                                 #  flex_one_of("quantatiesUnit") # measuring_units
-                                 # flex_one_of("measure") # control measures
-                                 #flex_one_of("vaccNb") # vaccination_in_response_to_the_outbreak_detail
                              ) %>% 
                              distinct()
                          
                          # control measures separately - disease and report specific
                          cm <- dat %>%
+                             mutate(specieName0 = if_else(is.na(specieName), groupName, specieName)) %>% 
                              select(
                                  country,
                                  report_id,# report
@@ -234,9 +228,12 @@ transform_six_month_reports <- function(six_month_reports) {
                                  areaID,
                                  oieReference,
                                  disease_status,
+                                 specieName0,
+                                 starts_with("isWild"), 
                                  flex_one_of("diseaseName"), # disease
                                  flex_one_of('cmSummariesList')) %>% 
                              distinct() %>% 
+                             rename(isWild1 = isWild) %>% 
                              flex_unnest('cmSummariesList') %>% 
                              flex_unnest("speciesCmList") %>% 
                              flex_unnest("cmList") %>% 
@@ -256,7 +253,6 @@ transform_six_month_reports <- function(six_month_reports) {
                      }) %>% 
             set_names(c("present", "absent", "unreported"))
         
-        ###TODO join quant and cm separately, over pres/abs/unr
         quant <- map_dfr(out, ~.$quant)
         cm <- map_dfr(out, ~.$control_measures)
         
@@ -265,28 +261,46 @@ transform_six_month_reports <- function(six_month_reports) {
     })
     
     transformed_reports <- compact(modify_depth(transformed_reports, 1, compact))
+    
+    # post-process reports ---------------------------------------
+    
     quantitative_reports <- map_dfr(transformed_reports, ~.$quant)
-    control_measures <- map_dfr(transformed_reports, ~.$control_measures)
     
-    disease_name_lookup <- tibble(country = unique(quantitative_reports$country)) %>% 
-        mutate(country_iso3c = countrycode::countrycode(sourcevar = country,origin = "country.name", destination = "iso3c"))
+    ## lookup table for country iso3c
+    country_iso_lookup <- tibble(country = unique(quantitative_reports$country)) %>%
+        mutate(country2 = case_when(
+            country == "Central African (Rep.)" ~ "Central African Republic",
+            country == "Dominican (Rep.)" ~ "Dominican Republic",
+            country == "Serbia and Montenegro" ~ "Serbia",
+            TRUE ~ country
+        )) %>% 
+        mutate(country_iso3c = countrycode::countrycode(sourcevar = country2,origin = "country.name", destination = "iso3c")) %>% 
+        select(-country2)
     
-    quantitative_reports <- quantitative_reports %>% 
-        janitor::clean_names() %>% 
+    ## general cleaning
+    quantitative_reports <- quantitative_reports %>%
+        janitor::clean_names() %>%
         mutate(is_wild = coalesce(is_wild0, is_wild)) %>% # when both is_wild0 and is_wild exist, is_wild0 is correct (and is_wild can be wrong)
-        mutate(disease_population = ifelse(is_wild, "wild", "domestic")) %>% 
-        select(-is_wild0, -is_wild, -animal_category) %>% 
-        left_join(disease_name_lookup,  by = "country") %>% 
-        mutate(sub_period_trans = ifelse(is.na(sub_period_trans), report_semester, sub_period_trans)) %>% 
+        mutate(disease_population = ifelse(is_wild, "wild", "domestic")) %>%
+        select(-is_wild0, -is_wild, -animal_category) %>%
+        left_join(country_iso_lookup,  by = "country") %>%
+        mutate(sub_period_trans = ifelse(is.na(sub_period_trans), report_semester, sub_period_trans)) %>%
         mutate(sub_period_trans = case_when(
             sub_period_trans == "SEM01" ~ "January-June",
             sub_period_trans == "SEM02" ~ "July-September",
-            TRUE ~ sub_period_trans)) %>% 
-        rename(disease = disease_name, disease_status_detail = code, 
+            TRUE ~ sub_period_trans)) %>%
+        rename(disease = disease_name, disease_status_detail = code,
                taxa = specie_name, cases = quantities_ncase, deaths = quantities_dead,
                serotype = trans_disease_type, adm = area_name, adm_type = template_name,
-               period = sub_period_trans)
+               period = sub_period_trans, killed_and_disposed = killed_and_displosed) %>% 
+        filter(!is_aquatic) # multiple report ids per semesters - requires attention
     
+    ## careful! disease_status_detail results in dupes 
+    quantitative_reports <- quantitative_reports %>% 
+        select(-disease_status_detail) %>% 
+        distinct()
+    
+    ## lookup table for disease names
     ando_disease_lookup <- readxl::read_xlsx(system.file("diseases", "disease_lookup.xlsx", package = "wahis")) %>%
         mutate(disease = textclean::replace_non_ascii(disease)) %>%
         rename(disease_class = class_desc) %>%
@@ -294,15 +308,16 @@ transform_six_month_reports <- function(six_month_reports) {
         select(-report, -no_match_found) %>%
         mutate_at(.vars = c("ando_id", "preferred_label", "disease_class"), ~na_if(., "NA"))
     
+    ## clean disease names
     quantitative_reports <- quantitative_reports %>%
-        mutate(disease = tolower(disease)) %>% 
+        mutate(disease = tolower(disease)) %>%
         mutate(disease = trimws(disease)) %>%
         mutate(disease = textclean::replace_non_ascii(disease)) %>%
         mutate(disease = ifelse(disease == "", causal_agent, disease)) %>%
-        mutate(disease = str_remove_all(disease, "\\s*\\([^\\)]+\\)")) %>% 
-        mutate(disease = str_remove(disease, "virus")) %>% 
+        mutate(disease = str_remove_all(disease, "\\s*\\([^\\)]+\\)")) %>%
+        mutate(disease = str_remove(disease, "virus")) %>%
         mutate(disease = trimws(disease)) %>%
-        mutate(disease = str_squish(disease)) %>% 
+        mutate(disease = str_squish(disease)) %>%
         left_join(ando_disease_lookup, by = "disease") %>%
         mutate(disease = coalesce(preferred_label, disease)) %>%
         select(-preferred_label) %>%
@@ -313,9 +328,68 @@ transform_six_month_reports <- function(six_month_reports) {
         distinct(disease) %>%
         mutate(table = "six_month_report")
     
-    #TODO post process: 
-    # general present vs detail
-    # control measures cleaning
+    ## aggregate over cleaned disease names (note dupes)
+    # quantitative_reports %>% 
+    #     get_dupes(country, report_semester, report_year, disease_status, disease, serotype, disease_population, taxa, period, adm) 
+    quantitative_reports <- quantitative_reports %>% 
+        group_by(country, country_iso3c, report_id, report_semester, report_year, is_aquatic, taxa, disease_population,
+                 area_id, oie_reference, disease_status, disease, serotype, ando_id, disease_class, 
+                 period, adm, adm_type) %>% 
+        summarize(susceptible = sum_na(susceptible),
+                  cases = sum_na(cases),
+                  deaths = sum_na(deaths),
+                  killed_and_disposed = sum_na(killed_and_disposed),
+                  slaughtered = sum_na(slaughtered),
+                  vaccinated = sum_na(vaccinated)) %>% 
+        ungroup()
+    
+    ## create detailed table that includes counts by month and/or adm (subnational)
+    quantitative_reports_detail <- quantitative_reports %>% 
+        filter(disease_status == "present")
+    
+    ## create summary table that gives status and counts by semester
+    quantitative_reports_summary <- quantitative_reports %>% 
+        mutate(disease_status_rank = recode(disease_status, "present" = 1, "absent" = 2, "unreported" = 3)) %>%
+        group_by(country, country_iso3c, report_id, report_semester, report_year, is_aquatic, taxa, disease_population,
+                 area_id, oie_reference, disease, serotype, ando_id, disease_class) %>% 
+        summarize(disease_status = min(disease_status_rank),
+                  susceptible = sum_na(susceptible),
+                  cases = sum_na(cases),
+                  deaths = sum_na(deaths),
+                  killed_and_disposed = sum_na(killed_and_disposed),
+                  slaughtered = sum_na(slaughtered),
+                  vaccinated = sum_na(vaccinated)) %>% 
+        ungroup() %>% 
+        mutate(disease_status = recode(disease_status, '1' = "present", '2' =  "absent", '3' = "unreported"))
+        
+    ## add control measures to summary table
+    control_measures <- map_dfr(transformed_reports, ~.$control_measures)
+    
+    control_measures <- control_measures %>%
+        clean_names() %>%
+        mutate(taxa = coalesce(specie_name,             # preference for species name associated with control measures
+                               specie_name0)) %>% # when species name is not associated with control measures, use higher level assignment
+        mutate(is_wild = coalesce(is_wild,            # preference for wild designation associated with control measures
+                                  coalesce(is_wild0, is_wild1) # this is the heuristic applied to quantitative data earlier (with is_wild now named is_wild1)
+        )) %>%
+        rename(disease = disease_name) %>%
+        mutate(disease_population = ifelse(is_wild, "wild", "domestic")) %>%
+        select(-specie_name, -specie_name0, -is_wild0, -is_wild1, -is_wild) %>%
+        distinct() %>%
+        group_by(country, report_id, report_semester, report_year, is_aquatic, area_id, oie_reference,
+                 disease_status, disease, disease_population, taxa) %>%
+        summarize(control_measure = paste(measure, collapse = "; "),
+                  control_measure_vaccines_administered =  str_flatten(vacc_nb)) %>%
+        ungroup()
+    
+    quantitative_reports_summary <- left_join(quantitative_reports_summary, control_measures, by = c("country", "report_id", "report_semester", "report_year", "is_aquatic", "area_id", "oie_reference", "disease_status", "disease", "taxa", "disease_population"))
+    
+    # Export -----------------------------------------------
+    wahis_joined <- list("quantitative_reports_summary" = quantitative_reports_summary,
+                         "quantitative_reports_detail" = quantitative_reports_detail,
+                         "outbreak_reports_diseases_unmatched" = diseases_unmatched)
+    
+    return(wahis_joined)
     
 }
 

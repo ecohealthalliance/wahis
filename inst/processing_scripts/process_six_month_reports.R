@@ -3,7 +3,7 @@ library(scrapetools)
 library(tictoc)
 
 # # get 6 month reports list -----------------------------------------------
-# report_list <- scrape_six_month_report_list() 
+# report_list <- scrape_six_month_report_list()
 # 
 # reports_to_get <- report_list %>% 
 #     select(report_id) %>% 
@@ -34,10 +34,11 @@ report_resps <- reduce(report_resps, c)
 
 # Transform files   ------------------------------------------------------
 # tables
+tic()
 six_month_report_tables <- split(report_resps, (1:length(report_resps)-1) %/% 1000) %>% # batching by 1000s (probably only necessary for initial run)
-    map(., transform_six_month_reports, report_list)
+    map(., transform_six_month_reports)
+six_month_report_tables <- reduce(six_month_report_tables, c)
 
-# outbreak_report_tables <- transpose(outbreak_report_tables) %>%
-#     map(function(x) reduce(x, bind_rows))
-
+readr::write_rds(six_month_report_tables, here::here("data-processed", "transformed_six_month.rds"), compress = "xz", compression = 9L)
+toc()
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/ingest_reports.R
 \name{ingest_report}
 \alias{ingest_report}
-\title{Extract Info from WAHIS Weekly Disease Information API}
+\title{Extract Info from WAHIS API}
 \usage{
 ingest_report(resp)
 }
@@ -10,5 +10,5 @@ ingest_report(resp)
 \item{resp}{curl API response}
 }
 \description{
-Extract Info from WAHIS Weekly Disease Information API
+Extract Info from WAHIS API
 }
