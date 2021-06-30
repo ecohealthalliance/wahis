@@ -410,9 +410,9 @@ transform_six_month_reports <- function(six_month_reports) {
                                                                                                      "disease", "taxa", "disease_population"))
     
     # Export -----------------------------------------------
-    wahis_joined <- list("quantitative_reports_summary" = quantitative_reports_summary,
-                         "quantitative_reports_detail" = quantitative_reports_detail,
-                         "quantitative_reports_diseases_unmatched" = diseases_unmatched)
+    wahis_joined <- list("six_month_reports_summary" = quantitative_reports_summary,
+                         "six_month_reports_detail" = quantitative_reports_detail,
+                         "six_month_reports_diseases_unmatched" = diseases_unmatched)
     
     return(wahis_joined)
     
