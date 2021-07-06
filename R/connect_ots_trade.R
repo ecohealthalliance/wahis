@@ -15,7 +15,10 @@ download_trade <- function(directory){
   
   max_year <- fromJSON("https://api.tradestatistics.io/year_range")[2,]
   
-  ots <- ots_create_tidy_data(years = c(2000:max_year), table = "yrpc",  products = product_ids) 
+  ots <- ots_create_tidy_data(years = c(2000:max_year), 
+                              table = "yrpc",  
+                              products = product_ids, 
+                              reporters = "all") 
   
   write_rds(ots, here(directory, "ots-trade.rds"))
 }

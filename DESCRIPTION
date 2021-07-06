@@ -60,4 +60,4 @@ Suggests:
     fs
 Remotes:
   noamross/scrapetools,
-  ropensci/tradestatistics
+  emmamendelsohn/tradestatistics
