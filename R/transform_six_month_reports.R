@@ -282,7 +282,9 @@ transform_six_month_reports <- function(six_month_reports) {
         janitor::clean_names() %>%
         mutate(is_wild = coalesce(is_wild0, is_wild)) %>% # when both is_wild0 and is_wild exist, is_wild0 is correct (and is_wild can be wrong)
         mutate(disease_population = ifelse(is_wild, "wild", "domestic")) %>%
-        select(-is_wild0, -is_wild, -animal_category) %>%
+        flex_unselect("is_wild0") %>%
+        flex_unselect("is_wild") %>% 
+        flex_unselect("animal_category") %>% 
         left_join(country_iso_lookup,  by = "country") %>%
         mutate(sub_period_trans = ifelse(is.na(sub_period_trans), report_semester, sub_period_trans)) %>%
         mutate(sub_period_trans = case_when(
