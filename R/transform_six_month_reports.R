@@ -409,7 +409,7 @@ transform_six_month_reports <- function(six_month_reports) {
     
     quantitative_reports_summary <- left_join(quantitative_reports_summary, control_measures, by = c("country", "report_id", "report_semester", "report_year", 
                                                                                                      "is_aquatic", "area_id", "oie_reference", "disease_status", 
-                                                                                                     "disease", "taxa", "disease_population"))
+                                                                                                     "disease", "taxa", "disease_population", "ando_id", "disease_class"))
     
     # Export -----------------------------------------------
     wahis_joined <- list("six_month_reports_summary" = quantitative_reports_summary,
