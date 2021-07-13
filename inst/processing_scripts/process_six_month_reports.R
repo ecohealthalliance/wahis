@@ -9,6 +9,10 @@ reports_to_get <- report_list %>%
     select(report_id) %>%
     mutate(url = paste0("https://wahis.oie.int/smr/pi/report/", report_id, "?format=preview"))
 
+# example report view - Afghanistan 
+# https://wahis.oie.int/#/report-smr/view?reportId=20038&period=SEM01&areaId=2&isAquatic=false  # formatted
+# https://wahis.oie.int/smr/pi/report/20038?format=preview # api
+
 # Pulling reports ----------------------------
 message("Pulling ", nrow(reports_to_get), " reports")
 
