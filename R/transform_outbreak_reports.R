@@ -1,5 +1,5 @@
 #' Convert a list of scraped ourbreak reports to a list of table
-#' @param outbreak_reports a list of outbreak reports produced by [ingest_outbreak_report]
+#' @param outbreak_reports a list of outbreak reports produced by [ingest_report]
 #' @param report_list produced by scrape_outbreak_report_list()
 #' @import dplyr tidyr purrr stringr
 #' @importFrom glue glue_collapse
