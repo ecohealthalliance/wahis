@@ -28,6 +28,8 @@ Imports:
     scrapetools,
     janitor,
     lubridate,
+    furrr,
+    future,
     vroom,
     readxl,
     readr,
@@ -55,8 +57,6 @@ Suggests:
     devtools,
     covr,
     DT,
-    future,
-    furrr,
     fs
 Remotes:
   noamross/scrapetools,
