@@ -98,13 +98,6 @@ transform_six_month_reports <- function(six_month_reports) {
     })
     if(!length(six_month_reports2)) return(NULL)
     
-    # conn <- repeldata::repel_local_conn()
-    # annual_reports_animal_diseases <- DBI::dbReadTable(conn, "annual_reports_animal_diseases")
-    # annual_reports_animal_diseases_detail <- DBI::dbReadTable(conn, "annual_reports_animal_diseases_detail")
-    # 
-    # annual_reports_animal_hosts <- DBI::dbReadTable(conn, "annual_reports_animal_hosts")
-    # annual_reports_animal_hosts_detail <- DBI::dbReadTable(conn, "annual_reports_animal_hosts_detail")
-    
     # For url lookup
     # https://wahis.oie.int/#/report-smr/view?reportId=20038&period=SEM01&areaId=2&isAquatic=false    
     
@@ -266,6 +259,12 @@ transform_six_month_reports <- function(six_month_reports) {
     
     quantitative_reports <- map_dfr(transformed_reports, ~.$quant)
     
+    ## early return if all reports are aquatic
+    if(all(quantitative_reports$isAquatic)){
+        message("All reports are aquatic. Returning NULL")
+        return(NULL)
+    }
+    
     ## lookup table for country iso3c
     country_iso_lookup <- tibble(country = unique(quantitative_reports$country)) %>%
         mutate(country2 = case_when(
@@ -296,8 +295,10 @@ transform_six_month_reports <- function(six_month_reports) {
                serotype = trans_disease_type, adm = area_name, adm_type = template_name,
                period = sub_period_trans, killed_and_disposed = killed_and_displosed) %>% 
         mutate_if(is.character, tolower) %>% 
+        mutate(country_iso3c = toupper(country_iso3c)) %>% 
         mutate(report_semester = as.integer(str_remove(report_semester, "sem"))) %>%
-        filter(!is_aquatic) # multiple report ids per semesters - requires attention
+        filter(!is_aquatic) %>% # multiple report ids per semesters - requires attention
+        drop_na(country_iso3c) # applies to guadaloupe, cueta, melilla
     
     ## careful! disease_status_detail results in dupes 
     quantitative_reports <- quantitative_reports %>% 
