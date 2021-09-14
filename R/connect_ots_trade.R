@@ -34,10 +34,12 @@ transform_trade <- function(directory){
   
   # assign country destination and origin
   ots_export <- ots %>%
-    select(year, product_code, country_origin = reporter_iso, country_destination = partner_iso, value = export_value_usd)
+    select(year, product_code, country_origin = reporter_iso, country_destination = partner_iso, value = export_value_usd) %>% 
+    as_tibble()
   
   ots_import <- ots %>%
-    select(year, product_code, country_origin = partner_iso, country_destination = reporter_iso, value = import_value_usd)
+    select(year, product_code, country_origin = partner_iso, country_destination = reporter_iso, value = import_value_usd)%>% 
+    as_tibble()
   
   # for trades reported more than once, assume max value
   ots_bilateral_long <- bind_rows(ots_export, ots_import) %>%
