@@ -36,7 +36,8 @@ transform_taxa_population <- function(directory){
                         Unit = col_character(),
                         Value = col_double(),
                         Flag = col_skip()
-                    )) %>%
+                    ), 
+                 locale = locale(encoding = "Latin1")) %>%
         janitor::clean_names()
                  
     fao_heads <- fao %>%
