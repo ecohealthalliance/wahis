@@ -410,15 +410,17 @@ transform_six_month_reports <- function(six_month_reports) {
         mutate(control_measures = map_chr(control_measures, ~str_c(sort(.), collapse = "; "))) %>% 
         mutate(control_measures = na_if(control_measures, "NA"))
     
-    ## generate "multiple species" lookup
+    ## handling "multiple species"
+    # lookup taxa from control measures
     mult_species_lookup <- control_measures %>%
         select(c("country", "report_id", "report_semester", "report_year",
                  "taxa",
                  "is_aquatic", "area_id", "oie_reference", "disease_status", "disease",
                  "disease_population", "ando_id", "disease_class")) %>%
-        filter(taxa != "multiple species") %>% 
+        filter(taxa != "multiple species") %>%
         distinct()
-
+     
+    # for absent/unreported multiple species, join with mult_species_lookup to get taxa 
     qrs_mult_spec <- quantitative_reports_summary %>%
         filter(taxa == "multiple species" & disease_status != "present") %>%
         left_join(mult_species_lookup,  by = c("country", "report_id", "report_semester", "report_year",
@@ -428,10 +430,11 @@ transform_six_month_reports <- function(six_month_reports) {
         mutate(taxa = ifelse(is.na(taxa.y), taxa.x, taxa.y)) %>%
         select(-taxa.x, -taxa.y)
 
+    # replace absent/unreported multiple species with relevant taxa
     quantitative_reports_summary <- quantitative_reports_summary %>%
         filter(!(taxa == "multiple species" & disease_status != "present")) %>%
-        bind_rows(qrs_mult_spec) %>% 
-        distinct()
+        bind_rows(qrs_mult_spec) %>%
+        distinct() # take distinct because some diseases were listed as both multiple species and a specific taxa, resulting in dupes when the multiple species is matched
     
     quantitative_reports_summary <- left_join(quantitative_reports_summary, 
                                                control_measures, by = c("country", "report_id", "report_semester", "report_year", 
@@ -439,7 +442,7 @@ transform_six_month_reports <- function(six_month_reports) {
                                                                         "taxa", 
                                                                         "disease_population", "ando_id", "disease_class")) 
     
-    quantitative_reports_summary %>% get_dupes(c("country", "report_id", "report_semester", "report_year",
+    dup_check <- quantitative_reports_summary3 %>% get_dupes(c("country", "report_id", "report_semester", "report_year",
                                                   "is_aquatic", "area_id", "oie_reference", "disease_status", "disease",
                                                   "taxa",
                                                   "disease_population", "ando_id", "disease_class"))
