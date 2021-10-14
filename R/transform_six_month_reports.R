@@ -411,25 +411,25 @@ transform_six_month_reports <- function(six_month_reports) {
         mutate(control_measures = na_if(control_measures, "NA"))
     
     ## generate "multiple species" lookup
-    # mult_species_lookup <- control_measures %>% 
-    #     select(c("country", "report_id", "report_semester", "report_year", 
-    #              "taxa",
-    #              "is_aquatic", "area_id", "oie_reference", "disease_status", "disease",
-    #              "disease_population", "ando_id", "disease_class")) %>% 
-    #     distinct()
-    # 
-    # qrs_mult_spec <- quantitative_reports_summary %>% 
-    #     filter(taxa == "multiple species") %>% 
-    #     left_join(mult_species_lookup,  by = c("country", "report_id", "report_semester", "report_year", 
-    #                                            # "taxa",
-    #                                            "is_aquatic", "area_id", "oie_reference", "disease_status", "disease",
-    #                                            "disease_population", "ando_id", "disease_class")) %>% 
-    #     mutate(taxa = ifelse(is.na(taxa.y), taxa.x, taxa.y)) %>% 
-    #     select(-taxa.x, -taxa.y)
-    # 
-    # quantitative_reports_summary <- quantitative_reports_summary %>% 
-    #     filter(taxa != "multiple species") %>% 
-    #     bind_rows(qrs_mult_spec)
+    mult_species_lookup <- control_measures %>%
+        select(c("country", "report_id", "report_semester", "report_year",
+                 "taxa",
+                 "is_aquatic", "area_id", "oie_reference", "disease_status", "disease",
+                 "disease_population", "ando_id", "disease_class")) %>%
+        distinct()
+
+    qrs_mult_spec <- quantitative_reports_summary %>%
+        filter(taxa == "multiple species" & disease_status != "present") %>%
+        left_join(mult_species_lookup,  by = c("country", "report_id", "report_semester", "report_year",
+                                               # "taxa",
+                                               "is_aquatic", "area_id", "oie_reference", "disease_status", "disease",
+                                               "disease_population", "ando_id", "disease_class")) %>%
+        mutate(taxa = ifelse(is.na(taxa.y), taxa.x, taxa.y)) %>%
+        select(-taxa.x, -taxa.y)
+
+    quantitative_reports_summary <- quantitative_reports_summary %>%
+        filter(!(taxa == "multiple species" & disease_status != "present")) %>%
+        bind_rows(qrs_mult_spec)
     
     quantitative_reports_summary <- left_join(quantitative_reports_summary, 
                                                control_measures, by = c("country", "report_id", "report_semester", "report_year", 
@@ -437,7 +437,7 @@ transform_six_month_reports <- function(six_month_reports) {
                                                                         "taxa", 
                                                                         "disease_population", "ando_id", "disease_class")) 
     
-    quantitative_reports_summary2%>% get_dupes(c("country", "report_id", "report_semester", "report_year", 
+    quantitative_reports_summary %>% get_dupes(c("country", "report_id", "report_semester", "report_year",
                                                   "is_aquatic", "area_id", "oie_reference", "disease_status", "disease",
                                                   "taxa",
                                                   "disease_population", "ando_id", "disease_class"))
