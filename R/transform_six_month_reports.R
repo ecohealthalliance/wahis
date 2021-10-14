@@ -427,12 +427,7 @@ transform_six_month_reports <- function(six_month_reports) {
                                                                        "is_aquatic", "area_id", "oie_reference", "disease_status", "disease",
                                                                        "taxa", 
                                                                        "disease_population", "ando_id", "disease_class")) 
-    
-    # control measure data doesn't include serotype - fill in NAs for presumed present taxa
-    quantitative_reports_summary <-  quantitative_reports_summary %>% 
-        group_by(report_id, disease_status, disease, disease_population) %>% 
-        fill(serotype) %>% 
-        ungroup()
+
     
     ## lookup table for country iso3c
     country_iso_lookup <- tibble(country = unique(quantitative_reports_summary$country)) %>%
@@ -442,17 +437,16 @@ transform_six_month_reports <- function(six_month_reports) {
             country == "Serbia and Montenegro" ~ "Serbia",
             TRUE ~ country
         )) %>% 
-        mutate(country_iso3c = countrycode::countrycode(sourcevar = country2,origin = "country.name", destination = "iso3c")) %>% 
+        mutate(country_iso3c = suppressWarnings(countrycode::countrycode(sourcevar = country2,origin = "country.name", destination = "iso3c"))) %>% 
         select(-country2) %>% 
         mutate(country = tolower(country))
     
     quantitative_reports_summary <- left_join(quantitative_reports_summary, country_iso_lookup)
     
     dup_check <- quantitative_reports_summary %>% get_dupes(c("country", "report_id", "report_semester", "report_year",
-                                                              "is_aquatic", "area_id", "oie_reference", "disease_status", "disease",
+                                                              "is_aquatic", "area_id", "oie_reference", "disease_status", "disease", "serotype",
                                                               "taxa",
                                                               "disease_population", "ando_id", "disease_class"))
-    
     
     # Export -----------------------------------------------
     wahis_joined <- list("six_month_reports_summary" = quantitative_reports_summary,
