@@ -416,6 +416,7 @@ transform_six_month_reports <- function(six_month_reports) {
                  "taxa",
                  "is_aquatic", "area_id", "oie_reference", "disease_status", "disease",
                  "disease_population", "ando_id", "disease_class")) %>%
+        filter(taxa != "multiple species") %>% 
         distinct()
 
     qrs_mult_spec <- quantitative_reports_summary %>%
@@ -429,7 +430,8 @@ transform_six_month_reports <- function(six_month_reports) {
 
     quantitative_reports_summary <- quantitative_reports_summary %>%
         filter(!(taxa == "multiple species" & disease_status != "present")) %>%
-        bind_rows(qrs_mult_spec)
+        bind_rows(qrs_mult_spec) %>% 
+        distinct()
     
     quantitative_reports_summary <- left_join(quantitative_reports_summary, 
                                                control_measures, by = c("country", "report_id", "report_semester", "report_year", 
