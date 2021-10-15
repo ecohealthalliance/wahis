@@ -257,24 +257,13 @@ transform_six_month_reports <- function(six_month_reports) {
     
     # post-process reports ---------------------------------------
     
-    quantitative_reports <- map_dfr(transformed_reports, ~.$quant)
+    quantitative_reports <- map_dfr(transformed_reports, ~.$quant) 
     
     ## early return if all reports are aquatic
     if(all(quantitative_reports$isAquatic)){
         message("All reports are aquatic. Returning NULL")
         return(NULL)
     }
-    
-    ## lookup table for country iso3c
-    country_iso_lookup <- tibble(country = unique(quantitative_reports$country)) %>%
-        mutate(country2 = case_when(
-            country == "Central African (Rep.)" ~ "Central African Republic",
-            country == "Dominican (Rep.)" ~ "Dominican Republic",
-            country == "Serbia and Montenegro" ~ "Serbia",
-            TRUE ~ country
-        )) %>% 
-        mutate(country_iso3c = countrycode::countrycode(sourcevar = country2,origin = "country.name", destination = "iso3c")) %>% 
-        select(-country2)
     
     ## general cleaning
     quantitative_reports <- quantitative_reports %>%
@@ -284,7 +273,6 @@ transform_six_month_reports <- function(six_month_reports) {
         flex_unselect("is_wild0") %>%
         flex_unselect("is_wild") %>% 
         flex_unselect("animal_category") %>% 
-        left_join(country_iso_lookup,  by = "country") %>%
         mutate(sub_period_trans = ifelse(is.na(sub_period_trans), report_semester, sub_period_trans)) %>%
         mutate(sub_period_trans = case_when(
             sub_period_trans == "SEM01" ~ "January-June",
@@ -295,18 +283,16 @@ transform_six_month_reports <- function(six_month_reports) {
                serotype = trans_disease_type, adm = area_name, adm_type = template_name,
                period = sub_period_trans, killed_and_disposed = killed_and_displosed) %>% 
         mutate_if(is.character, tolower) %>% 
-        mutate(country_iso3c = toupper(country_iso3c)) %>% 
         mutate(report_semester = as.integer(str_remove(report_semester, "sem"))) %>%
-        filter(!is_aquatic) %>% # multiple report ids per semesters - requires attention
-        drop_na(country_iso3c) # applies to guadaloupe, cueta, melilla
-    
+        filter(!is_aquatic) # multiple report ids per semesters - requires attention
+
     ## careful! disease_status_detail results in dupes 
     quantitative_reports <- quantitative_reports %>% 
         select(-disease_status_detail) %>% 
         distinct()
     
     ## now process control measures
-    control_measures <- map_dfr(transformed_reports, ~.$control_measures)
+    control_measures <- map_dfr(transformed_reports, ~.$control_measures)  
     
     control_measures <- control_measures %>%
         clean_names() %>%
@@ -365,7 +351,7 @@ transform_six_month_reports <- function(six_month_reports) {
     # quantitative_reports %>% 
     #     get_dupes(country, report_semester, report_year, disease_status, disease, serotype, disease_population, taxa, period, adm) 
     quantitative_reports <- quantitative_reports %>% 
-        group_by(country, country_iso3c, report_id, report_semester, report_year, is_aquatic, taxa, disease_population,
+        group_by(country, report_id, report_semester, report_year, is_aquatic, taxa, disease_population,
                  area_id, oie_reference, disease_status, disease, serotype, ando_id, disease_class, 
                  period, adm, adm_type) %>% 
         summarize(susceptible = sum_na(susceptible),
@@ -376,6 +362,7 @@ transform_six_month_reports <- function(six_month_reports) {
                   vaccinated = sum_na(vaccinated)) %>% 
         ungroup()
     
+    
     ## create detailed table that includes counts by month and/or adm (subnational)
     quantitative_reports_detail <- quantitative_reports %>% 
         filter(disease_status == "present")
@@ -383,7 +370,7 @@ transform_six_month_reports <- function(six_month_reports) {
     ## create summary table that gives status and counts by semester
     quantitative_reports_summary <- quantitative_reports %>% 
         mutate(disease_status_rank = recode(disease_status, "present" = 1, "absent" = 2, "unreported" = 3)) %>%
-        group_by(country, country_iso3c, report_id, report_semester, report_year, is_aquatic, taxa, disease_population,
+        group_by(country, report_id, report_semester, report_year, is_aquatic, taxa, disease_population,
                  area_id, oie_reference, disease, serotype, ando_id, disease_class) %>% 
         summarize(disease_status = min(disease_status_rank),
                   susceptible = sum_na(susceptible),
@@ -402,15 +389,65 @@ transform_six_month_reports <- function(six_month_reports) {
     control_measures <- control_measures %>% 
         group_by(country, report_id, report_semester, report_year, is_aquatic, taxa, disease_population,
                  area_id, oie_reference, disease_status, disease, ando_id, disease_class) %>% 
-        summarize(control_measures = unique(str_split(control_measures, pattern = "; ")),
-                  control_measures_vaccines_administered = sum(suppressWarnings(as.numeric(control_measures_vaccines_administered)))) %>% 
+        summarize(control_measures_vaccines_administered = as.integer(sum_na(suppressWarnings(as.integer(control_measures_vaccines_administered)))),
+                  control_measures = str_flatten(control_measures, collapse = "; ")
+        ) %>%
         ungroup() %>% 
         mutate(control_measures = map_chr(control_measures, ~str_c(sort(.), collapse = "; "))) %>% 
         mutate(control_measures = na_if(control_measures, "NA"))
     
-    quantitative_reports_summary <- left_join(quantitative_reports_summary, control_measures, by = c("country", "report_id", "report_semester", "report_year", 
-                                                                                                     "is_aquatic", "area_id", "oie_reference", "disease_status", 
-                                                                                                     "disease", "taxa", "disease_population", "ando_id", "disease_class"))
+    ## handling "multiple species" in unreported or absent
+    # lookup taxa from control measures
+    mult_species_lookup <- control_measures %>%
+        select(c("country", "report_id", "report_semester", "report_year",
+                 "taxa",
+                 "is_aquatic", "area_id", "oie_reference", "disease_status", "disease",
+                 "disease_population", "ando_id", "disease_class")) %>%
+        filter(taxa != "multiple species") %>%
+        distinct()
+    
+    # for absent/unreported multiple species, join with mult_species_lookup to get taxa 
+    qrs_mult_spec <- quantitative_reports_summary %>%
+        filter(taxa == "multiple species" & disease_status != "present") %>%
+        left_join(mult_species_lookup,  by = c("country", "report_id", "report_semester", "report_year",
+                                               # "taxa",
+                                               "is_aquatic", "area_id", "oie_reference", "disease_status", "disease",
+                                               "disease_population", "ando_id", "disease_class")) %>%
+        mutate(taxa = ifelse(is.na(taxa.y), taxa.x, taxa.y)) %>%
+        select(-taxa.x, -taxa.y)
+    
+    # replace absent/unreported multiple species with relevant taxa
+    quantitative_reports_summary <- quantitative_reports_summary %>%
+        filter(!(taxa == "multiple species" & disease_status != "present")) %>%
+        bind_rows(qrs_mult_spec) %>%
+        distinct() # take distinct because some diseases were listed as both multiple species and a specific taxa, resulting in dupes when the multiple species is matched
+
+    quantitative_reports_summary <- full_join(quantitative_reports_summary, 
+                                              control_measures, by = c("country", "report_id", "report_semester", "report_year", 
+                                                                       "is_aquatic", "area_id", "oie_reference", "disease_status", "disease",
+                                                                       "taxa", 
+                                                                       "disease_population", "ando_id", "disease_class")) 
+    
+    ## lookup table for country iso3c
+    country_iso_lookup <- tibble(country = unique(quantitative_reports_summary$country)) %>%
+        mutate(country2 = case_when(
+            country == "Central African (Rep.)" ~ "Central African Republic",
+            country == "Dominican (Rep.)" ~ "Dominican Republic",
+            country == "Serbia and Montenegro" ~ "Serbia",
+            TRUE ~ country
+        )) %>% 
+        mutate(country_iso3c = suppressWarnings(countrycode::countrycode(sourcevar = country2,origin = "country.name", destination = "iso3c"))) %>% 
+        select(-country2) %>% 
+        mutate(country = tolower(country))
+    
+    quantitative_reports_summary <- left_join(quantitative_reports_summary, country_iso_lookup) %>% 
+        drop_na(country_iso3c)
+    
+    # should be 0 rows
+    dup_check <- quantitative_reports_summary %>% get_dupes(c("country", "report_id", "report_semester", "report_year",
+                                                              "is_aquatic", "area_id", "oie_reference", "disease_status", "disease", "serotype",
+                                                              "taxa",
+                                                              "disease_population", "ando_id", "disease_class"))
     
     # Export -----------------------------------------------
     wahis_joined <- list("six_month_reports_summary" = quantitative_reports_summary,
