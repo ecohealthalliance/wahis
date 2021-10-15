@@ -427,7 +427,6 @@ transform_six_month_reports <- function(six_month_reports) {
                                                                        "is_aquatic", "area_id", "oie_reference", "disease_status", "disease",
                                                                        "taxa", 
                                                                        "disease_population", "ando_id", "disease_class")) 
-
     
     ## lookup table for country iso3c
     country_iso_lookup <- tibble(country = unique(quantitative_reports_summary$country)) %>%
@@ -441,8 +440,10 @@ transform_six_month_reports <- function(six_month_reports) {
         select(-country2) %>% 
         mutate(country = tolower(country))
     
-    quantitative_reports_summary <- left_join(quantitative_reports_summary, country_iso_lookup)
+    quantitative_reports_summary <- left_join(quantitative_reports_summary, country_iso_lookup) %>% 
+        drop_na(country_iso3c)
     
+    # should be 0 rows
     dup_check <- quantitative_reports_summary %>% get_dupes(c("country", "report_id", "report_semester", "report_year",
                                                               "is_aquatic", "area_id", "oie_reference", "disease_status", "disease", "serotype",
                                                               "taxa",
