@@ -7,7 +7,7 @@
 download_livestock(directory)
 }
 \arguments{
-\item{directory}{where livestock data is saved}
+\item{directory}{to save downloaded FAO data}
 }
 \description{
 Download fao livestock data

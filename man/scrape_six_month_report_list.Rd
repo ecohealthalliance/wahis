@@ -2,7 +2,7 @@
 % Please edit documentation in R/scrape_report_lists.R
 \name{scrape_six_month_report_list}
 \alias{scrape_six_month_report_list}
-\title{Get master list of outbreak reports}
+\title{Get master list of six month reports}
 \usage{
 scrape_six_month_report_list()
 }
@@ -10,5 +10,5 @@ scrape_six_month_report_list()
 A tibble of reports
 }
 \description{
-Get master list of outbreak reports
+Get master list of six month reports
 }

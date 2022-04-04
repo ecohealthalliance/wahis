@@ -1,5 +1,6 @@
 #' Download fao livestock data
-#' @param directory where livestock data is saved
+#' 
+#' @param directory to save downloaded FAO data
 #' @import here
 #' @export
 download_livestock <- function(directory){

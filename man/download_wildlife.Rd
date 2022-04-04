@@ -9,7 +9,7 @@ download_wildlife(token, directory)
 \arguments{
 \item{token}{IUCN redlist API token}
 
-\item{directory}{where migration data is saved}
+\item{directory}{to save downloaded wildlife migration data}
 }
 \description{
 Download iucn data

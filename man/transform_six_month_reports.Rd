@@ -2,13 +2,16 @@
 % Please edit documentation in R/transform_six_month_reports.R
 \name{transform_six_month_reports}
 \alias{transform_six_month_reports}
-\title{Convert a list of scraped six month reports to a list of table}
+\title{Convert a list of scraped six month reports into formatted data}
 \usage{
 transform_six_month_reports(six_month_reports)
 }
 \arguments{
-\item{six_month_reports}{a list of outbreak reports produced by [ingest_report]}
+\item{six_month_reports}{a list of outbreak reports produced by ingest_report()}
+}
+\value{
+A list of three tibbles
 }
 \description{
-Convert a list of scraped six month reports to a list of table
+Yields three tibbles (saved in a single list object): six_month_reports_summary (high level six month data), six_month_reports_detail (rovides case data at finer temportal and/or spatial resolutions), six_month_reports_diseases_unmatched (diseases from the six month reports that did not match the ANDO ontology. These diseases are not removed from the database.)
 }

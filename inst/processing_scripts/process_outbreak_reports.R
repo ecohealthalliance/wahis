@@ -1,3 +1,6 @@
+#!/usr/bin/env Rscript
+
+# This script is for testing. Processing for database is done in repel-infrastructure. 
 devtools::load_all()
 library(scrapetools)
 

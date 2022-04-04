@@ -1,5 +1,6 @@
 #' Download fao taxa population data
-#' @param directory where taxa population is saved
+#' 
+#' @param directory to save downloaded taxa population data
 #' @import here
 #' @export
 download_taxa_population <- function(directory){

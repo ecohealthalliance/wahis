@@ -1,5 +1,6 @@
-#' Scrape birdlife data for migratory bird species by country
-#' @param directory where bird migration data is saved
+#' Download birdlife data for migratory bird species by country
+#' 
+#' @param directory to save downloaded bird migration data 
 #' @import purrr stringr 
 #' @importFrom httr GET write_disk
 #' @import here
@@ -15,7 +16,8 @@ download_bird_migration <- function(directory){
 }
 
 
-#' Transform birdlife data to return counts of overlapping migratory species between pairwise countries
+#' Transform birdlife data to counts of overlapping migratory species between pairwise countries
+#' 
 #' @param directory where bird migration data is saved
 #' @import dplyr tidyr purrr xml2 stringr here
 #' @importFrom rvest html_nodes

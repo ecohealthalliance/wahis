@@ -1,6 +1,6 @@
 
 #' Download UN migrant data
-#' @param directory where migration data is saved
+#' @param directory to save downloaded migration data
 #' @import here
 #' @export
 download_human_migration <- function(directory){

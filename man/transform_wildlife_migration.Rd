@@ -7,7 +7,7 @@
 transform_wildlife_migration(directory)
 }
 \arguments{
-\item{directory}{where migration data is saved}
+\item{directory}{where wildlife migration data is saved}
 }
 \description{
 Transform iucn data to return counts of overlapping species between pairwise countries

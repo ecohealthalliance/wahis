@@ -7,7 +7,8 @@ report_list <- scrape_six_month_report_list()
 
 reports_to_get <- report_list %>%
     select(report_id) %>%
-    mutate(url = paste0("https://wahis.oie.int/smr/pi/report/", report_id, "?format=preview"))
+    mutate(url = paste0("https://wahis.oie.int/smr/pi/report/", report_id, "?format=preview")) %>% 
+    slice(sample(nrow(.), 500, replace = F))
 
 # example report view - Afghanistan 
 # https://wahis.oie.int/#/report-smr/view?reportId=20038&period=SEM01&areaId=2&isAquatic=false  # formatted
@@ -34,7 +35,7 @@ toc()
 # Save ingested files   ------------------------------------------------------
 # dir_create(here::here("data-processed"))
 # readr::write_rds(report_resps, here::here("data-processed", "report_resps_six_month.rds"), compress = "xz", compression = 9L)
-report_resps <- read_rds(here::here("data-processed", "report_resps_six_month.rds"))
+# report_resps <- read_rds(here::here("data-processed", "report_resps_six_month.rds"))
 report_resps <- reduce(report_resps, c)
 
 # Transform files   ------------------------------------------------------

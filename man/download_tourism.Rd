@@ -11,7 +11,7 @@ download_tourism(username, password, directory)
 
 \item{password}{UNWTO password}
 
-\item{directory}{where tourism is saved}
+\item{directory}{to save tourism data}
 }
 \description{
 Download wto tourism data

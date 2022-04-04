@@ -2,13 +2,13 @@
 % Please edit documentation in R/connect_bird_migration.R
 \name{download_bird_migration}
 \alias{download_bird_migration}
-\title{Scrape birdlife data for migratory bird species by country}
+\title{Download birdlife data for migratory bird species by country}
 \usage{
 download_bird_migration(directory)
 }
 \arguments{
-\item{directory}{where bird migration data is saved}
+\item{directory}{to save downloaded bird migration data}
 }
 \description{
-Scrape birdlife data for migratory bird species by country
+Download birdlife data for migratory bird species by country
 }

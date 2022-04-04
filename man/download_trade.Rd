@@ -7,7 +7,7 @@
 download_trade(directory)
 }
 \arguments{
-\item{directory}{where ots-trade.rds is saved}
+\item{directory}{to save downloaded OTS data}
 }
 \description{
 Download ots data

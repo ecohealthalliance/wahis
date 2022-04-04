@@ -43,6 +43,15 @@ flex_unnest <- function(df, x){
     }
 }
 
+# flex_unnest <- function(df, x){
+#     if(x %in% colnames(df)){
+#         df <- df %>% 
+#             mutate(!!x := map(!!x, as_tibble)) %>% 
+#             unnest(cols = one_of(x), names_repair = "universal", keep_empty = TRUE)
+#     }
+#     return(df)
+# }
+
 #' Support function for flexible one_of selection (does not throw warning when field does not exist)
 #' @param df A data frame, data frame extension (e.g. a tibble), or a lazy data frame (e.g. from dbplyr or dtplyr). 
 #' @param x One or more unquoted expressions separated by commas. Variable names can be used as if they were positions in the data frame, so expressions like x:y can be used to select a range of variables.
@@ -77,13 +86,16 @@ assert_distinct <- function(df, x){
 sum_na <- function(vec) ifelse(all(is.na(vec)), NA_integer_, sum(as.numeric(vec), na.rm = TRUE))
 
 
-#' Convert a list of scraped six month reports to a list of table
-#' @param six_month_reports a list of outbreak reports produced by [ingest_report]
+#' Convert a list of scraped six month reports into formatted data
+#' 
+#' Yields three tibbles (saved in a single list object): six_month_reports_summary (high level six month data), six_month_reports_detail (rovides case data at finer temportal and/or spatial resolutions), six_month_reports_diseases_unmatched (diseases from the six month reports that did not match the ANDO ontology. These diseases are not removed from the database.) 
+#' @param six_month_reports a list of outbreak reports produced by ingest_report()
 #' @import dplyr tidyr purrr stringr
 #' @importFrom janitor clean_names
 #' @importFrom textclean replace_non_ascii
 #' @importFrom countrycode countrycode
 #' @importFrom assertthat assert_that
+#' @return A list of three tibbles
 #' @export
 transform_six_month_reports <- function(six_month_reports) {
     

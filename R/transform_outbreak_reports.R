@@ -1,5 +1,7 @@
-#' Convert a list of scraped ourbreak reports to a list of table
-#' @param outbreak_reports a list of outbreak reports produced by [ingest_report]
+#' Convert a list of scraped outbreak reports into formatted data
+#' 
+#' Yields three tibbles (saved in a single list object): outbreak_reports_events (high level outbreak data), outbreak_reports_outbreaks (detailed location and impact data for outbreak events), outbreak_reports_diseases_unmatched (diseases from the outbreak reports that did not match the ANDO ontology. These diseases are not removed from the database.) 
+#' @param outbreak_reports a list of outbreak report content produced by ingest_report()
 #' @param report_list produced by scrape_outbreak_report_list()
 #' @import dplyr tidyr purrr stringr
 #' @importFrom glue glue_collapse
@@ -8,6 +10,7 @@
 #' @importFrom textclean replace_non_ascii
 #' @importFrom countrycode countrycode
 #' @importFrom assertthat %has_name%
+#' @return A list of three tibbles
 #' @export
 
 transform_outbreak_reports <- function(outbreak_reports,

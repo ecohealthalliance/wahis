@@ -1,11 +1,11 @@
 #' Generic function to get master list of reports
 #' Works for outbreak and six-month reports
 #' @return A tibble of reports
-#' @noRd
 #' @import purrr dplyr tidyr
 #' @importFrom janitor clean_names
 #' @importFrom httr POST content
 #' @importFrom assertthat assert_that
+#' @noRd
 scrape_report_list <- function(post_url) {
     
     page_size <- 1000000L
@@ -51,7 +51,7 @@ scrape_outbreak_report_list <- function() {
 }
 
 
-#' Get master list of outbreak reports
+#' Get master list of six month reports
 #' @return A tibble of reports
 #' @export
 scrape_six_month_report_list <- function() {

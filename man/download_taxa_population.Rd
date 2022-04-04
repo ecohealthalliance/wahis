@@ -7,7 +7,7 @@
 download_taxa_population(directory)
 }
 \arguments{
-\item{directory}{where taxa population is saved}
+\item{directory}{to save downloaded taxa population data}
 }
 \description{
 Download fao taxa population data

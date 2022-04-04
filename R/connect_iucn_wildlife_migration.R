@@ -1,6 +1,6 @@
 #' Download iucn data
 #' @param token IUCN redlist API token
-#' @param directory where migration data is saved
+#' @param directory to save downloaded wildlife migration data
 #' @import dplyr purrr here
 #' @importFrom readr write_rds
 #' @importFrom jsonlite fromJSON
@@ -27,7 +27,7 @@ download_wildlife <- function(token, directory){
 
 
 #' Transform iucn data to return counts of overlapping species between pairwise countries
-#' @param directory where migration data is saved
+#' @param directory where wildlife migration data is saved
 #' @import dplyr tidyr here purrr xml2
 #' @importFrom taxadb td_create filter_rank
 #' @importFrom countrycode countrycode

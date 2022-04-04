@@ -7,7 +7,7 @@
 download_human_migration(directory)
 }
 \arguments{
-\item{directory}{where migration data is saved}
+\item{directory}{to save downloaded migration data}
 }
 \description{
 Download UN migrant data

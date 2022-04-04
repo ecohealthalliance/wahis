@@ -1,5 +1,5 @@
 #' Download wto tourism data
-#' @param directory where tourism is saved
+#' @param directory to save tourism data
 #' @param username UNWTO email
 #' @param password UNWTO password
 #' @import dplyr here xml2 purrr stringr

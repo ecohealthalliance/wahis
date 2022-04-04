@@ -1,5 +1,5 @@
 #' Download ots data
-#' @param directory where ots-trade.rds is saved
+#' @param directory to save downloaded OTS data
 #' @import dplyr here tradestatistics
 #' @importFrom readr write_rds
 #' @importFrom jsonlite fromJSON

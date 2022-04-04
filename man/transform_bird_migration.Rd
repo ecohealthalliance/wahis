@@ -2,7 +2,7 @@
 % Please edit documentation in R/connect_bird_migration.R
 \name{transform_bird_migration}
 \alias{transform_bird_migration}
-\title{Transform birdlife data to return counts of overlapping migratory species between pairwise countries}
+\title{Transform birdlife data to counts of overlapping migratory species between pairwise countries}
 \usage{
 transform_bird_migration(directory)
 }
@@ -10,5 +10,5 @@ transform_bird_migration(directory)
 \item{directory}{where bird migration data is saved}
 }
 \description{
-Transform birdlife data to return counts of overlapping migratory species between pairwise countries
+Transform birdlife data to counts of overlapping migratory species between pairwise countries
 }
