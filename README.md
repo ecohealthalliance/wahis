@@ -15,7 +15,7 @@ This package provides access to veterinary disease data from [OIE WAHIS](https:/
       
 - _six month reports_ 
    - `inst/processing_scripts/process_six_month_reports.R` provides an example workflow for retrieving wahis 6 mognth reports
-   - `scrape_outbreak_report_list()` returns a master list of available 6 month reports
+   - `scrape_six_month_report_list()` returns a master list of available 6 month reports
    - `ingest_report()` accepts a curl response from the wahis API and returns 6 month report content as a list. `safe_ingest()` is a wrapper to handle errors when ingesting reports.
    - `transform_six_month_reports()` converts six month report content into formatted data. It yields three tibbles (saved in a single list object):
       - `six_month_reports_summary` contains high-level six-month data. It provides disease status (present/absent/unreported) and case counts by country, disease, taxa. It also includes control measures.
