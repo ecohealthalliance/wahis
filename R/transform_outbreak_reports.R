@@ -110,7 +110,7 @@ transform_outbreak_reports <- function(outbreak_reports,
     mutate_at(vars(contains("date")), ~lubridate::as_datetime(.)) 
   
   # Check for missing date_event_resolved
-  if(suppressWarnings(is.null(outbreak_reports_events$date_event_resolved))) outbreak_reports_events$date_event_resolved <- NA
+  if(suppressWarnings(is.null(outbreak_reports_events$date_event_resolved))) outbreak_reports_events$date_event_resolved <- lubridate::as_datetime(NA)
   missing_resolved <- outbreak_reports_events %>%
     filter(is.na(date_event_resolved)) %>%
     filter(is_final_report)
