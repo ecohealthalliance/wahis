@@ -1,6 +1,6 @@
 
 
-This package provides access to veterinary disease data from [OIE WAHIS](https://wahis.oie.int/#/home) as well as several other data sets that may support analysis of veterinary diseases.
+This package provides access to veterinary disease data from [OIE WAHIS](https://wahis.woah.org/#/home) as well as several other data sets that may support analysis of veterinary diseases.
 
 #### wahis data
 

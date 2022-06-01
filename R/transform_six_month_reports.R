@@ -111,7 +111,7 @@ transform_six_month_reports <- function(six_month_reports) {
     if(!length(six_month_reports2)) return(NULL)
     
     # For url lookup
-    # https://wahis.oie.int/#/report-smr/view?reportId=20038&period=SEM01&areaId=2&isAquatic=false    
+    # https://wahis.woah.org/#/report-smr/view?reportId=20038&period=SEM01&areaId=2&isAquatic=false    
     
     # Extracting data from lists ---------------------------------------------------
     transformed_reports <- imap(six_month_reports2, function(x, y){
